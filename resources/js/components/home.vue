@@ -1225,6 +1225,13 @@
     </div>
 </template>
 <script>
-export default {};
+export default {
+    created() {
+        if (!User.loggedIn()) {
+            console.log(true);
+            this.$router.push({ name: "login" });
+        }
+    }
+};
 </script>
 <style type="text/css"></style>

@@ -26,6 +26,7 @@
     },
     "dependencies": {
         "noty": "^3.2.0-beta",
+        "sweet-alert": "^2.0.5",
         "sweetalert2": "^9.10.12",
         "vue-router": "^3.5.2"
     }

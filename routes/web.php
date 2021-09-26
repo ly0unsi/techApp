@@ -15,4 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [HomeController::class, 'index']);
+
+Route::get('/', 'masterController@master');
+Route::get('{any}', function () {
+    return (view('blog.master'));
+})->where('any', '.*');

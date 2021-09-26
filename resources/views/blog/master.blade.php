@@ -7,6 +7,7 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="preconnect" href="https://fonts.gstatic.com/">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('style.css')}}" />
@@ -14,6 +15,8 @@
 </head>
 
 <body>
+
+
     <div id="app">
         <div class="site-mobile-menu site-navbar-target">
             <div class="site-mobile-menu-header">
@@ -53,6 +56,22 @@
                     </div>
                     <ul class="js-clone-nav d-none d-lg-inline-none text-start site-menu float-end">
                         <li class="active"><a href="index-2.html">Home</a></li>
+                        @if (Auth::user())
+
+                        <li class="active">
+                            <router-link to="/logout">Logout</router-link>
+                        </li>
+                        @else
+                        <li class="active">
+                            <router-link to="/login">Login</router-link>
+                        </li>
+                        @endif
+
+
+
+
+
+
                         <li class="has-children">
                             <a href="categories.html">Categories</a>
                             <ul class="dropdown">
@@ -136,7 +155,7 @@
         eval(mod_pagespeed_GIrE68D1a2);
     </script>
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
+
     <script>
         window.dataLayer = window.dataLayer || [];
 			function gtag(){dataLayer.push(arguments);}
@@ -144,9 +163,7 @@
 
 			gtag('config', 'UA-23581568-13');
     </script>
-    <script defer src="../../../static.cloudflareinsights.com/beacon.min.js"
-        data-cf-beacon='{"rayId":"69387e1eecae69e2","token":"cd0b4b3a733644fc843ef0b185f98241","version":"2021.8.1","si":10}'>
-    </script>
+
 </body>
 
 <!-- Mirrored from preview.colorlib.com/theme/magdesign/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 24 Sep 2021 02:13:27 GMT -->

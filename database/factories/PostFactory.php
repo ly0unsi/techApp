@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Post;
+use App\Models\Post;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -23,10 +23,13 @@ class PostFactory extends Factory
     public function definition()
     {
         return [
-            'post_title' => $this->faker->name,
-            'post_slug' => Str::slug($this->faker->name),
-            'user_id' => $this->faker->randomDigit,
-
+            'title' => $this->faker->name,
+            'image' => $this->faker->name,
+            'desc' => $this->faker->name,
+            'body' => $this->faker->text,
+            'slug' => Str::slug($this->faker->name),
+            'user_id' => auth()->user->id,
+            'category_id' => $this->faker->randomDigit
         ];
     }
 }

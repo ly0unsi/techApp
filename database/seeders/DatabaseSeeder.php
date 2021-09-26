@@ -1,6 +1,7 @@
 <?php
 
 use Database\Seeders\PosetSeeder;
+use Database\Seeders\PostSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,6 +13,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(PosetSeeder::class);
+        $this->call(PostSeeder::class);
     }
 }
