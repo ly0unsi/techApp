@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -17,7 +19,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('JWT', ['except' => ['login', 'signup']]);
+        $this->middleware('auth:api', ['except' => ['login', 'signup']]);
     }
 
     //
@@ -41,6 +43,12 @@ class AuthController extends Controller
             return response()->json(['error' => 'Email or Password Invalid'], 401);
         }
 
+        setcookie(
+            'jwt',
+            $token,
+            time() + (86400 * 30),
+            "/"
+        );
         return $this->respondWithToken($token);
     }
 
@@ -49,9 +57,9 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function me()
+    public function me(Request $request, Response $response)
     {
-        dd(auth()->user());
+        dd(Auth::user());
     }
 
     /**
@@ -61,7 +69,8 @@ class AuthController extends Controller
      */
     public function logout()
     {
-        auth()->logout();
+        unset($_COOKIE['jwt']);
+        Auth::user()->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
     }

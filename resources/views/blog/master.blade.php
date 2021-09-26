@@ -7,7 +7,7 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
     <link rel="preconnect" href="https://fonts.gstatic.com/">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('style.css')}}" />
@@ -56,22 +56,6 @@
                     </div>
                     <ul class="js-clone-nav d-none d-lg-inline-none text-start site-menu float-end">
                         <li class="active"><a href="index-2.html">Home</a></li>
-                        @if (Auth::user())
-
-                        <li class="active">
-                            <router-link to="/logout">Logout</router-link>
-                        </li>
-                        @else
-                        <li class="active">
-                            <router-link to="/login">Login</router-link>
-                        </li>
-                        @endif
-
-
-
-
-
-
                         <li class="has-children">
                             <a href="categories.html">Categories</a>
                             <ul class="dropdown">
@@ -79,25 +63,35 @@
                                 <li><a href="#">Food</a></li>
                                 <li><a href="#">Technology</a></li>
                                 <li><a href="#">Business</a></li>
-                                <li class="has-children">
-                                    <a href="#">Dropdown</a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Sub Menu One</a></li>
-                                        <li><a href="#">Sub Menu Two</a></li>
-                                        <li><a href="#">Sub Menu Three</a></li>
-                                    </ul>
-                                </li>
                             </ul>
                         </li>
-                        <li><a href="#">Travel</a></li>
-                        <li><a href="#">Food</a></li>
-                        <li><a href="#">Technology</a></li>
-                        <li><a href="#">Business</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact Us</a></li>
+
+                        @if (Auth::user())
+
+                        <li class="has-children">
+                            <a href="#">({{Auth::user()->name}})</a>
+
+                            <ul class="dropdown">
+                                <li>
+                                    <router-link to="/logout">Logout</router-link>
+                                </li>
+
+                            </ul>
+                        </li>
+                        @else
+                        <li class="active">
+                            <router-link to="/login">Login</router-link>
+                        </li>
+                        @endif
                     </ul>
                 </div>
             </div>
         </nav>
-        <router-view></router-view>
+        <transition name="custom-classes-transition" enter-active-class="animated fadeInRight">
+            <router-view></router-view>
+        </transition>
         <div class="site-footer">
             <div class="container">
                 <div class="row justify-content-center copyright">
@@ -127,12 +121,7 @@
             </div>
         </div>
     </div>
-    <div id="overlayer"></div>
-    <div class="loader">
-        <div class="spinner-border" role="status">
-            <span class="visually-hidden">Loading...</span>
-        </div>
-    </div>
+
     <script src="{{ asset('js/app.js')}}"></script>
     <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('js/tiny-slider.js')}}"></script>

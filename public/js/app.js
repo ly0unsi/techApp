@@ -2007,12 +2007,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   created: function created() {
+    axios.post("/api/auth/logout").then(function (res) {
+      Toast.fire({
+        icon: "success",
+        title: res.message
+      });
+    });
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-    Toast.fire({
-      icon: "success",
-      title: "Logout successfully"
-    });
     this.$router.push({
       name: "login"
     });

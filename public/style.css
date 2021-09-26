@@ -5878,7 +5878,7 @@ body[data-aos-easing="ease-out"] [data-aos] {
     --bs-white: #fff;
     --bs-gray: #6c757d;
     --bs-gray-dark: #343a40;
-    --bs-primary: #f79918;
+    --bs-primary: #303030;
     --bs-secondary: #10495c;
     --bs-success: #198754;
     --bs-info: #0dcaf0;
@@ -6042,7 +6042,7 @@ sup {
     top: -0.5em;
 }
 a {
-    color: #f79918;
+    color: #303030;
     text-decoration: underline;
 }
 a:hover {
@@ -6551,8 +6551,8 @@ textarea.form-control {
 }
 .btn-primary {
     color: #000;
-    background-color: #f79918;
-    border-color: #f79918;
+    background-color: #303030;
+    border-color: #303030;
 }
 .btn-primary:hover {
     color: #000;
@@ -6582,8 +6582,8 @@ textarea.form-control {
 .btn-primary:disabled,
 .btn-primary.disabled {
     color: #000;
-    background-color: #f79918;
-    border-color: #f79918;
+    background-color: #303030;
+    border-color: #303030;
 }
 .fade {
     -webkit-transition: opacity 0.15s linear;
@@ -6755,7 +6755,7 @@ textarea.form-control {
 .dropdown-item:active {
     color: #fff;
     text-decoration: none;
-    background-color: #f79918;
+    background-color: #303030;
 }
 .dropdown-item.disabled,
 .dropdown-item:disabled {
@@ -6906,8 +6906,8 @@ textarea.form-control {
 .list-group-item.active {
     z-index: 2;
     color: #fff;
-    background-color: #f79918;
-    border-color: #f79918;
+    background-color: #303030;
+    border-color: #303030;
 }
 .list-group-item + .list-group-item {
     border-top-width: 0;
@@ -7585,7 +7585,7 @@ textarea.form-control {
     color: #000;
 }
 .site-nav .site-navigation .site-menu .has-children .dropdown .active a {
-    color: #f79918 !important;
+    color: #303030 !important;
 }
 .site-nav .site-navigation .site-menu .has-children .dropdown > li {
     list-style: none;
@@ -7598,7 +7598,7 @@ textarea.form-control {
     display: block;
 }
 .site-nav .site-navigation .site-menu .has-children .dropdown > li > a:hover {
-    color: #f79918;
+    color: #303030;
 }
 .site-nav
     .site-navigation
@@ -7645,7 +7645,7 @@ textarea.form-control {
     > ul
     li
     a:hover {
-    color: #f79918;
+    color: #303030;
 }
 .site-nav
     .site-navigation
@@ -7668,7 +7668,7 @@ textarea.form-control {
     .dropdown
     > li.has-children:focus
     > a {
-    color: #f79918;
+    color: #303030;
 }
 .site-nav .site-navigation .site-menu .has-children:hover > a,
 .site-nav .site-navigation .site-menu .has-children:focus > a,
@@ -7788,14 +7788,14 @@ textarea.form-control {
     color: #000;
 }
 .site-mobile-menu .site-nav-wrap a:hover {
-    color: #f79918;
+    color: #303030;
 }
 .site-mobile-menu .site-nav-wrap li {
     position: relative;
     display: block;
 }
 .site-mobile-menu .site-nav-wrap li.active > a {
-    color: #f79918;
+    color: #303030;
 }
 .site-mobile-menu .site-nav-wrap .arrow-collapse {
     position: absolute;
@@ -7982,14 +7982,14 @@ a {
     text-transform: uppercase;
 }
 .btn.btn-primary {
-    background-color: #f79918;
+    background-color: #303030;
     color: #fff;
     border: 2px solid transparent;
 }
 .btn.btn-primary:hover {
     border: 2px solid transparent;
     background-color: #fff;
-    color: #f79918;
+    color: #303030;
     -webkit-box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.2);
     box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.2);
 }
@@ -8204,7 +8204,7 @@ a {
 }
 .most-popular-slider-wrap .tns-nav button.tns-nav-active:before,
 .posts-slide-wrap .tns-nav button.tns-nav-active:before {
-    background-color: #f79918;
+    background-color: #303030;
 }
 .post-section {
     font-size: 18px;
@@ -8240,12 +8240,12 @@ a {
     font-weight: 700;
     border-radius: 50%;
     background: rgba(247, 153, 24, 0.1);
-    color: #f79918;
+    color: #303030;
     text-align: center;
 }
 .custom-pagination a:hover,
 .custom-pagination a.active {
-    background: #f79918;
+    background: #303030;
     color: #fff;
 }
 .site-footer {
@@ -8275,7 +8275,7 @@ a {
     color: #000;
 }
 .site-footer a:hover:before {
-    background: #f79918;
+    background: #303030;
 }
 .site-footer .btn:before {
     display: none;
@@ -8315,6 +8315,6 @@ a {
     transform: translate(-50%, -50%);
 }
 .site-footer .social li a:hover {
-    background: #f79918;
+    background: #303030;
     color: #fff;
 }

@@ -3,12 +3,15 @@
 <script type="text/javascript">
 export default {
     created() {
+        axios.post("/api/auth/logout").then(res => {
+            Toast.fire({
+                icon: "success",
+                title: res.message
+            });
+        });
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-        Toast.fire({
-            icon: "success",
-            title: "Logout successfully"
-        });
+
         this.$router.push({ name: "login" });
     }
 };
