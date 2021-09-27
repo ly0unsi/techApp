@@ -4,9 +4,10 @@
 <!-- Mirrored from preview.colorlib.com/theme/magdesign/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 24 Sep 2021 02:13:17 GMT -->
 
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.1/tiny-slider.css">
+
     <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
     <link rel="preconnect" href="https://fonts.gstatic.com/">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&amp;display=swap" rel="stylesheet">
@@ -26,72 +27,11 @@
             </div>
             <div class="site-mobile-menu-body"></div>
         </div>
-        <nav class="site-nav">
-            <div class="container">
-                <div class="site-navigation">
-                    <div class="row">
-                        <div class="col-md-6 text-center order-1 order-md-2 mb-3 mb-md-0">
-                            <a href="index-2.html" class="logo m-0 text-uppercase">MagDesign</a>
-                        </div>
-                        <div class="col-md-3 order-3 order-md-1">
-                            <form action="#" class="search-form">
-                                <span class="icon-search2"></span>
-                                <input type="search" class="form-control" placeholder="Search...">
-                            </form>
-                        </div>
-                        <div class="col-md-3 text-end order-2 order-md-3 mb-3 mb-md-0">
-                            <div class="d-flex">
-                                <ul class="list-unstyled social me-auto">
-                                    <li><a href="#"><span class="icon-twitter"></span></a></li>
-                                    <li><a href="#"><span class="icon-facebook"></span></a></li>
-                                    <li><a href="#"><span class="icon-instagram"></span></a></li>
-                                </ul>
-                                <a href="#"
-                                    class="burger ms-auto float-end site-menu-toggle js-menu-toggle d-inline-block"
-                                    data-toggle="collapse" data-target="#main-navbar">
-                                    <span></span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <ul class="js-clone-nav d-none d-lg-inline-none text-start site-menu float-end">
-                        <li class="active"><a href="index-2.html">Home</a></li>
-                        <li class="has-children">
-                            <a href="categories.html">Categories</a>
-                            <ul class="dropdown">
-                                <li><a href="#">Travel</a></li>
-                                <li><a href="#">Food</a></li>
-                                <li><a href="#">Technology</a></li>
-                                <li><a href="#">Business</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Contact Us</a></li>
 
-                        @if (Auth::user())
-
-                        <li class="has-children">
-                            <a href="#">({{Auth::user()->name}})</a>
-
-                            <ul class="dropdown">
-                                <li>
-                                    <router-link to="/logout">Logout</router-link>
-                                </li>
-
-                            </ul>
-                        </li>
-                        @else
-                        <li class="active">
-                            <router-link to="/login">Login</router-link>
-                        </li>
-                        @endif
-                    </ul>
-                </div>
-            </div>
-        </nav>
         <transition name="custom-classes-transition" enter-active-class="animated fadeInRight">
             <router-view></router-view>
         </transition>
+        @auth
         <div class="site-footer">
             <div class="container">
                 <div class="row justify-content-center copyright">
@@ -105,9 +45,7 @@
                             </ul>
                         </div>
                         <div class="widget">
-                            <p>Copyright &copy;<script>
-                                    document.write(new Date().getFullYear());
-                                </script> All rights reserved | This template is made with <i
+                            <p>Copyright &copy; 2021 All rights reserved | This template is made with <i
                                     class="icon-heart text-danger" aria-hidden="true"></i> by <a
                                     href="https://colorlib.com/" target="_blank" rel="nofollow noopener">Colorlib</a>
                             </p>
@@ -120,38 +58,19 @@
                 </div>
             </div>
         </div>
+        @endauth
+
     </div>
 
     <script src="{{ asset('js/app.js')}}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('js/tiny-slider.js')}}"></script>
-    <script
-        src="{{asset('js/glightbox.min.js%2baos.js%2bnavbar.js%2bcounter.js%2bcustom.js.pagespeed.jc.B7bFTsJZUK.js')}}">
-    </script>
-    <script>
-        eval(mod_pagespeed_KpCH1a$C_m);
-    </script>
-    <script>
-        eval(mod_pagespeed_Ej3jj9tqUo);
-    </script>
-    <script>
-        eval(mod_pagespeed_Pkx$Oz4Gi9);
-    </script>
-    <script>
-        eval(mod_pagespeed_9lpIcAXJZV);
-    </script>
-    <script>
-        eval(mod_pagespeed_GIrE68D1a2);
-    </script>
 
 
-    <script>
-        window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
 
-			gtag('config', 'UA-23581568-13');
-    </script>
+
+
 
 </body>
 

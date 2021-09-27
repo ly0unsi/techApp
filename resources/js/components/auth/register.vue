@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" style="max-width: 500px;">
         <div class="row justify-content-center">
             <div class="col-xl-10 col-lg-12 col-md-9">
                 <div class="card shadow-sm my-5">
@@ -29,7 +29,7 @@
                                             </small>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group mt-1">
                                             <input
                                                 type="email"
                                                 class="form-control"

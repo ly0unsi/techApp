@@ -69,9 +69,7 @@ class AuthController extends Controller
      */
     public function logout()
     {
-        unset($_COOKIE['jwt']);
-        Auth::user()->logout();
-
+        auth()->logout();
         return response()->json(['message' => 'Successfully logged out']);
     }
 

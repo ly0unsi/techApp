@@ -6,7 +6,7 @@ export default {
         axios.post("/api/auth/logout").then(res => {
             Toast.fire({
                 icon: "success",
-                title: res.message
+                title: res.data.message
             });
         });
         localStorage.removeItem("token");

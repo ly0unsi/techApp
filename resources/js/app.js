@@ -15,6 +15,8 @@ Vue.use(VueRouter)
 import User from './Helpers/User';
 window.User = User
 
+import VueTinySlider from 'vue-tiny-slider';
+Vue.component('tiny-slider', VueTinySlider)
 // Sweet Alert start
 import Swal from 'sweetalert2'
 window.Swal = Swal;
@@ -46,5 +48,6 @@ window.Reload = new Vue();
 
 const app = new Vue({
     el: '#app',
-    router
+    router,
+
 });
