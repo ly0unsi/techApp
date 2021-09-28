@@ -46,7 +46,7 @@ class AuthController extends Controller
         setcookie(
             'jwt',
             $token,
-            time() + (86400 * 30),
+            time() + 86400,
             "/"
         );
         return $this->respondWithToken($token);

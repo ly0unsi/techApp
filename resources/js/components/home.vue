@@ -1,123 +1,12 @@
 <template>
     <div>
-        <nav class="site-nav">
-            <div class="container">
-                <div class="site-navigation">
-                    <div class="row">
-                        <div
-                            class="col-md-5 text-center order-1 order-md-2 mb-3 mb-md-0"
-                        >
-                            <a
-                                href="index-2.html"
-                                class="logo m-0 text-uppercase"
-                                >MagDesign</a
-                            >
-                        </div>
-                        <div class="col-md-3 order-3 order-md-1">
-                            <form action="#" class="search-form">
-                                <span class="icon-search2"></span>
-                                <input
-                                    type="search"
-                                    class="form-control"
-                                    placeholder="Search..."
-                                />
-                            </form>
-                        </div>
-                        <div
-                            class="col-md-4 text-end order-2 order-md-3 mb-3 mb-md-0"
-                        >
-                            <div class="d-flex">
-                                <ul class="list-unstyled social me-auto">
-                                    <li>
-                                        <a href="#"
-                                            ><span class="icon-twitter"></span
-                                        ></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"
-                                            ><span class="icon-facebook"></span
-                                        ></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"
-                                            ><span class="icon-instagram"></span
-                                        ></a>
-                                    </li>
-                                    <li v-if="user.name">
-                                        <a href="#">{{ user.name }}</a>
-                                    </li>
-
-                                    <li v-if="user.name">
-                                        <router-link to="/logout">
-                                            Logout
-                                        </router-link>
-                                    </li>
-
-                                    <li v-else>
-                                        <router-link to="/login"
-                                            >Login</router-link
-                                        >
-                                    </li>
-                                </ul>
-
-                                <a
-                                    class="burger ms-auto float-end site-menu-toggle d-inline-block"
-                                    v-on:click="onshow"
-                                >
-                                    <span></span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <transition
-                        name="slide"
-                        enter-active-class="animated fadeIn"
-                        leave-active-class="animated fadeOut"
-                    >
-                        <div v-if="show">
-                            <ul
-                                class="d-lg-inline-none text-start site-menu float-end"
-                            >
-                                <div class="site-mobile-menu-header">
-                                    <div class="site-mobile-menu-close">
-                                        <span
-                                            v-on:click="onshow"
-                                            class="icofont-close js-menu-toggle"
-                                        ></span>
-                                    </div>
-                                </div>
-                                <li class="active">
-                                    <a href="index-2.html">Home</a>
-                                </li>
-                                <li class="has-children">
-                                    <a href="categories.html">Categories</a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Travel</a></li>
-                                        <li><a href="#">Food</a></li>
-                                        <li><a href="#">Technology</a></li>
-                                        <li><a href="#">Business</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">About</a></li>
-                                <li><a href="#">Contact Us</a></li>
-                            </ul>
-                        </div>
-                    </transition>
-                </div>
-            </div>
-        </nav>
         <div class="section pt-5 pb-0">
             <div class="container">
                 <div class="row justify-content-center mb-5">
                     <div class="col-lg-7 text-center">
-                        <div v-if="user.name">
-                            <h2 class="heading">
-                                Trending
-                            </h2>
-                        </div>
-                        <div v-else>
-                            No user
-                        </div>
+                        <h2 class="heading">
+                            Trending
+                        </h2>
                     </div>
                 </div>
                 <div class="row">
@@ -131,7 +20,7 @@
                                 gutter="20"
                             >
                                 <div>
-                                    <div class="post-entry d-lg-flex">
+                                    <div class="post-entry d-lg-flex shadow">
                                         <div
                                             class="me-lg-5 thumbnail mb-4 mb-lg-0"
                                         >
@@ -1314,66 +1203,11 @@
                     <div class="col-md-4 d-grid">
                         <input
                             type="submit"
-                            class="btn btn-primary"
+                            class="btn btn-dark"
                             value="Subscribe"
                         />
                     </div>
                 </form>
-            </div>
-        </div>
-        <div class="site-footer">
-            <div class="container">
-                <div class="row justify-content-center copyright">
-                    <div class="col-lg-7 text-center">
-                        <div class="widget">
-                            <ul class="social list-unstyled">
-                                <li>
-                                    <a href="#"
-                                        ><span class="icon-facebook"></span
-                                    ></a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                        ><span class="icon-twitter"></span
-                                    ></a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                        ><span class="icon-linkedin"></span
-                                    ></a>
-                                </li>
-                                <li>
-                                    <a href="#"
-                                        ><span class="icon-youtube-play"></span
-                                    ></a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="widget">
-                            <p>
-                                Copyright &copy; 2021 All rights reserved | This
-                                template is made with
-                                <i
-                                    class="icon-heart text-danger"
-                                    aria-hidden="true"
-                                ></i>
-                                by
-                                <a
-                                    href="https://colorlib.com/"
-                                    target="_blank"
-                                    rel="nofollow noopener"
-                                    >Colorlib</a
-                                >
-                            </p>
-                            <div class="d-block">
-                                <a href="#" class="m-2"
-                                    >Terms &amp; Conditions</a
-                                >/
-                                <a href="#" class="m-2">Privacy Policy</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -1383,23 +1217,21 @@ export default {
     data() {
         return {
             user: {},
+            categories: {},
             show: false
         };
     },
+    props: ["userProp"],
     methods: {
         onshow() {
             this.show = !this.show;
         }
     },
     created() {
-        if (!User.loggedIn()) {
-            console.log(true);
-            this.$router.push({ name: "login" });
-        }
         axios
-            .get("/api/user")
-            .then(res => (this.user = res.data))
-            .catch(err => console.log(err));
+            .get("/api/categories/")
+            .then(({ data }) => (this.categories = data));
+        console.log(this.userProp);
     }
 };
 </script>

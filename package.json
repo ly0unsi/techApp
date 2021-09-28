@@ -25,10 +25,13 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
-        "noty": "^3.2.0-beta",
+        "noty": "^3.2.0-beta-deprecated",
+        "slugify": "^1.6.0",
         "sweet-alert": "^2.0.5",
         "sweetalert2": "^9.10.12",
         "vue-router": "^3.5.2",
-        "vue-tiny-slider": "^0.1.39"
+        "vue-slugify": "^0.1.0",
+        "vue-tiny-slider": "^0.1.39",
+        "vue2-editor": "^2.10.3"
     }
 }

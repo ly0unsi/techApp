@@ -11,12 +11,25 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import logout from './components/auth/logout'
 import axios from 'axios'
+Vue.component('layout', require('./components/layout.vue').default);
 Vue.use(VueRouter)
+
+
+
 import User from './Helpers/User';
 window.User = User
 
 import VueTinySlider from 'vue-tiny-slider';
 Vue.component('tiny-slider', VueTinySlider)
+
+import { VueEditor } from "vue2-editor";
+Vue.component('VueEditor', VueEditor)
+
+// Import Notification Class
+import Notification from './Helpers/Notification';
+window.Notification = Notification
+
+
 // Sweet Alert start
 import Swal from 'sweetalert2'
 window.Swal = Swal;
@@ -32,6 +45,10 @@ const Toast = Swal.mixin({
         toast.addEventListener('mouseleave', Swal.resumeTimer)
     }
 });
+
+
+var VueSlugify = require('vue-slugify')
+Vue.use(VueSlugify)
 
 window.Toast = Toast;
 

@@ -2,8 +2,8 @@
     <div style="max-width: 500px;" class="container">
         <div class="row justify-content-center">
             <div class="col-xl-10 col-lg-12 col-md-9">
-                <div class="card shadow-sm my-5">
-                    <div class="card-body p-0">
+                <div class="shadow my-5">
+                    <div class=" p-2">
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="login-form">
@@ -64,7 +64,7 @@
                                         <div class="form-group">
                                             <button
                                                 type="submit"
-                                                class="btn btn-primary btn-block"
+                                                class="btn btn-dark btn-block"
                                             >
                                                 Login
                                             </button>
@@ -98,12 +98,6 @@
 
 <script type="text/javascript">
 export default {
-    created() {
-        if (User.loggedIn()) {
-            this.$router.push({ name: "home" });
-        }
-    },
-
     data() {
         return {
             form: {
@@ -113,19 +107,28 @@ export default {
             errors: {}
         };
     },
+    props: ["userProp"],
+    created() {
+        axios
+            .get("/api/categories/")
+            .then(({ data }) => (this.categories = data));
+        if (this.user.name) {
+            this.$router.push({ name: "home" });
+        }
+        console.log(this.userProp);
+    },
 
     methods: {
         login() {
             axios
                 .post("/api/auth/login", this.form)
                 .then(res => {
-                    User.responseAfterLogin(res);
                     Toast.fire({
                         icon: "success",
                         title: "Signed in successfully"
                     });
                     this.$router.push({ name: "home" });
-                    console.log(res.data);
+                    this.$router.go();
                 })
                 .catch(error => (this.errors = error.response.data.errors))
                 .catch(error => {

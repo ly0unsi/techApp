@@ -11,30 +11,24 @@ class masterController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['master']]);
+        $this->middleware('getauth');
+        $this->middleware('auth:api',)->except('login');
     }
 
     public function master(Request $request)
     {
-        if (isset($_COOKIE["jwt"])) {
-            if ($jwt = $_COOKIE["jwt"]) {
-                $request->headers->set('Authorization', "Bearer" . $jwt); # code...
-                $request->headers->set('X-Requested-With', "XMLHttpRequest"); # code...
 
-            }
-        }
+
+        return view('blog.master',);
+    }
+    public function login(Request $request)
+    {
+
 
         return view('blog.master',);
     }
     public function user(Request $request)
     {
-        if (isset($_COOKIE["jwt"])) {
-            if ($jwt = $_COOKIE["jwt"]) {
-                $request->headers->set('Authorization', "Bearer" . $jwt); # code...
-                $request->headers->set('X-Requested-With', "XMLHttpRequest"); # code...
-
-            }
-        }
         /**
          * Display a listing of the resource.
          *

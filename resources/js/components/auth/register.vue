@@ -1,9 +1,9 @@
 <template>
-    <div class="container" style="max-width: 500px;">
+    <div class="container">
         <div class="row justify-content-center">
-            <div class="col-xl-10 col-lg-12 col-md-9">
-                <div class="card shadow-sm my-5">
-                    <div class="card-body p-0">
+            <div class="col-xl-7 col-lg-12 col-md-9">
+                <div class="shadow my-5">
+                    <div class="p-2">
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="login-form">
@@ -13,7 +13,10 @@
                                         </h1>
                                     </div>
                                     <form class="user" @submit.prevent="signup">
-                                        <div class="form-group">
+                                        <label for="exampleFormControlTextarea1"
+                                            ><b>Full Name </b></label
+                                        >
+                                        <div class="form-group mb-1">
                                             <input
                                                 type="text"
                                                 class="form-control"
@@ -28,8 +31,10 @@
                                                 {{ errors.name[0] }}
                                             </small>
                                         </div>
-
-                                        <div class="form-group mt-1">
+                                        <label for="exampleFormControlTextarea1"
+                                            ><b>Email </b></label
+                                        >
+                                        <div class="form-group mb-1">
                                             <input
                                                 type="email"
                                                 class="form-control"
@@ -45,7 +50,11 @@
                                                 {{ errors.email[0] }}
                                             </small>
                                         </div>
-                                        <div class="form-group">
+
+                                        <label for="exampleFormControlTextarea1"
+                                            ><b>Password </b></label
+                                        >
+                                        <div class="form-group mb-1">
                                             <input
                                                 type="password"
                                                 class="form-control"
@@ -60,8 +69,10 @@
                                                 {{ errors.password[0] }}
                                             </small>
                                         </div>
-
-                                        <div class="form-group">
+                                        <label for="exampleFormControlTextarea1"
+                                            ><b>Confirm Password </b></label
+                                        >
+                                        <div class="form-group mb-1">
                                             <input
                                                 type="password"
                                                 class="form-control"
@@ -75,7 +86,7 @@
                                         <div class="form-group">
                                             <button
                                                 type="submit"
-                                                class="btn btn-primary btn-block"
+                                                class="btn btn-dark btn-block"
                                             >
                                                 Register
                                             </button>
@@ -104,9 +115,16 @@
 <script type="text/javascript">
 export default {
     created() {
-        if (User.loggedIn()) {
+        if (!this.user.name) {
             this.$router.push({ name: "home" });
         }
+        axios
+            .get("/api/user")
+            .then(res => (this.user = res.data))
+            .catch(err => console.log(err));
+        axios
+            .get("/api/categories/")
+            .then(({ data }) => (this.categories = data));
     },
 
     data() {
@@ -117,7 +135,8 @@ export default {
                 password: null,
                 confirm_password: null
             },
-            errors: {}
+            errors: {},
+            user: {}
         };
     },
     methods: {
@@ -125,7 +144,6 @@ export default {
             axios
                 .post("/api/auth/signup", this.form)
                 .then(res => {
-                    User.responseAfterLogin(res);
                     Toast.fire({
                         icon: "success",
                         title: "Signed in successfully"
