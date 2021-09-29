@@ -115,7 +115,7 @@
 <script type="text/javascript">
 export default {
     created() {
-        if (!this.user.name) {
+        if (this.user.name) {
             this.$router.push({ name: "home" });
         }
         axios
@@ -149,6 +149,8 @@ export default {
                         title: "Signed in successfully"
                     });
                     this.$router.push({ name: "home" });
+                    this.$router.push({ name: "home" });
+                    setTimeout(this.$router.go(), 10000);
                 })
 
                 .catch(error => (this.errors = error.response.data.errors))

@@ -8,7 +8,7 @@
                             class="col-md-4 text-center order-1 order-md-2 mb-3 mb-md-0"
                         >
                             <router-link to="/" class="logo m-0 text-uppercase">
-                                MagDesign
+                                Readose.com
                             </router-link>
                         </div>
                         <div class="col-md-4 order-3 order-md-1">
@@ -18,9 +18,48 @@
                                     type="search"
                                     class="form-control"
                                     style="border-radius:30px"
+                                    v-model="searchTerm"
                                     placeholder="Search..."
                                 />
                             </form>
+                            <transition
+                                name="custom-classes-transition"
+                                enter-active-class="animate__animated animate__bounceIn"
+                                leave-active-class="animate__animated animate__bounceOut"
+                            >
+                                <div
+                                    v-if="searchTerm !== ''"
+                                    class="bg-light col-3 py-2 px-2 mt-1 shadow-sm"
+                                    style="height:auto;background:black;position:absolute;width:auto;z-index:3;border-radius:30px"
+                                >
+                                    <div v-if="searchedPosts.length > 0">
+                                        <div
+                                            :key="post.id"
+                                            v-for="post in searchedPosts"
+                                            class="d-flex mt-1"
+                                            style="align-items: center;"
+                                        >
+                                            <img
+                                                style="width: 37px;
+                                            border-radius: 50%;
+                                            border:1px solid #303030;
+                                            height: 37px;
+                                            object-fit: cover;"
+                                                :src="post.photo"
+                                                alt=""
+                                            />
+                                            <span
+                                                style="margin-left:5px;color:#303030"
+                                                >{{ post.title }} | by
+                                                {{ post.user.name }}</span
+                                            >
+                                        </div>
+                                    </div>
+                                    <div v-else>
+                                        NO user Found !!
+                                    </div>
+                                </div>
+                            </transition>
                         </div>
                         <div
                             class="col-md-4 col-sm-12 text-end order-2 order-md-3 mb-3 mb-md-0"
@@ -55,8 +94,16 @@
 
                                     <li v-if="user.name">
                                         <span
+                                            v-if="showModal == false"
                                             v-on:click="onShowModal"
                                             class="icon-edit"
+                                            style="cursor:pointer;color:#303030"
+                                        ></span>
+                                        <span
+                                            v-else
+                                            v-on:click="onShowModal"
+                                            class="icon-close"
+                                            style="cursor:pointer;color:#303030"
                                         ></span>
                                     </li>
 
@@ -78,8 +125,8 @@
                     </div>
                     <transition
                         name="slide"
-                        enter-active-class="animated slideInRight"
-                        leave-active-class="animated slideOutRight"
+                        enter-active-class="animate__animated animate__slideInRight animate__faster"
+                        leave-active-class=" animate__animated animate__slideOutRight animate__faster"
                     >
                         <ul
                             v-if="show"
@@ -117,13 +164,13 @@
             </div>
         </nav>
 
-        <create :show-modal="showModal" />
+        <create :show-modal="showModal" :cats="categories" />
 
         <transition
             name="custom-classes-transition"
-            enter-active-class="animated fadeInRight"
+            enter-active-class="animate__animated animate__fadeInRight animate__fast"
         >
-            <router-view :user-prop="user"></router-view>
+            <router-view></router-view>
         </transition>
     </div>
 </template>
@@ -137,7 +184,9 @@ export default {
             categories: {},
             show: false,
             showModal: false,
-            routeName: this.$router.name
+            routeName: this.$router.name,
+            searchTerm: "",
+            posts: []
         };
     },
     methods: {
@@ -155,17 +204,27 @@ export default {
                 .get("/api/user")
                 .then(res => (this.user = res.data))
                 .catch(err => console.log(err));
+        },
+        getCategories() {
+            axios
+                .get("/api/categories/")
+                .then(res => (this.categories = res.data));
+        },
+        getPosts() {
+            axios.get("/api/posts/").then(res => (this.posts = res.data));
+        }
+    },
+    computed: {
+        searchedPosts() {
+            return this.posts.filter(post => {
+                return post.title.match(this.searchTerm);
+            });
         }
     },
     created() {
         this.getUser();
-
-        axios
-            .get("/api/categories/")
-            .then(({ data }) => (this.categories = data));
-    },
-    mounted() {
-        this.getUser();
+        this.getCategories();
+        this.getPosts();
     }
 };
 </script>

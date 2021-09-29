@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -15,9 +16,9 @@ class PostController extends Controller
         $this->middleware('getauth');
     }
     // all books
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::all();
+        $posts = Post::with('user', 'category')->get();
         return response()->json($posts);
     }
     public function add(Request $request)
@@ -38,18 +39,20 @@ class PostController extends Controller
 
         $name = time() . "." . $ext;
         $img = Image::make($request->photo)->resize(240, 200);
-        $upload_path = 'post/';
+        $upload_path = 'posts';
         $image_url = $upload_path . $name;
         $img->save($image_url);
-        $post = new Post;
+        $post = new Post();
         $post->title = $request->title;
+
         $post->slug = $request->slug;
         $post->desc = $request->desc;
         $post->content = $request->content;
         $post->photo = $image_url;
-        $post->category()->attach($request->category_id);
-
-        Auth::user()->posts()->save($post);
-        return response()->json('post Created succesfully');
+        $category = Category::where('id', $request->category_id)->first();
+        $post->category()->associate($category);
+        $user = Auth::user();
+        $post->user()->associate($user);
+        $post->save();
     }
 }

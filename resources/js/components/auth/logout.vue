@@ -16,7 +16,7 @@ export default {
             });
 
         this.$router.push({ name: "login" });
-        this.$router.go();
+        setTimeout(this.$router.go(), 10000);
     }
 };
 </script>

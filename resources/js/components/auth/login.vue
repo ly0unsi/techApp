@@ -115,7 +115,6 @@ export default {
         if (this.user.name) {
             this.$router.push({ name: "home" });
         }
-        console.log(this.userProp);
     },
 
     methods: {
@@ -128,7 +127,7 @@ export default {
                         title: "Signed in successfully"
                     });
                     this.$router.push({ name: "home" });
-                    this.$router.go();
+                    setTimeout(this.$router.go(), 10000);
                 })
                 .catch(error => (this.errors = error.response.data.errors))
                 .catch(error => {

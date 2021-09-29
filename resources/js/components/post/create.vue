@@ -1,11 +1,14 @@
 <template>
     <transition
         name="custom-classes-transition"
-        enter-active-class="animated bounceIn"
-        leave-active-class="animated bounceOut"
+        enter-active-class="animate__animated animate__bounceIn"
+        leave-active-class="animate__animated animate__bounceOut"
     >
-        <div v-if="showModal" class="createModal container">
-            <div class="row justify-content-center">
+        <div
+            v-if="showModal"
+            style="width:100%;height:100%;position:absolute; z-index: 10"
+        >
+            <div class="row createModal shadow">
                 <div class="col-xl-12 col-lg-12 col-md-12">
                     <div class="my-5">
                         <div class="-0">
@@ -152,7 +155,7 @@
                                                                 :value="
                                                                     category.id
                                                                 "
-                                                                v-for="category in categories"
+                                                                v-for="category in cats"
                                                                 >{{
                                                                     category.name
                                                                 }}</option
@@ -191,12 +194,26 @@
                                                                 errors.photo[0]
                                                             }}
                                                         </small>
-
-                                                        <img
-                                                            :src="form.photo"
-                                                            style="height: 40px; width: 40px;"
-                                                            class="rounded-circle border border-dark"
-                                                        />
+                                                        <transition
+                                                            name="custom-classes-transition"
+                                                            enter-active-class="animate__animated animate__bounceIn"
+                                                            leave-active-class="animate__animated animate__bounceOut"
+                                                        >
+                                                            <img
+                                                                v-if="
+                                                                    form.photo !==
+                                                                        null
+                                                                "
+                                                                :src="
+                                                                    form.photo
+                                                                "
+                                                                :key="
+                                                                    form.photo
+                                                                "
+                                                                style="height: 40px; width: 40px;"
+                                                                class="rounded-circle border border-dark"
+                                                            />
+                                                        </transition>
                                                     </div>
                                                 </div>
                                             </div>
@@ -231,7 +248,7 @@ export default {
             this.$router.push({ name: "/login" });
         }
     },
-    props: ["showModal"],
+    props: ["showModal", "cats"],
 
     data() {
         return {
@@ -243,8 +260,7 @@ export default {
                 category_id: null,
                 slug: null
             },
-            errors: {},
-            categories: {}
+            errors: {}
         };
     },
 
@@ -257,7 +273,6 @@ export default {
                 let reader = new FileReader();
                 reader.onload = event => {
                     this.form.photo = event.target.result;
-                    console.log(event.target.result);
                 };
                 reader.readAsDataURL(file);
             }
@@ -265,17 +280,28 @@ export default {
         postInsert() {
             axios
                 .post("/api/createpost", this.form)
-                .then(() => {
-                    this.$router.push({ name: "home" });
-                    Notification.success();
+                .then(res => {
+                    Toast.fire({
+                        icon: "success",
+                        title: "Post created in successfully"
+                    });
+
+                    this.form = {};
+                    this.form.photo = null;
                 })
-                .catch(error => (this.errors = error.response.data.errors));
+                .catch(error => {
+                    if (error.response !== undefined) {
+                        this.errors = error.response.data.errors;
+                        Toast.fire({
+                            icon: "error",
+                            title: "Check your fields"
+                        });
+                    }
+                });
         }
     },
     created() {
-        axios
-            .get("/api/categories/")
-            .then(({ data }) => (this.categories = data));
+        console.log(this.form.photo);
     }
 };
 </script>

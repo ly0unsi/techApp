@@ -28,6 +28,7 @@ class CategoryController extends Controller
          * @return \Illuminate\Http\Response
          */
         $cats = Category::all();
+
         return response()->json($cats);
     }
 }

@@ -12,7 +12,6 @@ class masterController extends Controller
     public function __construct()
     {
         $this->middleware('getauth');
-        $this->middleware('auth:api',)->except('login');
     }
 
     public function master(Request $request)

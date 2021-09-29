@@ -33,17 +33,15 @@
 .icon-instagram:before {
     content: "\f16d";
 }
+
 .createModal {
-    max-width: 800px;
-    position: absolute;
+    max-width: 600px;
     z-index: 3;
-    left: 50%;
-    top: 50%;
-    margin-left: -400px;
-    margin-top: -260px;
+
+    margin: auto;
     border-radius: 20px;
     background: white;
-    border: solid 1px #616161;
+    border: solid 1px #b6b6b6;
 }
 .icon-facebook:before {
     content: "\f09a";
@@ -1471,6 +1469,7 @@ body {
     height: 30px;
     width: 30px;
 }
+
 .site-mobile-menu-close > span:before,
 .site-mobile-menu-close > span:after {
     position: absolute;
@@ -1479,6 +1478,9 @@ body {
     height: 24px;
 
     background: #303030;
+}
+.icon-close:before {
+    content: "\f00d";
 }
 .site-mobile-menu-close > span:before {
     -webkit-transform: rotate(45deg);
@@ -1675,13 +1677,13 @@ body {
     content: "";
 }
 .burger:before {
-    top: 4px;
+    top: 7px;
 }
 .burger span {
     top: 15px;
 }
 .burger:after {
-    top: 26px;
+    top: 23px;
 }
 .burger:hover:before {
     top: 7px;

@@ -19,14 +19,14 @@
                                 items="1"
                                 gutter="20"
                             >
-                                <div>
+                                <div v-for="post in posts" :key="post.id">
                                     <div class="post-entry d-lg-flex shadow">
                                         <div
                                             class="me-lg-5 thumbnail mb-4 mb-lg-0"
                                         >
                                             <a href="single.html">
                                                 <img
-                                                    src="images/post_lg_1.jpg"
+                                                    :src="post.photo"
                                                     alt="Image"
                                                     class="img-fluid"
                                                 />
@@ -34,23 +34,18 @@
                                         </div>
                                         <div class="content align-self-center">
                                             <div class="post-meta mb-3">
-                                                <a href="#" class="category"
-                                                    >Business</a
-                                                >,
-                                                <a href="#" class="category"
-                                                    >Travel</a
-                                                >
-                                                &mdash;
-                                                <span class="date"
-                                                    >July 2, 2020</span
-                                                >
+                                                <a href="#" class="category">{{
+                                                    post.category.name
+                                                }}</a
+                                                >, &mdash;
+                                                <span class="date">{{
+                                                    post.created_at
+                                                }}</span>
                                             </div>
                                             <h2 class="heading">
-                                                <a href="single.html"
-                                                    >Your most unhappy customers
-                                                    are your greatest source of
-                                                    learning.</a
-                                                >
+                                                <a href="single.html">{{
+                                                    post.description
+                                                }}</a>
                                             </h2>
                                             <p>
                                                 Far far away, behind the word
@@ -73,201 +68,9 @@
                                                     />
                                                 </div>
                                                 <div class="text">
-                                                    <strong
-                                                        >Sergy Campbell</strong
-                                                    >
-                                                    <span>CEO and Founder</span>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div class="post-entry d-lg-flex">
-                                        <div
-                                            class="me-lg-5 thumbnail mb-4 mb-lg-0"
-                                        >
-                                            <a href="single.html">
-                                                <img
-                                                    src="images/post_lg_2.jpg"
-                                                    alt="Image"
-                                                    class="img-fluid"
-                                                />
-                                            </a>
-                                        </div>
-                                        <div class="content align-self-center">
-                                            <div class="post-meta mb-3">
-                                                <a href="#" class="category"
-                                                    >Business</a
-                                                >,
-                                                <a href="#" class="category"
-                                                    >Travel</a
-                                                >
-                                                &mdash;
-                                                <span class="date"
-                                                    >July 2, 2020</span
-                                                >
-                                            </div>
-                                            <h2 class="heading">
-                                                <a href="single.html"
-                                                    >Your most unhappy customers
-                                                    are your greatest source of
-                                                    learning.</a
-                                                >
-                                            </h2>
-                                            <p>
-                                                Far far away, behind the word
-                                                mountains, far from the
-                                                countries Vokalia and
-                                                Consonantia, there live the
-                                                blind texts. Separated they live
-                                                in Bookmarksgrove right at the
-                                                coast of the Semantics, a large
-                                                language ocean.
-                                            </p>
-                                            <a
-                                                href="#"
-                                                class="post-author d-flex align-items-center"
-                                            >
-                                                <div class="author-pic">
-                                                    <img
-                                                        src="images/person_1.jpg"
-                                                        alt="Image"
-                                                    />
-                                                </div>
-                                                <div class="text">
-                                                    <strong
-                                                        >Sergy Campbell</strong
-                                                    >
-                                                    <span>CEO and Founder</span>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div class="post-entry d-lg-flex">
-                                        <div
-                                            class="me-lg-5 thumbnail mb-4 mb-lg-0"
-                                        >
-                                            <a href="single.html">
-                                                <img
-                                                    src="images/post_lg_3.jpg"
-                                                    alt="Image"
-                                                    class="img-fluid"
-                                                />
-                                            </a>
-                                        </div>
-                                        <div class="content align-self-center">
-                                            <div class="post-meta mb-3">
-                                                <a href="#" class="category"
-                                                    >Business</a
-                                                >,
-                                                <a href="#" class="category"
-                                                    >Travel</a
-                                                >
-                                                &mdash;
-                                                <span class="date"
-                                                    >July 2, 2020</span
-                                                >
-                                            </div>
-                                            <h2 class="heading">
-                                                <a href="single.html"
-                                                    >Your most unhappy customers
-                                                    are your greatest source of
-                                                    learning.</a
-                                                >
-                                            </h2>
-                                            <p>
-                                                Far far away, behind the word
-                                                mountains, far from the
-                                                countries Vokalia and
-                                                Consonantia, there live the
-                                                blind texts. Separated they live
-                                                in Bookmarksgrove right at the
-                                                coast of the Semantics, a large
-                                                language ocean.
-                                            </p>
-                                            <a
-                                                href="#"
-                                                class="post-author d-flex align-items-center"
-                                            >
-                                                <div class="author-pic">
-                                                    <img
-                                                        src="images/person_1.jpg"
-                                                        alt="Image"
-                                                    />
-                                                </div>
-                                                <div class="text">
-                                                    <strong
-                                                        >Sergy Campbell</strong
-                                                    >
-                                                    <span>CEO and Founder</span>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <div class="post-entry d-lg-flex">
-                                        <div
-                                            class="me-lg-5 thumbnail mb-4 mb-lg-0"
-                                        >
-                                            <a href="single.html">
-                                                <img
-                                                    src="images/post_lg_4.jpg"
-                                                    alt="Image"
-                                                    class="img-fluid"
-                                                />
-                                            </a>
-                                        </div>
-                                        <div class="content align-self-center">
-                                            <div class="post-meta mb-3">
-                                                <a href="#" class="category"
-                                                    >Business</a
-                                                >,
-                                                <a href="#" class="category"
-                                                    >Travel</a
-                                                >
-                                                &mdash;
-                                                <span class="date"
-                                                    >July 2, 2020</span
-                                                >
-                                            </div>
-                                            <h2 class="heading">
-                                                <a href="single.html"
-                                                    >Your most unhappy customers
-                                                    are your greatest source of
-                                                    learning.</a
-                                                >
-                                            </h2>
-                                            <p>
-                                                Far far away, behind the word
-                                                mountains, far from the
-                                                countries Vokalia and
-                                                Consonantia, there live the
-                                                blind texts. Separated they live
-                                                in Bookmarksgrove right at the
-                                                coast of the Semantics, a large
-                                                language ocean.
-                                            </p>
-                                            <a
-                                                href="#"
-                                                class="post-author d-flex align-items-center"
-                                            >
-                                                <div class="author-pic">
-                                                    <img
-                                                        src="images/person_1.jpg"
-                                                        alt="Image"
-                                                    />
-                                                </div>
-                                                <div class="text">
-                                                    <strong
-                                                        >Sergy Campbell</strong
-                                                    >
+                                                    <strong>{{
+                                                        post.author.name
+                                                    }}</strong>
                                                     <span>CEO and Founder</span>
                                                 </div>
                                             </a>
@@ -1216,22 +1019,16 @@
 export default {
     data() {
         return {
-            user: {},
-            categories: {},
-            show: false
+            posts: []
         };
     },
-    props: ["userProp"],
     methods: {
-        onshow() {
-            this.show = !this.show;
+        getPosts() {
+            axios.get("/api/posts/").then(res => (this.posts = res.data));
         }
     },
     created() {
-        axios
-            .get("/api/categories/")
-            .then(({ data }) => (this.categories = data));
-        console.log(this.userProp);
+        this.getPosts();
     }
 };
 </script>

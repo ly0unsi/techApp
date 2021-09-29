@@ -1967,8 +1967,6 @@ __webpack_require__.r(__webpack_exports__);
         name: "home"
       });
     }
-
-    console.log(this.userProp);
   },
   methods: {
     login: function login() {
@@ -1984,7 +1982,7 @@ __webpack_require__.r(__webpack_exports__);
           name: "home"
         });
 
-        _this2.$router.go();
+        setTimeout(_this2.$router.go(), 10000);
       })["catch"](function (error) {
         return _this2.errors = error.response.data.errors;
       })["catch"](function (error) {
@@ -2027,7 +2025,7 @@ __webpack_require__.r(__webpack_exports__);
     this.$router.push({
       name: "login"
     });
-    this.$router.go();
+    setTimeout(this.$router.go(), 10000);
   }
 });
 
@@ -2162,7 +2160,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    if (!this.user.name) {
+    if (this.user.name) {
       this.$router.push({
         name: "home"
       });
@@ -2203,6 +2201,12 @@ __webpack_require__.r(__webpack_exports__);
         _this2.$router.push({
           name: "home"
         });
+
+        _this2.$router.push({
+          name: "home"
+        });
+
+        setTimeout(_this2.$router.go(), 10000);
       })["catch"](function (error) {
         return _this2.errors = error.response.data.errors;
       })["catch"](function (error) {
@@ -2230,81 +2234,76 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _layout_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../layout.vue */ "./resources/js/components/layout.vue");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  components: {
-    layout: _layout_vue__WEBPACK_IMPORTED_MODULE_0__.default
-  },
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_defineProperty({
   created: function created() {
     if (!User.loggedIn()) {
       this.$router.push({
@@ -2335,7 +2334,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     }
   }
-});
+}, "created", function created() {}));
 
 /***/ }),
 
@@ -3367,225 +3366,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      user: {},
-      categories: {},
-      show: false
+      posts: []
     };
   },
-  props: ["userProp"],
   methods: {
-    onshow: function onshow() {
-      this.show = !this.show;
+    getPosts: function getPosts() {
+      var _this = this;
+
+      axios.get("/api/posts/").then(function (res) {
+        return _this.posts = res.data;
+      });
     }
   },
   created: function created() {
-    var _this = this;
-
-    axios.get("/api/categories/").then(function (_ref) {
-      var data = _ref.data;
-      return _this.categories = data;
-    });
-    console.log(this.userProp);
+    this.getPosts();
   }
 });
 
@@ -3732,6 +3529,53 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -3743,7 +3587,9 @@ __webpack_require__.r(__webpack_exports__);
       categories: {},
       show: false,
       showModal: false,
-      routeName: this.$router.name
+      routeName: this.$router.name,
+      searchTerm: "",
+      posts: []
     };
   },
   methods: {
@@ -3764,19 +3610,35 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (err) {
         return console.log(err);
       });
+    },
+    getCategories: function getCategories() {
+      var _this2 = this;
+
+      axios.get("/api/categories/").then(function (res) {
+        return _this2.categories = res.data;
+      });
+    },
+    getPosts: function getPosts() {
+      var _this3 = this;
+
+      axios.get("/api/posts/").then(function (res) {
+        return _this3.posts = res.data;
+      });
+    }
+  },
+  computed: {
+    searchedPosts: function searchedPosts() {
+      var _this4 = this;
+
+      return this.posts.filter(function (post) {
+        return post.title.match(_this4.searchTerm);
+      });
     }
   },
   created: function created() {
-    var _this2 = this;
-
     this.getUser();
-    axios.get("/api/categories/").then(function (_ref) {
-      var data = _ref.data;
-      return _this2.categories = data;
-    });
-  },
-  mounted: function mounted() {
-    this.getUser();
+    this.getCategories();
+    this.getPosts();
   }
 });
 
@@ -4021,6 +3883,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_defineProperty({
   created: function created() {
     if (!User.loggedIn()) {
@@ -4029,7 +3908,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     }
   },
-  props: ["showModal"],
+  props: ["showModal", "cats"],
   data: function data() {
     return {
       form: {
@@ -4040,8 +3919,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         category_id: null,
         slug: null
       },
-      errors: {},
-      categories: {}
+      errors: {}
     };
   },
   methods: {
@@ -4057,7 +3935,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         reader.onload = function (event) {
           _this.form.photo = event.target.result;
-          console.log(event.target.result);
         };
 
         reader.readAsDataURL(file);
@@ -4066,24 +3943,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     postInsert: function postInsert() {
       var _this2 = this;
 
-      axios.post("/api/createpost", this.form).then(function () {
-        _this2.$router.push({
-          name: "home"
+      axios.post("/api/createpost", this.form).then(function (res) {
+        Toast.fire({
+          icon: "success",
+          title: "Post created in successfully"
         });
-
-        Notification.success();
+        _this2.form = {};
+        _this2.form.photo = null;
       })["catch"](function (error) {
-        return _this2.errors = error.response.data.errors;
+        if (error.response !== undefined) {
+          _this2.errors = error.response.data.errors;
+          Toast.fire({
+            icon: "error",
+            title: "Check your fields"
+          });
+        }
       });
     }
   }
 }, "created", function created() {
-  var _this3 = this;
-
-  axios.get("/api/categories/").then(function (_ref) {
-    var data = _ref.data;
-    return _this3.categories = data;
-  });
+  console.log(this.form.photo);
 }));
 
 /***/ }),
@@ -57852,118 +57731,85 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("layout", [
-    _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-xl-8 col-lg-12 col-md-12" }, [
-          _c("div", { staticClass: "shadow my-5" }, [
-            _c("div", { staticClass: "p-2" }, [
-              _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col-lg-12 " }, [
-                  _c("div", [
-                    _c("div", { staticClass: "text-center" }, [
-                      _c("h1", { staticClass: "h4 text-gray-900 mb-4" }, [
-                        _vm._v(
-                          "\n                                            Add Category\n                                        "
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "form",
-                      {
-                        staticClass: "user",
-                        on: {
-                          submit: function($event) {
-                            $event.preventDefault()
-                            return _vm.categoryInsert.apply(null, arguments)
-                          }
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-xl-8 col-lg-12 col-md-12" }, [
+        _c("div", { staticClass: "shadow my-5" }, [
+          _c("div", { staticClass: "p-2" }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-lg-12 " }, [
+                _c("div", [
+                  _vm._m(0),
+                  _vm._v(" "),
+                  _c(
+                    "form",
+                    {
+                      staticClass: "user",
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          return _vm.categoryInsert.apply(null, arguments)
                         }
-                      },
-                      [
-                        _c("div", { staticClass: "form-group" }, [
-                          _c("div", { staticClass: "form-row" }, [
-                            _c("div", { staticClass: "col-md-12" }, [
-                              _c(
-                                "label",
+                      }
+                    },
+                    [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c("div", { staticClass: "form-row" }, [
+                          _c("div", { staticClass: "col-md-12" }, [
+                            _vm._m(1),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
                                 {
-                                  attrs: { for: "exampleFormControlTextarea1" }
-                                },
-                                [
-                                  _c("b", [
-                                    _vm._v(
-                                      "Category name\n                                                        "
-                                    )
-                                  ])
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.form.name,
-                                    expression: "form.name"
-                                  }
-                                ],
-                                staticClass: "form-control my-1",
-                                attrs: {
-                                  type: "text",
-                                  id: "exampleInputFirstName",
-                                  placeholder: "Enter Categoty name"
-                                },
-                                domProps: { value: _vm.form.name },
-                                on: {
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.$set(
-                                      _vm.form,
-                                      "name",
-                                      $event.target.value
-                                    )
-                                  }
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.name,
+                                  expression: "form.name"
                                 }
-                              }),
-                              _vm._v(" "),
-                              _vm.errors.name
-                                ? _c("small", { staticClass: "text-danger" }, [
-                                    _vm._v(
-                                      "\n                                                        " +
-                                        _vm._s(_vm.errors.name[0]) +
-                                        "\n                                                    "
-                                    )
-                                  ])
-                                : _vm._e()
-                            ])
+                              ],
+                              staticClass: "form-control my-1",
+                              attrs: {
+                                type: "text",
+                                id: "exampleInputFirstName",
+                                placeholder: "Enter Categoty name"
+                              },
+                              domProps: { value: _vm.form.name },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.form,
+                                    "name",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.errors.name
+                              ? _c("small", { staticClass: "text-danger" }, [
+                                  _vm._v(
+                                    "\n                                                    " +
+                                      _vm._s(_vm.errors.name[0]) +
+                                      "\n                                                "
+                                  )
+                                ])
+                              : _vm._e()
                           ])
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "form-group pt-1" }, [
-                          _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-primary btn-block",
-                              attrs: { type: "submit" }
-                            },
-                            [
-                              _vm._v(
-                                "\n                                                Submit\n                                            "
-                              )
-                            ]
-                          )
                         ])
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("hr"),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "text-center" }),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "text-center" })
-                  ])
+                      ]),
+                      _vm._v(" "),
+                      _vm._m(2)
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("hr"),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "text-center" }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "text-center" })
                 ])
               ])
             ])
@@ -57973,7 +57819,48 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "text-center" }, [
+      _c("h1", { staticClass: "h4 text-gray-900 mb-4" }, [
+        _vm._v(
+          "\n                                        Add Category\n                                    "
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "exampleFormControlTextarea1" } }, [
+      _c("b", [
+        _vm._v(
+          "Category name\n                                                    "
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group pt-1" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-dark btn-block", attrs: { type: "submit" } },
+        [
+          _vm._v(
+            "\n                                            Create\n                                        "
+          )
+        ]
+      )
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -58018,8 +57905,8 @@ var render = function() {
                       gutter: "20"
                     }
                   },
-                  [
-                    _c("div", [
+                  _vm._l(_vm.posts, function(post) {
+                    return _c("div", { key: post.id }, [
                       _c(
                         "div",
                         { staticClass: "post-entry d-lg-flex shadow" },
@@ -58031,10 +57918,7 @@ var render = function() {
                               _c("a", { attrs: { href: "single.html" } }, [
                                 _c("img", {
                                   staticClass: "img-fluid",
-                                  attrs: {
-                                    src: "images/post_lg_1.jpg",
-                                    alt: "Image"
-                                  }
+                                  attrs: { src: post.photo, alt: "Image" }
                                 })
                               ])
                             ]
@@ -58051,32 +57935,19 @@ var render = function() {
                                     staticClass: "category",
                                     attrs: { href: "#" }
                                   },
-                                  [_vm._v("Business")]
+                                  [_vm._v(_vm._s(post.category.name))]
                                 ),
                                 _vm._v(
-                                  ",\n                                            "
-                                ),
-                                _c(
-                                  "a",
-                                  {
-                                    staticClass: "category",
-                                    attrs: { href: "#" }
-                                  },
-                                  [_vm._v("Travel")]
-                                ),
-                                _vm._v(
-                                  "\n                                            —\n                                            "
+                                  ", —\n                                            "
                                 ),
                                 _c("span", { staticClass: "date" }, [
-                                  _vm._v("July 2, 2020")
+                                  _vm._v(_vm._s(post.created_at))
                                 ])
                               ]),
                               _vm._v(" "),
                               _c("h2", { staticClass: "heading" }, [
                                 _c("a", { attrs: { href: "single.html" } }, [
-                                  _vm._v(
-                                    "Your most unhappy customers\n                                                are your greatest source of\n                                                learning."
-                                  )
+                                  _vm._v(_vm._s(post.description))
                                 ])
                               ]),
                               _vm._v(" "),
@@ -58104,7 +57975,9 @@ var render = function() {
                                   ]),
                                   _vm._v(" "),
                                   _c("div", { staticClass: "text" }, [
-                                    _c("strong", [_vm._v("Sergy Campbell")]),
+                                    _c("strong", [
+                                      _vm._v(_vm._s(post.author.name))
+                                    ]),
                                     _vm._v(" "),
                                     _c("span", [_vm._v("CEO and Founder")])
                                   ])
@@ -58114,287 +57987,9 @@ var render = function() {
                           )
                         ]
                       )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", [
-                      _c("div", { staticClass: "post-entry d-lg-flex" }, [
-                        _c(
-                          "div",
-                          { staticClass: "me-lg-5 thumbnail mb-4 mb-lg-0" },
-                          [
-                            _c("a", { attrs: { href: "single.html" } }, [
-                              _c("img", {
-                                staticClass: "img-fluid",
-                                attrs: {
-                                  src: "images/post_lg_2.jpg",
-                                  alt: "Image"
-                                }
-                              })
-                            ])
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "content align-self-center" },
-                          [
-                            _c("div", { staticClass: "post-meta mb-3" }, [
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "category",
-                                  attrs: { href: "#" }
-                                },
-                                [_vm._v("Business")]
-                              ),
-                              _vm._v(
-                                ",\n                                            "
-                              ),
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "category",
-                                  attrs: { href: "#" }
-                                },
-                                [_vm._v("Travel")]
-                              ),
-                              _vm._v(
-                                "\n                                            —\n                                            "
-                              ),
-                              _c("span", { staticClass: "date" }, [
-                                _vm._v("July 2, 2020")
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("h2", { staticClass: "heading" }, [
-                              _c("a", { attrs: { href: "single.html" } }, [
-                                _vm._v(
-                                  "Your most unhappy customers\n                                                are your greatest source of\n                                                learning."
-                                )
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("p", [
-                              _vm._v(
-                                "\n                                            Far far away, behind the word\n                                            mountains, far from the\n                                            countries Vokalia and\n                                            Consonantia, there live the\n                                            blind texts. Separated they live\n                                            in Bookmarksgrove right at the\n                                            coast of the Semantics, a large\n                                            language ocean.\n                                        "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                staticClass:
-                                  "post-author d-flex align-items-center",
-                                attrs: { href: "#" }
-                              },
-                              [
-                                _c("div", { staticClass: "author-pic" }, [
-                                  _c("img", {
-                                    attrs: {
-                                      src: "images/person_1.jpg",
-                                      alt: "Image"
-                                    }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "text" }, [
-                                  _c("strong", [_vm._v("Sergy Campbell")]),
-                                  _vm._v(" "),
-                                  _c("span", [_vm._v("CEO and Founder")])
-                                ])
-                              ]
-                            )
-                          ]
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", [
-                      _c("div", { staticClass: "post-entry d-lg-flex" }, [
-                        _c(
-                          "div",
-                          { staticClass: "me-lg-5 thumbnail mb-4 mb-lg-0" },
-                          [
-                            _c("a", { attrs: { href: "single.html" } }, [
-                              _c("img", {
-                                staticClass: "img-fluid",
-                                attrs: {
-                                  src: "images/post_lg_3.jpg",
-                                  alt: "Image"
-                                }
-                              })
-                            ])
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "content align-self-center" },
-                          [
-                            _c("div", { staticClass: "post-meta mb-3" }, [
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "category",
-                                  attrs: { href: "#" }
-                                },
-                                [_vm._v("Business")]
-                              ),
-                              _vm._v(
-                                ",\n                                            "
-                              ),
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "category",
-                                  attrs: { href: "#" }
-                                },
-                                [_vm._v("Travel")]
-                              ),
-                              _vm._v(
-                                "\n                                            —\n                                            "
-                              ),
-                              _c("span", { staticClass: "date" }, [
-                                _vm._v("July 2, 2020")
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("h2", { staticClass: "heading" }, [
-                              _c("a", { attrs: { href: "single.html" } }, [
-                                _vm._v(
-                                  "Your most unhappy customers\n                                                are your greatest source of\n                                                learning."
-                                )
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("p", [
-                              _vm._v(
-                                "\n                                            Far far away, behind the word\n                                            mountains, far from the\n                                            countries Vokalia and\n                                            Consonantia, there live the\n                                            blind texts. Separated they live\n                                            in Bookmarksgrove right at the\n                                            coast of the Semantics, a large\n                                            language ocean.\n                                        "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                staticClass:
-                                  "post-author d-flex align-items-center",
-                                attrs: { href: "#" }
-                              },
-                              [
-                                _c("div", { staticClass: "author-pic" }, [
-                                  _c("img", {
-                                    attrs: {
-                                      src: "images/person_1.jpg",
-                                      alt: "Image"
-                                    }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "text" }, [
-                                  _c("strong", [_vm._v("Sergy Campbell")]),
-                                  _vm._v(" "),
-                                  _c("span", [_vm._v("CEO and Founder")])
-                                ])
-                              ]
-                            )
-                          ]
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", [
-                      _c("div", { staticClass: "post-entry d-lg-flex" }, [
-                        _c(
-                          "div",
-                          { staticClass: "me-lg-5 thumbnail mb-4 mb-lg-0" },
-                          [
-                            _c("a", { attrs: { href: "single.html" } }, [
-                              _c("img", {
-                                staticClass: "img-fluid",
-                                attrs: {
-                                  src: "images/post_lg_4.jpg",
-                                  alt: "Image"
-                                }
-                              })
-                            ])
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "content align-self-center" },
-                          [
-                            _c("div", { staticClass: "post-meta mb-3" }, [
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "category",
-                                  attrs: { href: "#" }
-                                },
-                                [_vm._v("Business")]
-                              ),
-                              _vm._v(
-                                ",\n                                            "
-                              ),
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "category",
-                                  attrs: { href: "#" }
-                                },
-                                [_vm._v("Travel")]
-                              ),
-                              _vm._v(
-                                "\n                                            —\n                                            "
-                              ),
-                              _c("span", { staticClass: "date" }, [
-                                _vm._v("July 2, 2020")
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("h2", { staticClass: "heading" }, [
-                              _c("a", { attrs: { href: "single.html" } }, [
-                                _vm._v(
-                                  "Your most unhappy customers\n                                                are your greatest source of\n                                                learning."
-                                )
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("p", [
-                              _vm._v(
-                                "\n                                            Far far away, behind the word\n                                            mountains, far from the\n                                            countries Vokalia and\n                                            Consonantia, there live the\n                                            blind texts. Separated they live\n                                            in Bookmarksgrove right at the\n                                            coast of the Semantics, a large\n                                            language ocean.\n                                        "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                staticClass:
-                                  "post-author d-flex align-items-center",
-                                attrs: { href: "#" }
-                              },
-                              [
-                                _c("div", { staticClass: "author-pic" }, [
-                                  _c("img", {
-                                    attrs: {
-                                      src: "images/person_1.jpg",
-                                      alt: "Image"
-                                    }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "text" }, [
-                                  _c("strong", [_vm._v("Sergy Campbell")]),
-                                  _vm._v(" "),
-                                  _c("span", [_vm._v("CEO and Founder")])
-                                ])
-                              ]
-                            )
-                          ]
-                        )
-                      ])
                     ])
-                  ]
+                  }),
+                  0
                 )
               ],
               1
@@ -59854,7 +59449,7 @@ var render = function() {
                       },
                       [
                         _vm._v(
-                          "\n                            MagDesign\n                        "
+                          "\n                            Readose.com\n                        "
                         )
                       ]
                     )
@@ -59862,7 +59457,131 @@ var render = function() {
                   1
                 ),
                 _vm._v(" "),
-                _vm._m(0),
+                _c(
+                  "div",
+                  { staticClass: "col-md-4 order-3 order-md-1" },
+                  [
+                    _c(
+                      "form",
+                      { staticClass: "search-form", attrs: { action: "#" } },
+                      [
+                        _c("span", { staticClass: "icon-search2" }),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.searchTerm,
+                              expression: "searchTerm"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          staticStyle: { "border-radius": "30px" },
+                          attrs: { type: "search", placeholder: "Search..." },
+                          domProps: { value: _vm.searchTerm },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.searchTerm = $event.target.value
+                            }
+                          }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "transition",
+                      {
+                        attrs: {
+                          name: "custom-classes-transition",
+                          "enter-active-class":
+                            "animate__animated animate__bounceIn",
+                          "leave-active-class":
+                            "animate__animated animate__bounceOut"
+                        }
+                      },
+                      [
+                        _vm.searchTerm !== ""
+                          ? _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "bg-light col-3 py-2 px-2 mt-1 shadow-sm",
+                                staticStyle: {
+                                  height: "auto",
+                                  background: "black",
+                                  position: "absolute",
+                                  width: "auto",
+                                  "z-index": "3",
+                                  "border-radius": "30px"
+                                }
+                              },
+                              [
+                                _vm.searchedPosts.length > 0
+                                  ? _c(
+                                      "div",
+                                      _vm._l(_vm.searchedPosts, function(post) {
+                                        return _c(
+                                          "div",
+                                          {
+                                            key: post.id,
+                                            staticClass: "d-flex mt-1",
+                                            staticStyle: {
+                                              "align-items": "center"
+                                            }
+                                          },
+                                          [
+                                            _c("img", {
+                                              staticStyle: {
+                                                width: "37px",
+                                                "border-radius": "50%",
+                                                border: "1px solid #303030",
+                                                height: "37px",
+                                                "object-fit": "cover"
+                                              },
+                                              attrs: {
+                                                src: post.photo,
+                                                alt: ""
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _c(
+                                              "span",
+                                              {
+                                                staticStyle: {
+                                                  "margin-left": "5px",
+                                                  color: "#303030"
+                                                }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  _vm._s(post.title) +
+                                                    " | by\n                                            " +
+                                                    _vm._s(post.user.name)
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      }),
+                                      0
+                                    )
+                                  : _c("div", [
+                                      _vm._v(
+                                        "\n                                    NO user Found !!\n                                "
+                                      )
+                                    ])
+                              ]
+                            )
+                          : _vm._e()
+                      ]
+                    )
+                  ],
+                  1
+                ),
                 _vm._v(" "),
                 _c(
                   "div",
@@ -59876,11 +59595,11 @@ var render = function() {
                         "ul",
                         { staticClass: "list-unstyled social me-auto" },
                         [
+                          _vm._m(0),
+                          _vm._v(" "),
                           _vm._m(1),
                           _vm._v(" "),
                           _vm._m(2),
-                          _vm._v(" "),
-                          _vm._m(3),
                           _vm._v(" "),
                           _vm.user.name
                             ? _c("li", [
@@ -59912,10 +59631,23 @@ var render = function() {
                           _vm._v(" "),
                           _vm.user.name
                             ? _c("li", [
-                                _c("span", {
-                                  staticClass: "icon-edit",
-                                  on: { click: _vm.onShowModal }
-                                })
+                                _vm.showModal == false
+                                  ? _c("span", {
+                                      staticClass: "icon-edit",
+                                      staticStyle: {
+                                        cursor: "pointer",
+                                        color: "#303030"
+                                      },
+                                      on: { click: _vm.onShowModal }
+                                    })
+                                  : _c("span", {
+                                      staticClass: "icon-close",
+                                      staticStyle: {
+                                        cursor: "pointer",
+                                        color: "#303030"
+                                      },
+                                      on: { click: _vm.onShowModal }
+                                    })
                               ])
                             : _c(
                                 "li",
@@ -59950,8 +59682,10 @@ var render = function() {
                 {
                   attrs: {
                     name: "slide",
-                    "enter-active-class": "animated slideInRight",
-                    "leave-active-class": "animated slideOutRight"
+                    "enter-active-class":
+                      "animate__animated animate__slideInRight animate__faster",
+                    "leave-active-class":
+                      " animate__animated animate__slideOutRight animate__faster"
                   }
                 },
                 [
@@ -60043,17 +59777,20 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _c("create", { attrs: { "show-modal": _vm.showModal } }),
+      _c("create", {
+        attrs: { "show-modal": _vm.showModal, cats: _vm.categories }
+      }),
       _vm._v(" "),
       _c(
         "transition",
         {
           attrs: {
             name: "custom-classes-transition",
-            "enter-active-class": "animated fadeInRight"
+            "enter-active-class":
+              "animate__animated animate__fadeInRight animate__fast"
           }
         },
-        [_c("router-view", { attrs: { "user-prop": _vm.user } })],
+        [_c("router-view")],
         1
       )
     ],
@@ -60061,22 +59798,6 @@ var render = function() {
   )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-4 order-3 order-md-1" }, [
-      _c("form", { staticClass: "search-form", attrs: { action: "#" } }, [
-        _c("span", { staticClass: "icon-search2" }),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "form-control",
-          staticStyle: { "border-radius": "30px" },
-          attrs: { type: "search", placeholder: "Search..." }
-        })
-      ])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -60135,242 +59856,58 @@ var render = function() {
     {
       attrs: {
         name: "custom-classes-transition",
-        "enter-active-class": "animated bounceIn",
-        "leave-active-class": "animated bounceOut"
+        "enter-active-class": "animate__animated animate__bounceIn",
+        "leave-active-class": "animate__animated animate__bounceOut"
       }
     },
     [
       _vm.showModal
-        ? _c("div", { staticClass: "createModal container" }, [
-            _c("div", { staticClass: "row justify-content-center" }, [
-              _c("div", { staticClass: "col-xl-12 col-lg-12 col-md-12" }, [
-                _c("div", { staticClass: "my-5" }, [
-                  _c("div", { staticClass: "-0" }, [
-                    _c("div", { staticClass: "row" }, [
-                      _c("div", { staticClass: "col-lg-12" }, [
-                        _c("div", [
-                          _c("div", { staticClass: "text-center" }, [
-                            _c("h1", { staticClass: "h4 text-gray-900 mb-4" }, [
-                              _vm._v(
-                                "\n                                            Add Post\n                                        "
+        ? _c(
+            "div",
+            {
+              staticStyle: {
+                width: "100%",
+                height: "100%",
+                position: "absolute",
+                "z-index": "10"
+              }
+            },
+            [
+              _c("div", { staticClass: "row createModal shadow" }, [
+                _c("div", { staticClass: "col-xl-12 col-lg-12 col-md-12" }, [
+                  _c("div", { staticClass: "my-5" }, [
+                    _c("div", { staticClass: "-0" }, [
+                      _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-lg-12" }, [
+                          _c("div", [
+                            _c("div", { staticClass: "text-center" }, [
+                              _c(
+                                "h1",
+                                { staticClass: "h4 text-gray-900 mb-4" },
+                                [
+                                  _vm._v(
+                                    "\n                                            Add Post\n                                        "
+                                  )
+                                ]
                               )
-                            ])
-                          ]),
-                          _vm._v(" "),
-                          _c(
-                            "form",
-                            {
-                              staticClass: "user",
-                              attrs: { enctype: "multipart/form-data" },
-                              on: {
-                                submit: function($event) {
-                                  $event.preventDefault()
-                                  return _vm.postInsert.apply(null, arguments)
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "form",
+                              {
+                                staticClass: "user",
+                                attrs: { enctype: "multipart/form-data" },
+                                on: {
+                                  submit: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.postInsert.apply(null, arguments)
+                                  }
                                 }
-                              }
-                            },
-                            [
-                              _c("div", { staticClass: "form-group" }, [
-                                _c("div", { staticClass: "form-row" }, [
-                                  _c("div", { staticClass: "col-md-12" }, [
-                                    _c(
-                                      "label",
-                                      {
-                                        attrs: {
-                                          for: "exampleFormControlTextarea1"
-                                        }
-                                      },
-                                      [
-                                        _c("b", [
-                                          _vm._v(
-                                            "Post title\n                                                        "
-                                          )
-                                        ])
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
-                                          value: _vm.form.title,
-                                          expression: "form.title"
-                                        }
-                                      ],
-                                      staticClass: "form-control",
-                                      attrs: {
-                                        type: "text",
-                                        id: "exampleInputFirstName",
-                                        placeholder: "Enter Post Title"
-                                      },
-                                      domProps: { value: _vm.form.title },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            _vm.form,
-                                            "title",
-                                            $event.target.value
-                                          )
-                                        }
-                                      }
-                                    }),
-                                    _vm._v(" "),
-                                    _vm.errors.title
-                                      ? _c(
-                                          "small",
-                                          { staticClass: "text-danger" },
-                                          [
-                                            _vm._v(
-                                              "\n                                                        " +
-                                                _vm._s(_vm.errors.title[0]) +
-                                                "\n                                                    "
-                                            )
-                                          ]
-                                        )
-                                      : _vm._e()
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("div", { staticClass: "col-md-12" }, [
-                                    _c(
-                                      "label",
-                                      {
-                                        attrs: {
-                                          for: "exampleFormControlTextarea1"
-                                        }
-                                      },
-                                      [
-                                        _c("b", [
-                                          _vm._v(
-                                            "Post Slug\n                                                        "
-                                          )
-                                        ])
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c("input", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
-                                          value: _vm.form.slug,
-                                          expression: "form.slug"
-                                        },
-                                        {
-                                          name: "slugify",
-                                          rawName: "v-slugify"
-                                        }
-                                      ],
-                                      staticClass: "form-control",
-                                      attrs: {
-                                        type: "text",
-                                        id: "exampleInputFirstName",
-                                        placeholder: "Enter Post Slug"
-                                      },
-                                      domProps: { value: _vm.form.slug },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            _vm.form,
-                                            "slug",
-                                            $event.target.value
-                                          )
-                                        }
-                                      }
-                                    }),
-                                    _vm._v(" "),
-                                    _vm.errors.title
-                                      ? _c(
-                                          "small",
-                                          { staticClass: "text-danger" },
-                                          [
-                                            _vm._v(
-                                              "\n                                                        " +
-                                                _vm._s(_vm.errors.title[0]) +
-                                                "\n                                                    "
-                                            )
-                                          ]
-                                        )
-                                      : _vm._e()
-                                  ]),
-                                  _vm._v(" "),
-                                  _c("div", { staticClass: "col-md-12" }, [
-                                    _c(
-                                      "label",
-                                      {
-                                        attrs: {
-                                          for: "exampleFormControlTextarea1"
-                                        }
-                                      },
-                                      [
-                                        _c("b", [
-                                          _vm._v(
-                                            "Post\n                                                            Description\n                                                        "
-                                          )
-                                        ])
-                                      ]
-                                    ),
-                                    _vm._v(" "),
-                                    _c("textarea", {
-                                      directives: [
-                                        {
-                                          name: "model",
-                                          rawName: "v-model",
-                                          value: _vm.form.desc,
-                                          expression: "form.desc"
-                                        }
-                                      ],
-                                      staticClass: "form-control",
-                                      attrs: {
-                                        id: "exampleInputFirstName",
-                                        placeholder: "Enter Post decription",
-                                        cols: "30",
-                                        rows: "5"
-                                      },
-                                      domProps: { value: _vm.form.desc },
-                                      on: {
-                                        input: function($event) {
-                                          if ($event.target.composing) {
-                                            return
-                                          }
-                                          _vm.$set(
-                                            _vm.form,
-                                            "desc",
-                                            $event.target.value
-                                          )
-                                        }
-                                      }
-                                    }),
-                                    _vm._v(" "),
-                                    _vm.errors.desc
-                                      ? _c(
-                                          "small",
-                                          { staticClass: "text-danger" },
-                                          [
-                                            _vm._v(
-                                              "\n                                                        " +
-                                                _vm._s(_vm.errors.desc[0]) +
-                                                "\n                                                    "
-                                            )
-                                          ]
-                                        )
-                                      : _vm._e()
-                                  ])
-                                ])
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "form-group" }, [
-                                _c("div", { staticClass: "form-row" }, [
-                                  _c(
-                                    "div",
-                                    { staticClass: "col-md-12" },
-                                    [
+                              },
+                              [
+                                _c("div", { staticClass: "form-group" }, [
+                                  _c("div", { staticClass: "form-row" }, [
+                                    _c("div", { staticClass: "col-md-12" }, [
                                       _c(
                                         "label",
                                         {
@@ -60381,208 +59918,439 @@ var render = function() {
                                         [
                                           _c("b", [
                                             _vm._v(
-                                              "Post content\n                                                        "
+                                              "Post title\n                                                        "
                                             )
                                           ])
                                         ]
                                       ),
                                       _vm._v(" "),
-                                      _c("VueEditor", {
-                                        model: {
-                                          value: _vm.form.content,
-                                          callback: function($$v) {
-                                            _vm.$set(_vm.form, "content", $$v)
-                                          },
-                                          expression:
-                                            "\n                                                            form.content\n                                                        "
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.form.title,
+                                            expression: "form.title"
+                                          }
+                                        ],
+                                        staticClass: "form-control",
+                                        attrs: {
+                                          type: "text",
+                                          id: "exampleInputFirstName",
+                                          placeholder: "Enter Post Title"
+                                        },
+                                        domProps: { value: _vm.form.title },
+                                        on: {
+                                          input: function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              _vm.form,
+                                              "title",
+                                              $event.target.value
+                                            )
+                                          }
                                         }
                                       }),
                                       _vm._v(" "),
-                                      _vm.errors.content
+                                      _vm.errors.title
                                         ? _c(
                                             "small",
                                             { staticClass: "text-danger" },
                                             [
                                               _vm._v(
                                                 "\n                                                        " +
-                                                  _vm._s(
-                                                    _vm.errors.content[0]
-                                                  ) +
+                                                  _vm._s(_vm.errors.title[0]) +
                                                   "\n                                                    "
                                               )
                                             ]
                                           )
                                         : _vm._e()
-                                    ],
-                                    1
-                                  )
-                                ])
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "form-group" }, [
-                                _c("div", { staticClass: "form-row" }, [
-                                  _c("div", { staticClass: "col-md-12" }, [
-                                    _c(
-                                      "label",
-                                      {
-                                        attrs: {
-                                          for: "exampleFormControlSelect1"
-                                        }
-                                      },
-                                      [
-                                        _vm._v(
-                                          "Product\n                                                        Category"
-                                        )
-                                      ]
-                                    ),
+                                    ]),
                                     _vm._v(" "),
-                                    _c(
-                                      "select",
-                                      {
-                                        directives: [
-                                          {
-                                            name: "model",
-                                            rawName: "v-model",
-                                            value: _vm.form.category_id,
-                                            expression:
-                                              "\n                                                            form.category_id\n                                                        "
-                                          }
-                                        ],
-                                        staticClass: "form-control",
-                                        attrs: {
-                                          id: "exampleFormControlSelect1"
-                                        },
-                                        on: {
-                                          change: function($event) {
-                                            var $$selectedVal = Array.prototype.filter
-                                              .call(
-                                                $event.target.options,
-                                                function(o) {
-                                                  return o.selected
-                                                }
-                                              )
-                                              .map(function(o) {
-                                                var val =
-                                                  "_value" in o
-                                                    ? o._value
-                                                    : o.value
-                                                return val
-                                              })
-                                            _vm.$set(
-                                              _vm.form,
-                                              "category_id",
-                                              $event.target.multiple
-                                                ? $$selectedVal
-                                                : $$selectedVal[0]
-                                            )
-                                          }
-                                        }
-                                      },
-                                      _vm._l(_vm.categories, function(
-                                        category
-                                      ) {
-                                        return _c(
-                                          "option",
-                                          {
-                                            key: category.id,
-                                            domProps: { value: category.id }
-                                          },
-                                          [_vm._v(_vm._s(category.name))]
-                                        )
-                                      }),
-                                      0
-                                    )
-                                  ])
-                                ])
-                              ]),
-                              _vm._v(" "),
-                              _c(
-                                "div",
-                                { staticClass: "form-group pt-1 text-center" },
-                                [
-                                  _c("div", { staticClass: "form-row" }, [
                                     _c("div", { staticClass: "col-md-12" }, [
                                       _c(
                                         "label",
                                         {
-                                          staticClass:
-                                            "btn btn-sm btn-dark btn-block",
-                                          attrs: { type: "submit" }
+                                          attrs: {
+                                            for: "exampleFormControlTextarea1"
+                                          }
                                         },
                                         [
-                                          _c("input", {
-                                            staticClass: "custom-file-input",
-                                            staticStyle: { display: "none" },
-                                            attrs: {
-                                              type: "file",
-                                              id: "customFile"
-                                            },
-                                            on: { change: _vm.onFileSelected }
-                                          }),
-                                          _vm._v(
-                                            "\n                                                        Post Pic >\n                                                    "
-                                          )
+                                          _c("b", [
+                                            _vm._v(
+                                              "Post Slug\n                                                        "
+                                            )
+                                          ])
                                         ]
                                       ),
                                       _vm._v(" "),
-                                      _vm.errors.photo
+                                      _c("input", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.form.slug,
+                                            expression: "form.slug"
+                                          },
+                                          {
+                                            name: "slugify",
+                                            rawName: "v-slugify"
+                                          }
+                                        ],
+                                        staticClass: "form-control",
+                                        attrs: {
+                                          type: "text",
+                                          id: "exampleInputFirstName",
+                                          placeholder: "Enter Post Slug"
+                                        },
+                                        domProps: { value: _vm.form.slug },
+                                        on: {
+                                          input: function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              _vm.form,
+                                              "slug",
+                                              $event.target.value
+                                            )
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _vm.errors.title
                                         ? _c(
                                             "small",
                                             { staticClass: "text-danger" },
                                             [
                                               _vm._v(
                                                 "\n                                                        " +
-                                                  _vm._s(_vm.errors.photo[0]) +
+                                                  _vm._s(_vm.errors.title[0]) +
                                                   "\n                                                    "
                                               )
                                             ]
                                           )
-                                        : _vm._e(),
-                                      _vm._v(" "),
-                                      _c("img", {
-                                        staticClass:
-                                          "rounded-circle border border-dark",
-                                        staticStyle: {
-                                          height: "40px",
-                                          width: "40px"
+                                        : _vm._e()
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "col-md-12" }, [
+                                      _c(
+                                        "label",
+                                        {
+                                          attrs: {
+                                            for: "exampleFormControlTextarea1"
+                                          }
                                         },
-                                        attrs: { src: _vm.form.photo }
-                                      })
+                                        [
+                                          _c("b", [
+                                            _vm._v(
+                                              "Post\n                                                            Description\n                                                        "
+                                            )
+                                          ])
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("textarea", {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.form.desc,
+                                            expression: "form.desc"
+                                          }
+                                        ],
+                                        staticClass: "form-control",
+                                        attrs: {
+                                          id: "exampleInputFirstName",
+                                          placeholder: "Enter Post decription",
+                                          cols: "30",
+                                          rows: "5"
+                                        },
+                                        domProps: { value: _vm.form.desc },
+                                        on: {
+                                          input: function($event) {
+                                            if ($event.target.composing) {
+                                              return
+                                            }
+                                            _vm.$set(
+                                              _vm.form,
+                                              "desc",
+                                              $event.target.value
+                                            )
+                                          }
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _vm.errors.desc
+                                        ? _c(
+                                            "small",
+                                            { staticClass: "text-danger" },
+                                            [
+                                              _vm._v(
+                                                "\n                                                        " +
+                                                  _vm._s(_vm.errors.desc[0]) +
+                                                  "\n                                                    "
+                                              )
+                                            ]
+                                          )
+                                        : _vm._e()
                                     ])
                                   ])
-                                ]
-                              ),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "form-group pt-1" }, [
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "form-group" }, [
+                                  _c("div", { staticClass: "form-row" }, [
+                                    _c(
+                                      "div",
+                                      { staticClass: "col-md-12" },
+                                      [
+                                        _c(
+                                          "label",
+                                          {
+                                            attrs: {
+                                              for: "exampleFormControlTextarea1"
+                                            }
+                                          },
+                                          [
+                                            _c("b", [
+                                              _vm._v(
+                                                "Post content\n                                                        "
+                                              )
+                                            ])
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("VueEditor", {
+                                          model: {
+                                            value: _vm.form.content,
+                                            callback: function($$v) {
+                                              _vm.$set(_vm.form, "content", $$v)
+                                            },
+                                            expression:
+                                              "\n                                                            form.content\n                                                        "
+                                          }
+                                        }),
+                                        _vm._v(" "),
+                                        _vm.errors.content
+                                          ? _c(
+                                              "small",
+                                              { staticClass: "text-danger" },
+                                              [
+                                                _vm._v(
+                                                  "\n                                                        " +
+                                                    _vm._s(
+                                                      _vm.errors.content[0]
+                                                    ) +
+                                                    "\n                                                    "
+                                                )
+                                              ]
+                                            )
+                                          : _vm._e()
+                                      ],
+                                      1
+                                    )
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "form-group" }, [
+                                  _c("div", { staticClass: "form-row" }, [
+                                    _c("div", { staticClass: "col-md-12" }, [
+                                      _c(
+                                        "label",
+                                        {
+                                          attrs: {
+                                            for: "exampleFormControlSelect1"
+                                          }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "Product\n                                                        Category"
+                                          )
+                                        ]
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "select",
+                                        {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value: _vm.form.category_id,
+                                              expression:
+                                                "\n                                                            form.category_id\n                                                        "
+                                            }
+                                          ],
+                                          staticClass: "form-control",
+                                          attrs: {
+                                            id: "exampleFormControlSelect1"
+                                          },
+                                          on: {
+                                            change: function($event) {
+                                              var $$selectedVal = Array.prototype.filter
+                                                .call(
+                                                  $event.target.options,
+                                                  function(o) {
+                                                    return o.selected
+                                                  }
+                                                )
+                                                .map(function(o) {
+                                                  var val =
+                                                    "_value" in o
+                                                      ? o._value
+                                                      : o.value
+                                                  return val
+                                                })
+                                              _vm.$set(
+                                                _vm.form,
+                                                "category_id",
+                                                $event.target.multiple
+                                                  ? $$selectedVal
+                                                  : $$selectedVal[0]
+                                              )
+                                            }
+                                          }
+                                        },
+                                        _vm._l(_vm.cats, function(category) {
+                                          return _c(
+                                            "option",
+                                            {
+                                              key: category.id,
+                                              domProps: { value: category.id }
+                                            },
+                                            [_vm._v(_vm._s(category.name))]
+                                          )
+                                        }),
+                                        0
+                                      )
+                                    ])
+                                  ])
+                                ]),
+                                _vm._v(" "),
                                 _c(
-                                  "button",
+                                  "div",
                                   {
-                                    staticClass: "btn btn-dark",
-                                    attrs: { type: "submit" }
+                                    staticClass: "form-group pt-1 text-center"
                                   },
                                   [
-                                    _vm._v(
-                                      "\n                                                Add\n                                            "
-                                    )
+                                    _c("div", { staticClass: "form-row" }, [
+                                      _c(
+                                        "div",
+                                        { staticClass: "col-md-12" },
+                                        [
+                                          _c(
+                                            "label",
+                                            {
+                                              staticClass:
+                                                "btn btn-sm btn-dark btn-block",
+                                              attrs: { type: "submit" }
+                                            },
+                                            [
+                                              _c("input", {
+                                                staticClass:
+                                                  "custom-file-input",
+                                                staticStyle: {
+                                                  display: "none"
+                                                },
+                                                attrs: {
+                                                  type: "file",
+                                                  id: "customFile"
+                                                },
+                                                on: {
+                                                  change: _vm.onFileSelected
+                                                }
+                                              }),
+                                              _vm._v(
+                                                "\n                                                        Post Pic >\n                                                    "
+                                              )
+                                            ]
+                                          ),
+                                          _vm._v(" "),
+                                          _vm.errors.photo
+                                            ? _c(
+                                                "small",
+                                                { staticClass: "text-danger" },
+                                                [
+                                                  _vm._v(
+                                                    "\n                                                        " +
+                                                      _vm._s(
+                                                        _vm.errors.photo[0]
+                                                      ) +
+                                                      "\n                                                    "
+                                                  )
+                                                ]
+                                              )
+                                            : _vm._e(),
+                                          _vm._v(" "),
+                                          _c(
+                                            "transition",
+                                            {
+                                              attrs: {
+                                                name:
+                                                  "custom-classes-transition",
+                                                "enter-active-class":
+                                                  "animate__animated animate__bounceIn",
+                                                "leave-active-class":
+                                                  "animate__animated animate__bounceOut"
+                                              }
+                                            },
+                                            [
+                                              _vm.form.photo !== null
+                                                ? _c("img", {
+                                                    key: _vm.form.photo,
+                                                    staticClass:
+                                                      "rounded-circle border border-dark",
+                                                    staticStyle: {
+                                                      height: "40px",
+                                                      width: "40px"
+                                                    },
+                                                    attrs: {
+                                                      src: _vm.form.photo
+                                                    }
+                                                  })
+                                                : _vm._e()
+                                            ]
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ])
                                   ]
-                                )
-                              ])
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c("hr"),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "text-center" }),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "text-center" })
+                                ),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "form-group pt-1" }, [
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-dark",
+                                      attrs: { type: "submit" }
+                                    },
+                                    [
+                                      _vm._v(
+                                        "\n                                                Add\n                                            "
+                                      )
+                                    ]
+                                  )
+                                ])
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c("hr"),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "text-center" }),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "text-center" })
+                          ])
                         ])
                       ])
                     ])
                   ])
                 ])
               ])
-            ])
-          ])
+            ]
+          )
         : _vm._e()
     ]
   )
