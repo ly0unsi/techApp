@@ -6,7 +6,7 @@ export default {
         axios
             .post("/api/auth/logout")
             .then(() => {
-                Reload.$emit("AfterAdd");
+                Reload.$emit("logout");
             })
             .then(res => {
                 Toast.fire({
@@ -15,8 +15,7 @@ export default {
                 });
             });
 
-        this.$router.push({ name: "login" });
-        setTimeout(this.$router.go(), 10000);
+        this.$router.push({ name: "home" });
     }
 };
 </script>

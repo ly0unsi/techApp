@@ -104,41 +104,51 @@ export default {
                 email: null,
                 password: null
             },
-            errors: {}
+            errors: {},
+            auth: {}
         };
     },
-    props: ["userProp"],
-    created() {
-        axios
-            .get("/api/categories/")
-            .then(({ data }) => (this.categories = data));
-        if (this.user.name) {
-            this.$router.push({ name: "home" });
+    methods: {
+        async getUser() {
+            try {
+                const res = await axios.get("/api/user");
+                this.auth = res.data;
+                console.log(res.data);
+                this.auth = res.data;
+                console.log(this.auth);
+            } catch (err) {
+                console.log(err);
+            }
+        },
+        async getCats() {
+            const res = await axios.get("/api/categories/");
+            this.categories = res.data;
+        },
+        async login() {
+            try {
+                const res = await axios.post("/api/auth/login", this.form);
+                Reload.$emit("login");
+                this.$router.push({ name: "home" });
+            } catch (error) {
+                if (error) {
+                    this.errors = error.response.data.errors;
+                    Toast.fire({
+                        icon: "warning",
+                        title: "something went wrong"
+                    });
+                }
+            }
+        },
+        checkUser() {
+            if (this.auth.name === "abdllah") {
+                this.$router.push({ name: "home" });
+            }
         }
     },
-
-    methods: {
-        login() {
-            axios
-                .post("/api/auth/login", this.form)
-                .then(res => {
-                    Toast.fire({
-                        icon: "success",
-                        title: "Signed in successfully"
-                    });
-                    this.$router.push({ name: "home" });
-                    setTimeout(this.$router.go(), 10000);
-                })
-                .catch(error => (this.errors = error.response.data.errors))
-                .catch(error => {
-                    if (error) {
-                        Toast.fire({
-                            icon: "warning",
-                            title: this.errors
-                        });
-                    }
-                });
-        }
+    created() {
+        this.getUser();
+        this.getCats();
+        this.checkUser();
     }
 };
 </script>

@@ -3,12 +3,11 @@
 namespace App;
 
 use App\Models\Post;
-use App\Models\Profile as ModelsProfile;
+use App\Models\Profile;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Symfony\Component\HttpKernel\Profiler\Profile;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
@@ -62,6 +61,6 @@ class User extends Authenticatable implements JWTSubject
     }
     public function profile()
     {
-        return $this->hasOne(ModelsProfile::class);
+        return $this->hasOne(Profile::class);
     }
 }

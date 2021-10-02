@@ -51,8 +51,10 @@
                                             <span
                                                 style="margin-left:5px;color:#303030"
                                                 >{{ post.title }} | by
-                                                {{ post.user.name }}</span
-                                            >
+                                                <b>
+                                                    {{ post.user.name }}
+                                                </b>
+                                            </span>
                                         </div>
                                     </div>
                                     <div v-else>
@@ -65,53 +67,80 @@
                             class="col-md-4 col-sm-12 text-end order-2 order-md-3 mb-3 mb-md-0"
                         >
                             <div class="d-flex">
-                                <ul class="list-unstyled social me-auto">
-                                    <li>
-                                        <a href="#"
-                                            ><span class="icon-twitter"></span
-                                        ></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"
-                                            ><span class="icon-facebook"></span
-                                        ></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"
-                                            ><span class="icon-instagram"></span
-                                        ></a>
-                                    </li>
+                                <ul class="list-unstyled social me-auto col-10">
+                                    <div style="float:left">
+                                        <li>
+                                            <a href="#"
+                                                ><span
+                                                    class="icon-twitter"
+                                                ></span
+                                            ></a>
+                                        </li>
+                                        <li>
+                                            <a href="#"
+                                                ><span
+                                                    class="icon-facebook"
+                                                ></span
+                                            ></a>
+                                        </li>
+                                        <li>
+                                            <a href="#"
+                                                ><span
+                                                    class="icon-instagram"
+                                                ></span
+                                            ></a>
+                                        </li>
+                                    </div>
+                                    <div style="float:right">
+                                        <li v-if="user.name" class="dropdown">
+                                            <div
+                                                alt=""
+                                                id="dropdownMenuButton"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true"
+                                                aria-expanded="false"
+                                            >
+                                                <img
+                                                    style="width: 30px;
+                                                            border-radius: 50%;
+                                                            border:1px solid #303030;
+                                                            height: 30px;
+                                                            object-fit: cover;"
+                                                    :src="user.profilePic"
+                                                />
+                                            </div>
 
-                                    <li v-if="user.name">
-                                        <a href="#">{{ user.name }}</a>
-                                    </li>
+                                            <div
+                                                class="dropdown-menu"
+                                                aria-labelledby="dropdownMenuButton"
+                                            >
+                                                <div
+                                                    class="dropdown-item"
+                                                    v-if="user.name"
+                                                >
+                                                    <span
+                                                        v-on:click="onShowModal"
+                                                        style="cursor:pointer;color:#303030"
+                                                        >Add a post</span
+                                                    >
+                                                </div>
+                                                <div class="dropdown-item">
+                                                    <router-link
+                                                        style="padding:0"
+                                                        :user="user"
+                                                        to="/logout"
+                                                        >Logout
+                                                    </router-link>
+                                                </div>
+                                            </div>
+                                        </li>
 
-                                    <li v-if="user.name">
-                                        <router-link :user="user" to="/logout">
-                                            Logout
-                                        </router-link>
-                                    </li>
-
-                                    <li v-if="user.name">
-                                        <span
-                                            v-if="showModal == false"
-                                            v-on:click="onShowModal"
-                                            class="icon-edit"
-                                            style="cursor:pointer;color:#303030"
-                                        ></span>
-                                        <span
-                                            v-else
-                                            v-on:click="onShowModal"
-                                            class="icon-close"
-                                            style="cursor:pointer;color:#303030"
-                                        ></span>
-                                    </li>
-
-                                    <li v-else>
-                                        <router-link to="/login"
-                                            >Login</router-link
-                                        >
-                                    </li>
+                                        <li v-if="!user.name">
+                                            <router-link to="/login"
+                                                >Login</router-link
+                                            >
+                                        </li>
+                                    </div>
                                 </ul>
 
                                 <a
@@ -164,7 +193,11 @@
             </div>
         </nav>
 
-        <create :show-modal="showModal" :cats="categories" />
+        <create
+            @closeModal="closeModal"
+            :show-modal="showModal"
+            :cats="categories"
+        />
 
         <transition
             name="custom-classes-transition"
@@ -184,7 +217,6 @@ export default {
             categories: {},
             show: false,
             showModal: false,
-            routeName: this.$router.name,
             searchTerm: "",
             posts: []
         };
@@ -199,19 +231,24 @@ export default {
         onshow() {
             this.show = !this.show;
         },
-        getUser() {
-            axios
-                .get("/api/user")
-                .then(res => (this.user = res.data))
-                .catch(err => console.log(err));
+        async getUser() {
+            try {
+                const res = await axios.get("/api/user");
+                this.user = res.data;
+            } catch (err) {
+                console.log(err);
+            }
         },
-        getCategories() {
-            axios
-                .get("/api/categories/")
-                .then(res => (this.categories = res.data));
+        async getCategories() {
+            const res = await axios.get("/api/categories/");
+            this.categories = res.data;
         },
-        getPosts() {
-            axios.get("/api/posts/").then(res => (this.posts = res.data));
+        async getPosts() {
+            const res = await axios.get("/api/posts/");
+            this.posts = res.data;
+        },
+        closeModal() {
+            this.showModal = false;
         }
     },
     computed: {
@@ -223,6 +260,12 @@ export default {
     },
     created() {
         this.getUser();
+        Reload.$on("logout", () => {
+            this.getUser();
+        });
+        Reload.$on("login", () => {
+            this.getUser();
+        });
         this.getCategories();
         this.getPosts();
     }

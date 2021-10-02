@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-xl-7 col-lg-12 col-md-9">
+            <div class="col-xl-4 col-lg-12 col-md-9" style="border-radius:10px">
                 <div class="shadow my-5">
                     <div class="p-2">
                         <div class="row">
@@ -95,7 +95,7 @@
                                     <hr />
                                     <div class="text-center">
                                         <router-link
-                                            to="/"
+                                            to="/login"
                                             class="font-weight-bold small"
                                             >Already have an
                                             account?</router-link
@@ -140,28 +140,25 @@ export default {
         };
     },
     methods: {
-        signup() {
-            axios
-                .post("/api/auth/signup", this.form)
-                .then(res => {
-                    Toast.fire({
-                        icon: "success",
-                        title: "Signed in successfully"
-                    });
-                    this.$router.push({ name: "home" });
-                    this.$router.push({ name: "home" });
-                    setTimeout(this.$router.go(), 10000);
-                })
+        async signup() {
+            try {
+                const res = await axios.post("/api/auth/signup", this.form);
 
-                .catch(error => (this.errors = error.response.data.errors))
-                .catch(error => {
-                    if (error) {
-                        Toast.fire({
-                            icon: "warning",
-                            title: this.errors
-                        });
-                    }
+                Toast.fire({
+                    icon: "success",
+                    title: "Signed in successfully"
                 });
+                this.$router.push({ name: "home" });
+                setTimeout(this.$router.go(), 10000);
+            } catch (error) {
+                this.errors = error.response.data.errors;
+                if (error) {
+                    Toast.fire({
+                        icon: "warning",
+                        title: this.errors
+                    });
+                }
+            }
         }
     }
 };

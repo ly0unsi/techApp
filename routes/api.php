@@ -31,7 +31,10 @@ Route::group([
     Route::get('me', 'AuthController@me');
 });
 Route::get('user', 'masterController@user');
+
 Route::post('createCat', 'Api\CategoryController@createCat');
 Route::get('categories', 'Api\CategoryController@index');
+
 Route::post('createpost', 'Api\PostController@add');
 Route::get('posts', 'Api\PostController@index');
+Route::get('post/{slug}', 'Api\PostController@show');

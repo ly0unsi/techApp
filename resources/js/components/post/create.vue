@@ -5,14 +5,21 @@
         leave-active-class="animate__animated animate__bounceOut"
     >
         <div
-            v-if="showModal"
-            style="width:100%;height:100%;position:absolute; z-index: 10"
+            v-if="show_modal"
+            style="width:100%;height:100%;position:absolute; z-index: 10;padding-top: 35px;"
         >
-            <div class="row createModal shadow">
+            <div class="col-md-6 col-sm-11 createModal shadow">
+                <div class="col-12">
+                    <i
+                        class="fas fa-times close_add_post__icon"
+                        style="cursor:pointer"
+                        @click="closeModal"
+                    ></i>
+                </div>
                 <div class="col-xl-12 col-lg-12 col-md-12">
-                    <div class="my-5">
+                    <div class="my-2">
                         <div class="-0">
-                            <div class="row">
+                            <div class="p-2">
                                 <div class="col-lg-12">
                                     <div>
                                         <div class="text-center">
@@ -224,6 +231,15 @@
                                                     class="btn btn-dark"
                                                 >
                                                     Add
+                                                    <div
+                                                        v-if="showSpinner"
+                                                        class="spinner-border spinner_add_post"
+                                                        role="status"
+                                                    >
+                                                        <span class="sr-only"
+                                                            >Loading...</span
+                                                        >
+                                                    </div>
                                                 </button>
                                             </div>
                                         </form>
@@ -260,11 +276,20 @@ export default {
                 category_id: null,
                 slug: null
             },
-            errors: {}
+            errors: {},
+            showSpinner: false
         };
     },
-
+    computed: {
+        show_modal() {
+            return this.showModal;
+        }
+    },
     methods: {
+        closeModal() {
+            this.showModal = false;
+            this.$emit("closeModal");
+        },
         onFileSelected(event) {
             let file = event.target.files[0];
             if (file.size > 1048770) {
@@ -277,32 +302,32 @@ export default {
                 reader.readAsDataURL(file);
             }
         },
-        postInsert() {
-            axios
-                .post("/api/createpost", this.form)
-                .then(res => {
-                    Toast.fire({
-                        icon: "success",
-                        title: "Post created in successfully"
-                    });
-
-                    this.form = {};
-                    this.form.photo = null;
-                })
-                .catch(error => {
-                    if (error.response !== undefined) {
-                        this.errors = error.response.data.errors;
-                        Toast.fire({
-                            icon: "error",
-                            title: "Check your fields"
-                        });
-                    }
+        async postInsert() {
+            try {
+                this.showSpinner = true;
+                await axios.post("/api/createpost", this.form);
+                this.showSpinner = false;
+                this.closeModal();
+                Toast.fire({
+                    icon: "success",
+                    title: "Post created in successfully"
                 });
+                this.form = {};
+                this.form.photo = null;
+            } catch (error) {
+                if (error.response !== undefined) {
+                    this.showSpinner = false;
+                    this.errors = error.response.data.errors;
+                    Toast.fire({
+                        icon: "error",
+                        title: "Check your fields"
+                    });
+                }
+            }
         }
     },
-    created() {
-        console.log(this.form.photo);
-    }
+
+    created() {}
 };
 </script>
 

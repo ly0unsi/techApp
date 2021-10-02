@@ -20,12 +20,7 @@ class masterController extends Controller
 
         return view('blog.master',);
     }
-    public function login(Request $request)
-    {
 
-
-        return view('blog.master',);
-    }
     public function user(Request $request)
     {
         /**

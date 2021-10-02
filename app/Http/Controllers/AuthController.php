@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
+use App\Models\Profile;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -87,6 +89,7 @@ class AuthController extends Controller
 
     public function signup(Request $request)
     {
+
 
         $validateData = $request->validate([
             'email' => 'required|unique:users|max:255',

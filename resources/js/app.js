@@ -29,6 +29,7 @@ Vue.component('VueEditor', VueEditor)
 import Notification from './Helpers/Notification';
 window.Notification = Notification
 
+window.moment = require('moment');
 
 // Sweet Alert start
 import Swal from 'sweetalert2'

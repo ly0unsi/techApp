@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', 'masterController@master');
-Route::get('/login', 'masterController@login')->name('login');
+
 
 
 Route::get('{any}', 'masterController@master')->where('any', '.*');

@@ -1,84 +1,127 @@
 <template>
     <div>
-        <div class="section pt-5 pb-0">
-            <div class="container">
-                <div class="row justify-content-center mb-5">
-                    <div class="col-lg-7 text-center">
-                        <h2 class="heading">
-                            Trending
-                        </h2>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="posts-slide-wrap">
-                            <tiny-slider
-                                :mouse-drag="true"
-                                :controls="false"
-                                :loop="true"
-                                items="1"
-                                gutter="20"
-                            >
-                                <div v-for="post in posts" :key="post.id">
-                                    <div class="post-entry d-lg-flex shadow">
-                                        <div
-                                            class="me-lg-5 thumbnail mb-4 mb-lg-0"
-                                        >
-                                            <a href="single.html">
-                                                <img
-                                                    :src="post.photo"
-                                                    alt="Image"
-                                                    class="img-fluid"
-                                                />
-                                            </a>
-                                        </div>
-                                        <div class="content align-self-center">
-                                            <div class="post-meta mb-3">
-                                                <a href="#" class="category">{{
-                                                    post.category.name
-                                                }}</a
-                                                >, &mdash;
-                                                <span class="date">{{
-                                                    post.created_at
-                                                }}</span>
-                                            </div>
-                                            <h2 class="heading">
-                                                <a href="single.html">{{
-                                                    post.description
-                                                }}</a>
-                                            </h2>
-                                            <p>
-                                                Far far away, behind the word
-                                                mountains, far from the
-                                                countries Vokalia and
-                                                Consonantia, there live the
-                                                blind texts. Separated they live
-                                                in Bookmarksgrove right at the
-                                                coast of the Semantics, a large
-                                                language ocean.
-                                            </p>
-                                            <a
-                                                href="#"
-                                                class="post-author d-flex align-items-center"
-                                            >
-                                                <div class="author-pic">
-                                                    <img
-                                                        src="images/person_1.jpg"
-                                                        alt="Image"
-                                                    />
-                                                </div>
-                                                <div class="text">
-                                                    <strong>{{
-                                                        post.author.name
-                                                    }}</strong>
-                                                    <span>CEO and Founder</span>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
+        <div class="section pt-1 pb-0">
+            <div class="col-lg-12">
+                <div
+                    id="carouselExampleIndicators"
+                    class="carousel slide"
+                    data-ride="carousel"
+                >
+                    <ol class="carousel-indicators">
+                        <li
+                            v-bind:class="{ active: index === 0 }"
+                            :key="topic.id"
+                            v-for="(topic, index) in topics.slice(0, 4)"
+                            data-target="#carouselExampleIndicators"
+                            :data-slide-to="index"
+                        ></li>
+                    </ol>
+                    <div
+                        class="carousel-inner py-5"
+                        style="background:rgb(36 36 36);color:white!important"
+                    >
+                        <div
+                            v-bind:class="{ active: index === 0 }"
+                            class="carousel-item position-relative"
+                            :key="topic.id"
+                            v-for="(topic, index) in topics.slice(0, 4)"
+                        >
+                            <div class="post-entry d-lg-flex container">
+                                <router-link
+                                    class="stretched-link"
+                                    :to="{
+                                        name: 'post',
+                                        params: { slug: topic.slug }
+                                    }"
+                                ></router-link>
+
+                                <div class="me-lg-5 thumbnail mb-4 mb-lg-0">
+                                    <a href="single.html">
+                                        <img
+                                            style="width: 569px;
+                                                        height: 500px;object-fit: cover;"
+                                            :src="topic.photo"
+                                            alt="Image"
+                                            class="img-fluid"
+                                        />
+                                    </a>
                                 </div>
-                            </tiny-slider>
+                                <div class="content align-self-center">
+                                    <div class="post-meta mb-3">
+                                        <a
+                                            href="#"
+                                            class="category"
+                                            style="color:whitesmoke"
+                                        >
+                                            {{ topic.category.name }}
+                                        </a>
+                                        &mdash;
+                                        <span
+                                            class="date"
+                                            style="color:whitesmoke"
+                                            >{{
+                                                moment(topic.created_at).format(
+                                                    "MMM DD,YYYY"
+                                                )
+                                            }}</span
+                                        >
+                                    </div>
+                                    <h2 class="heading text-light">
+                                        <a
+                                            href="single.html"
+                                            style="color:white"
+                                            >{{ topic.title }}</a
+                                        >
+                                    </h2>
+                                    <p style="color:whitesmoke">
+                                        {{ topic.desc }}
+                                    </p>
+                                    <a
+                                        href="#"
+                                        class="post-author d-flex align-items-center"
+                                    >
+                                        <div class="author-pic">
+                                            <img
+                                                :src="topic.user.profilePic"
+                                                alt="Image"
+                                            />
+                                        </div>
+                                        <div class="text">
+                                            <strong style="color:whitesmoke">{{
+                                                topic.user.name
+                                            }}</strong>
+                                            <span>CEO and Founder</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                    <div class="coarousel_control">
+                        <a
+                            style="bottom: -478px !important;left:1248px"
+                            href="#carouselExampleIndicators"
+                            role="button"
+                            data-slide="prev"
+                        >
+                            <span
+                                aria-hidden="true"
+                                style="width:17px;color:whitesmoke"
+                                >Prev |
+                            </span>
+                        </a>
+                        <a
+                            style="bottom: -478px !important;"
+                            href="#carouselExampleIndicators"
+                            role="button"
+                            data-slide="next"
+                        >
+                            <span
+                                aria-hidden="true"
+                                style="width:17px;color:whitesmoke"
+                                >Next</span
+                            >
+                        </a>
                     </div>
                 </div>
             </div>
@@ -1019,12 +1062,16 @@
 export default {
     data() {
         return {
-            posts: []
+            topics: []
         };
     },
     methods: {
-        getPosts() {
-            axios.get("/api/posts/").then(res => (this.posts = res.data));
+        async getPosts() {
+            const res = await axios.get("/api/posts/");
+            this.topics = res.data;
+        },
+        moment() {
+            return moment();
         }
     },
     created() {

@@ -18,7 +18,7 @@ class PostController extends Controller
     // all books
     public function index(Request $request)
     {
-        $posts = Post::with('user', 'category')->get();
+        $posts = Post::with('user', 'category')->latest()->get();
         return response()->json($posts);
     }
     public function add(Request $request)
@@ -38,9 +38,13 @@ class PostController extends Controller
         $ext = explode('/', $sub)[1];
 
         $name = time() . "." . $ext;
-        $img = Image::make($request->photo)->resize(240, 200);
-        $upload_path = 'posts';
+
+        $img = Image::make($request->photo);
+
+        $upload_path = 'images/posts';
+
         $image_url = $upload_path . $name;
+
         $img->save($image_url);
         $post = new Post();
         $post->title = $request->title;
@@ -50,9 +54,16 @@ class PostController extends Controller
         $post->content = $request->content;
         $post->photo = $image_url;
         $category = Category::where('id', $request->category_id)->first();
+
         $post->category()->associate($category);
         $user = Auth::user();
         $post->user()->associate($user);
+
         $post->save();
+    }
+    public function show($slug)
+    {
+        $post = Post::with('user', 'category')->where('slug', $slug)->first();
+        return response()->json($post);
     }
 }
