@@ -41,7 +41,7 @@ class PostController extends Controller
 
         $img = Image::make($request->photo);
 
-        $upload_path = 'images/posts';
+        $upload_path = 'images/posts/';
 
         $image_url = $upload_path . $name;
 
@@ -64,6 +64,12 @@ class PostController extends Controller
     public function show($slug)
     {
         $post = Post::with('user', 'category')->where('slug', $slug)->first();
-        return response()->json($post);
+        $sameCatPosts = Post::with('user', 'category')->where('category_id', $post->category_id)->latest()->get();
+        return response()->json(
+            [
+                'post' => $post,
+                'sameCat' => $sameCatPosts
+            ]
+        );
     }
 }

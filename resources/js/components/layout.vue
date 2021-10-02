@@ -45,12 +45,25 @@
                                             border:1px solid #303030;
                                             height: 37px;
                                             object-fit: cover;"
-                                                :src="post.photo"
+                                                :src="'/' + post.photo"
                                                 alt=""
                                             />
                                             <span
                                                 style="margin-left:5px;color:#303030"
-                                                >{{ post.title }} | by
+                                            >
+                                                <router-link
+                                                    :to="{
+                                                        name: 'post',
+                                                        params: {
+                                                            slug: post.slug
+                                                        }
+                                                    }"
+                                                    >{{
+                                                        post.title
+                                                    }}</router-link
+                                                >
+
+                                                | by
                                                 <b>
                                                     {{ post.user.name }}
                                                 </b>
@@ -186,7 +199,16 @@
                                 <a href="#">Categories</a>
                                 <ul class="dropdown">
                                     <li v-for="cat in categories" :key="cat.id">
-                                        <a href="#">{{ cat.name }}</a>
+                                        <router-link
+                                            :to="{
+                                                name: 'catposts',
+                                                params: {
+                                                    catName: cat.name
+                                                }
+                                            }"
+                                        >
+                                            {{ cat.name }}
+                                        </router-link>
                                     </li>
                                 </ul>
                             </li>

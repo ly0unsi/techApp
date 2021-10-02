@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -30,5 +31,11 @@ class CategoryController extends Controller
         $cats = Category::all();
 
         return response()->json($cats);
+    }
+    public function catPosts($catName)
+    {
+        $category = Category::where('name', $catName)->first();
+        $catPosts = Post::with('user')->where('category_id', $category->id)->latest()->get();
+        return response()->json($catPosts);
     }
 }

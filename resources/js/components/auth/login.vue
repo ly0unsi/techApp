@@ -112,7 +112,6 @@ export default {
         async getUser() {
             try {
                 const res = await axios.get("/api/user");
-                this.auth = res.data;
                 console.log(res.data);
                 this.auth = res.data;
                 console.log(this.auth);

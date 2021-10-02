@@ -34,6 +34,7 @@ Route::get('user', 'masterController@user');
 
 Route::post('createCat', 'Api\CategoryController@createCat');
 Route::get('categories', 'Api\CategoryController@index');
+Route::get('catPosts/{catName}', 'Api\CategoryController@catPosts');
 
 Route::post('createpost', 'Api\PostController@add');
 Route::get('posts', 'Api\PostController@index');

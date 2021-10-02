@@ -10,6 +10,7 @@ let createPost = require('./components/post/create.vue').default;
 let showPost = require('./components/post/show.vue').default;
 
 let createCat = require('./components/category/create.vue').default;
+let catPosts = require('./components/category/index.vue').default;
 
 
 
@@ -44,6 +45,11 @@ export const routes = [
         name: 'post',
         path: '/post/:slug',
         component: showPost
+    },
+    {
+        name: 'catposts',
+        path: '/category/:catName',
+        component: catPosts
     },
 
 ]
