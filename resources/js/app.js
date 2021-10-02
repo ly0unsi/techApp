@@ -9,12 +9,25 @@ require('./bootstrap');
 
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import logout from './components/auth/logout'
 import axios from 'axios'
 Vue.component('layout', require('./components/layout.vue').default);
 Vue.use(VueRouter)
 
-
+import VueProgressBar from 'vue-progressbar'
+const options = {
+    color: '##dc3545',
+    failedColor: '#874b4b',
+    thickness: '2px',
+    transition: {
+        speed: '0.2s',
+        opacity: '0.6s',
+        termination: 300
+    },
+    autoRevert: true,
+    location: 'left',
+    inverse: false
+}
+Vue.use(VueProgressBar, options)
 
 import User from './Helpers/User';
 window.User = User
