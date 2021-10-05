@@ -1962,6 +1962,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -1970,7 +1979,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         password: null
       },
       errors: {},
-      auth: {}
+      auth: {},
+      showSpinner: false
     };
   },
   methods: {
@@ -2042,42 +2052,45 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.prev = 0;
-                _context3.next = 3;
+                _this3.showSpinner = true;
+                _context3.next = 4;
                 return axios.post("/api/auth/login", _this3.form);
 
-              case 3:
+              case 4:
                 res = _context3.sent;
                 Reload.$emit("login");
+                _this3.showSpinner = false;
 
                 _this3.$router.push({
                   name: "home"
                 });
 
-                _context3.next = 11;
+                _context3.next = 13;
                 break;
 
-              case 8:
-                _context3.prev = 8;
+              case 10:
+                _context3.prev = 10;
                 _context3.t0 = _context3["catch"](0);
 
                 if (_context3.t0) {
                   _this3.errors = _context3.t0.response.data.errors;
+                  _this3.showSpinner = false;
                   Toast.fire({
                     icon: "warning",
                     title: "something went wrong"
                   });
                 }
 
-              case 11:
+              case 13:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 8]]);
+        }, _callee3, null, [[0, 10]]);
       }))();
     },
     checkUser: function checkUser() {
-      if (this.auth.name === "abdllah") {
+      if (Object.keys(this.auth).length !== 0) {
         this.$router.push({
           name: "home"
         });
@@ -4729,6 +4742,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -4738,38 +4761,55 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   computed: {},
   methods: {
-    getPost: function getPost() {
-      var _this = this;
-
+    likePost: function likePost(postId) {
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var slug, res;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.prev = 0;
-                slug = _this.$route.params.slug;
-                _context.next = 4;
-                return axios.get("/api/post/" + slug);
+                _context.next = 2;
+                return axios.post("/api/like/" + postId);
 
-              case 4:
-                res = _context.sent;
-                _this.post = res.data.post;
-                _this.sameCat = res.data.sameCat;
-                _context.next = 12;
-                break;
-
-              case 9:
-                _context.prev = 9;
-                _context.t0 = _context["catch"](0);
-                console.log(_context.t0);
-
-              case 12:
+              case 2:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 9]]);
+        }, _callee);
+      }))();
+    },
+    getPost: function getPost() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var slug, res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                slug = _this.$route.params.slug;
+                _context2.next = 4;
+                return axios.get("/api/post/" + slug);
+
+              case 4:
+                res = _context2.sent;
+                _this.post = res.data.post;
+                _this.sameCat = res.data.sameCat;
+                _context2.next = 12;
+                break;
+
+              case 9:
+                _context2.prev = 9;
+                _context2.t0 = _context2["catch"](0);
+                console.log(_context2.t0);
+
+              case 12:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, null, [[0, 9]]);
       }))();
     },
     moment: function (_moment) {
@@ -80470,7 +80510,35 @@ var render = function() {
                         _vm._v(" "),
                         _vm._m(1),
                         _vm._v(" "),
-                        _vm._m(2),
+                        _c("div", { staticClass: "form-group" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-dark",
+                              attrs: { type: "submit" }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                            Login\n                                            "
+                              ),
+                              _vm.showSpinner
+                                ? _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "spinner-border spinner_add_post",
+                                      attrs: { role: "status" }
+                                    },
+                                    [
+                                      _c("span", { staticClass: "sr-only" }, [
+                                        _vm._v("Loading...")
+                                      ])
+                                    ]
+                                  )
+                                : _vm._e()
+                            ]
+                          )
+                        ]),
                         _vm._v(" "),
                         _c("hr")
                       ]
@@ -80556,22 +80624,6 @@ var staticRenderFns = [
               attrs: { for: "customCheck" }
             },
             [_vm._v("Remember Me")]
-          )
-        ]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c(
-        "button",
-        { staticClass: "btn btn-dark btn-block", attrs: { type: "submit" } },
-        [
-          _vm._v(
-            "\n                                            Login\n                                        "
           )
         ]
       )
@@ -83339,7 +83391,7 @@ var render = function() {
               "animate__animated animate__fadeInRight animate__fast"
           }
         },
-        [_c("router-view")],
+        [_c("router-view", { key: _vm.$route.fullPath })],
         1
       ),
       _vm._v(" "),
@@ -84013,6 +84065,28 @@ var render = function() {
               staticClass: "img-fluid rounded mb-4",
               attrs: { src: "/" + _vm.post.photo }
             }),
+            _vm._v(" "),
+            _c("div", { staticClass: "d-flex" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-sm btn-danger",
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.LikePost(_vm.post.id)
+                    }
+                  }
+                },
+                [
+                  _vm._v(
+                    "\n                            Like\n                        "
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c("span", [_vm._v(_vm._s(_vm.post.likes.length))])
+            ]),
             _vm._v(" "),
             _c("div", {
               staticStyle: { "text-align": "justify" },

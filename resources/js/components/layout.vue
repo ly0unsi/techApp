@@ -235,7 +235,7 @@
             name="custom-classes-transition"
             enter-active-class="animate__animated animate__fadeInRight animate__fast"
         >
-            <router-view></router-view>
+            <router-view :key="$route.fullPath"></router-view>
         </transition>
         <!-- set progressbar -->
         <vue-progress-bar></vue-progress-bar>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Models\Like;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -71,5 +72,33 @@ class PostController extends Controller
                 'sameCat' => $sameCatPosts
             ]
         );
+    }
+    public function like($postId)
+    {
+        $post = Post::find($postId);
+
+        if ($post->isLikedByLoggedInUser()) {
+            $res = Like::where([
+                'user_id' => auth()->user()->id,
+                'post_id' => $postId
+            ])->delete();
+
+            if ($res) {
+                return response()->json([
+                    'count' => Post::find($postId)->likes->count()
+                ]);
+            }
+        } else {
+            $like = new Like();
+
+            $like->user_id = auth()->user()->id;
+            $like->post_id = $postId;
+
+            $like->save();
+
+            return response()->json([
+                'count' => Post::find($postId)->likes->count()
+            ]);
+        }
     }
 }

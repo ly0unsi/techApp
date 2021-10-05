@@ -64,9 +64,18 @@
                                         <div class="form-group">
                                             <button
                                                 type="submit"
-                                                class="btn btn-dark btn-block"
+                                                class="btn btn-dark"
                                             >
                                                 Login
+                                                <div
+                                                    v-if="showSpinner"
+                                                    class="spinner-border spinner_add_post"
+                                                    role="status"
+                                                >
+                                                    <span class="sr-only"
+                                                        >Loading...</span
+                                                    >
+                                                </div>
                                             </button>
                                         </div>
                                         <hr />
@@ -105,7 +114,8 @@ export default {
                 password: null
             },
             errors: {},
-            auth: {}
+            auth: {},
+            showSpinner: false
         };
     },
     methods: {
@@ -125,12 +135,16 @@ export default {
         },
         async login() {
             try {
+                this.showSpinner = true;
                 const res = await axios.post("/api/auth/login", this.form);
                 Reload.$emit("login");
+                this.showSpinner = false;
                 this.$router.push({ name: "home" });
             } catch (error) {
                 if (error) {
                     this.errors = error.response.data.errors;
+                    this.showSpinner = false;
+
                     Toast.fire({
                         icon: "warning",
                         title: "something went wrong"
@@ -139,7 +153,7 @@ export default {
             }
         },
         checkUser() {
-            if (this.auth.name === "abdllah") {
+            if (Object.keys(this.auth).length !== 0) {
                 this.$router.push({ name: "home" });
             }
         }

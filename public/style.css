@@ -1957,8 +1957,11 @@ a {
 .spinner_add_post {
     height: 15px;
     width: 15px;
-    border: 2px solid;
+    border: 3px solid;
     border-right-color: transparent;
+}
+a {
+    color: var(--bs-dark);
 }
 .close_add_post__icon {
     float: right;

@@ -39,3 +39,4 @@ Route::get('catPosts/{catName}', 'Api\CategoryController@catPosts');
 Route::post('createpost', 'Api\PostController@add');
 Route::get('posts', 'Api\PostController@index');
 Route::get('post/{slug}', 'Api\PostController@show');
+Route::post('/like/{postId}', 'Api\PostController@like');

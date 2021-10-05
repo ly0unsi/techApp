@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Like;
 use App\Models\Post;
 use App\Models\Profile;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -62,5 +63,9 @@ class User extends Authenticatable implements JWTSubject
     public function profile()
     {
         return $this->hasOne(Profile::class);
+    }
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
     }
 }

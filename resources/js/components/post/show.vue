@@ -26,6 +26,16 @@
                             :src="'/' + post.photo"
                             class="img-fluid rounded mb-4"
                         />
+                        <div class="d-flex">
+                            <button
+                                class="btn btn-sm btn-danger"
+                                @click.prevent="LikePost(post.id)"
+                            >
+                                Like
+                            </button>
+                            <span>{{ post.likes.length }}</span>
+                        </div>
+
                         <div
                             style="text-align:justify"
                             v-html="post.content"
@@ -167,6 +177,9 @@ export default {
     },
     computed: {},
     methods: {
+        async likePost(postId) {
+            await axios.post("/api/like/" + postId);
+        },
         async getPost() {
             try {
                 let slug = this.$route.params.slug;
