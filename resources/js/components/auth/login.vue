@@ -122,9 +122,10 @@ export default {
         async getUser() {
             try {
                 const res = await axios.get("/api/user");
-                console.log(res.data);
                 this.auth = res.data;
-                console.log(this.auth);
+                if (Object.keys(this.auth).length > 0) {
+                    this.$router.push({ name: "home" });
+                }
             } catch (err) {
                 console.log(err);
             }
@@ -151,17 +152,11 @@ export default {
                     });
                 }
             }
-        },
-        checkUser() {
-            if (Object.keys(this.auth).length !== 0) {
-                this.$router.push({ name: "home" });
-            }
         }
     },
     created() {
         this.getUser();
         this.getCats();
-        this.checkUser();
     }
 };
 </script>

@@ -4,12 +4,12 @@ namespace App\Models;
 
 use App\Models\Like;
 use App\User;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    use HasFactory;
+
 
     protected $fillable = [
         'title', 'desc', 'content', 'photo', 'slug'

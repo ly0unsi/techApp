@@ -1999,23 +1999,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 3:
                 res = _context.sent;
-                console.log(res.data);
                 _this.auth = res.data;
-                console.log(_this.auth);
-                _context.next = 12;
+
+                if (Object.keys(_this.auth).length > 0) {
+                  _this.$router.push({
+                    name: "home"
+                  });
+                }
+
+                _context.next = 11;
                 break;
 
-              case 9:
-                _context.prev = 9;
+              case 8:
+                _context.prev = 8;
                 _context.t0 = _context["catch"](0);
                 console.log(_context.t0);
 
-              case 12:
+              case 11:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 9]]);
+        }, _callee, null, [[0, 8]]);
       }))();
     },
     getCats: function getCats() {
@@ -2088,19 +2093,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee3, null, [[0, 10]]);
       }))();
-    },
-    checkUser: function checkUser() {
-      if (Object.keys(this.auth).length !== 0) {
-        this.$router.push({
-          name: "home"
-        });
-      }
     }
   },
   created: function created() {
     this.getUser();
     this.getCats();
-    this.checkUser();
   }
 });
 
@@ -2150,6 +2147,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2270,7 +2269,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_defineProperty({
   created: function created() {
     var _this = this;
 
@@ -2299,11 +2307,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         confirm_password: null
       },
       errors: {},
-      user: {}
+      user: {},
+      showSpinner: false
     };
   },
   methods: {
-    signup: function signup() {
+    getUser: function getUser() {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
@@ -2314,45 +2323,89 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context.prev = 0;
                 _context.next = 3;
-                return axios.post("/api/auth/signup", _this2.form);
+                return axios.get("/api/user");
 
               case 3:
                 res = _context.sent;
+                _this2.auth = res.data;
+
+                if (Object.keys(_this2.auth).length > 0) {
+                  _this2.$router.push({
+                    name: "home"
+                  });
+                }
+
+                _context.next = 11;
+                break;
+
+              case 8:
+                _context.prev = 8;
+                _context.t0 = _context["catch"](0);
+                console.log(_context.t0);
+
+              case 11:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, null, [[0, 8]]);
+      }))();
+    },
+    signup: function signup() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                _this3.showSpinner = true;
+                _context2.next = 4;
+                return axios.post("/api/auth/signup", _this3.form);
+
+              case 4:
+                res = _context2.sent;
+                _this3.showSpinner = false;
                 Toast.fire({
                   icon: "success",
                   title: "Signed in successfully"
                 });
 
-                _this2.$router.push({
+                _this3.$router.push({
                   name: "home"
                 });
 
-                setTimeout(_this2.$router.go(), 10000);
-                _context.next = 13;
+                setTimeout(_this3.$router.go(), 10000);
+                _context2.next = 15;
                 break;
 
-              case 9:
-                _context.prev = 9;
-                _context.t0 = _context["catch"](0);
-                _this2.errors = _context.t0.response.data.errors;
+              case 11:
+                _context2.prev = 11;
+                _context2.t0 = _context2["catch"](0);
+                _this3.errors = _context2.t0.response.data.errors;
 
-                if (_context.t0) {
+                if (_context2.t0) {
+                  _this3.showSpinner = false;
                   Toast.fire({
                     icon: "warning",
-                    title: _this2.errors
+                    title: _this3.errors
                   });
                 }
 
-              case 13:
+              case 15:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, null, [[0, 9]]);
+        }, _callee2, null, [[0, 11]]);
       }))();
     }
   }
-});
+}, "created", function created() {
+  getUser();
+}));
 
 /***/ }),
 
@@ -2640,6 +2693,9 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
 //
 //
 //
@@ -4752,64 +4808,131 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       post: {},
-      sameCat: {}
+      sameCat: {},
+      isLiked: false,
+      user: {}
     };
   },
   computed: {},
   methods: {
-    likePost: function likePost(postId) {
+    getUser: function getUser() {
+      var _this = this;
+
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var res;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
-                return axios.post("/api/like/" + postId);
+                _context.prev = 0;
+                _context.next = 3;
+                return axios.get("/api/user");
 
-              case 2:
+              case 3:
+                res = _context.sent;
+                _this.user = res.data;
+                _context.next = 10;
+                break;
+
+              case 7:
+                _context.prev = 7;
+                _context.t0 = _context["catch"](0);
+                console.log(_context.t0);
+
+              case 10:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee);
+        }, _callee, null, [[0, 7]]);
       }))();
     },
-    getPost: function getPost() {
-      var _this = this;
-
+    likePost: function likePost(postId) {
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var slug, res;
+        var res;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.prev = 0;
-                slug = _this.$route.params.slug;
-                _context2.next = 4;
-                return axios.get("/api/post/" + slug);
+                _context2.next = 2;
+                return axios.post("/api/like/" + postId);
+
+              case 2:
+                res = _context2.sent;
+                Reload.$emit("like");
 
               case 4:
-                res = _context2.sent;
-                _this.post = res.data.post;
-                _this.sameCat = res.data.sameCat;
-                _context2.next = 12;
-                break;
-
-              case 9:
-                _context2.prev = 9;
-                _context2.t0 = _context2["catch"](0);
-                console.log(_context2.t0);
-
-              case 12:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 9]]);
+        }, _callee2);
+      }))();
+    },
+    getPost: function getPost() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        var slug, res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.prev = 0;
+                slug = _this2.$route.params.slug;
+                _context3.next = 4;
+                return axios.get("/api/post/" + slug);
+
+              case 4:
+                res = _context3.sent;
+                _this2.post = res.data.post;
+                _this2.sameCat = res.data.sameCat;
+                _this2.isLiked = res.data.isLiked;
+                _context3.next = 13;
+                break;
+
+              case 10:
+                _context3.prev = 10;
+                _context3.t0 = _context3["catch"](0);
+                console.log(_context3.t0);
+
+              case 13:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, null, [[0, 10]]);
       }))();
     },
     moment: function (_moment) {
@@ -4827,7 +4950,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     })
   },
   created: function created() {
+    var _this3 = this;
+
     this.getPost();
+    Reload.$on("like", function () {
+      _this3.getPost();
+    });
+    this.getUser();
   }
 });
 
@@ -80865,7 +80994,35 @@ var render = function() {
                           })
                         ]),
                         _vm._v(" "),
-                        _vm._m(5)
+                        _c("div", { staticClass: "form-group" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-dark",
+                              attrs: { type: "submit" }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                            Login\n                                            "
+                              ),
+                              _vm.showSpinner
+                                ? _c(
+                                    "div",
+                                    {
+                                      staticClass:
+                                        "spinner-border spinner_add_post",
+                                      attrs: { role: "status" }
+                                    },
+                                    [
+                                      _c("span", { staticClass: "sr-only" }, [
+                                        _vm._v("Loading...")
+                                      ])
+                                    ]
+                                  )
+                                : _vm._e()
+                            ]
+                          )
+                        ])
                       ]
                     ),
                     _vm._v(" "),
@@ -80945,22 +81102,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("label", { attrs: { for: "exampleFormControlTextarea1" } }, [
       _c("b", [_vm._v("Confirm Password ")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c(
-        "button",
-        { staticClass: "btn btn-dark btn-block", attrs: { type: "submit" } },
-        [
-          _vm._v(
-            "\n                                            Register\n                                        "
-          )
-        ]
-      )
     ])
   }
 ]
@@ -81389,7 +81530,15 @@ var render = function() {
                                     )
                                   )
                                 ]
-                              )
+                              ),
+                              _vm._v(
+                                "\n                                    —\n                                    " +
+                                  _vm._s(topic.likes.length) +
+                                  "\n                                    "
+                              ),
+                              _c("i", {
+                                staticClass: "fas fa-heart text-light"
+                              })
                             ]),
                             _vm._v(" "),
                             _c("h2", { staticClass: "heading text-light" }, [
@@ -84066,27 +84215,83 @@ var render = function() {
               attrs: { src: "/" + _vm.post.photo }
             }),
             _vm._v(" "),
-            _c("div", { staticClass: "d-flex" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-sm btn-danger",
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.LikePost(_vm.post.id)
-                    }
-                  }
-                },
-                [
-                  _vm._v(
-                    "\n                            Like\n                        "
-                  )
-                ]
-              ),
-              _vm._v(" "),
-              _c("span", [_vm._v(_vm._s(_vm.post.likes.length))])
-            ]),
+            Object.keys(_vm.user).length > 0
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "d-flex",
+                    staticStyle: { "font-size": "31px" }
+                  },
+                  [
+                    _c(
+                      "transition",
+                      {
+                        attrs: {
+                          name: "custom-classes-transition",
+                          "enter-active-class":
+                            "animate__animated animate__bounceIn"
+                        }
+                      },
+                      [
+                        _vm.isLiked
+                          ? _c(
+                              "span",
+                              {
+                                staticClass: "text-dark",
+                                staticStyle: { cursor: "pointer" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.likePost(_vm.post.id)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "fas fa-heart" })]
+                            )
+                          : _vm._e()
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "transition",
+                      {
+                        attrs: {
+                          name: "custom-classes-transition",
+                          "enter-active-class":
+                            "animate__animated animate__bounceIn"
+                        }
+                      },
+                      [
+                        !_vm.isLiked
+                          ? _c(
+                              "span",
+                              {
+                                staticClass: "text-dark",
+                                staticStyle: { cursor: "pointer" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.likePost(_vm.post.id)
+                                  }
+                                }
+                              },
+                              [_c("i", { staticClass: "far fa-heart" })]
+                            )
+                          : _vm._e()
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "text-dark ml-2" }, [
+                      _vm._v(
+                        "\n                            " +
+                          _vm._s(_vm.post.likes.length) +
+                          "\n                        "
+                      )
+                    ])
+                  ],
+                  1
+                )
+              : _vm._e(),
             _vm._v(" "),
             _c("div", {
               staticStyle: { "text-align": "justify" },

@@ -86,9 +86,18 @@
                                         <div class="form-group">
                                             <button
                                                 type="submit"
-                                                class="btn btn-dark btn-block"
+                                                class="btn btn-dark"
                                             >
-                                                Register
+                                                Login
+                                                <div
+                                                    v-if="showSpinner"
+                                                    class="spinner-border spinner_add_post"
+                                                    role="status"
+                                                >
+                                                    <span class="sr-only"
+                                                        >Loading...</span
+                                                    >
+                                                </div>
                                             </button>
                                         </div>
                                     </form>
@@ -136,14 +145,27 @@ export default {
                 confirm_password: null
             },
             errors: {},
-            user: {}
+            user: {},
+            showSpinner: false
         };
     },
     methods: {
+        async getUser() {
+            try {
+                const res = await axios.get("/api/user");
+                this.auth = res.data;
+                if (Object.keys(this.auth).length > 0) {
+                    this.$router.push({ name: "home" });
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        },
         async signup() {
             try {
+                this.showSpinner = true;
                 const res = await axios.post("/api/auth/signup", this.form);
-
+                this.showSpinner = false;
                 Toast.fire({
                     icon: "success",
                     title: "Signed in successfully"
@@ -153,6 +175,7 @@ export default {
             } catch (error) {
                 this.errors = error.response.data.errors;
                 if (error) {
+                    this.showSpinner = false;
                     Toast.fire({
                         icon: "warning",
                         title: this.errors
@@ -160,6 +183,9 @@ export default {
                 }
             }
         }
+    },
+    created() {
+        getUser();
     }
 };
 </script>

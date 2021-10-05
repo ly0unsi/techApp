@@ -26,14 +26,41 @@
                             :src="'/' + post.photo"
                             class="img-fluid rounded mb-4"
                         />
-                        <div class="d-flex">
-                            <button
-                                class="btn btn-sm btn-danger"
-                                @click.prevent="LikePost(post.id)"
+                        <div
+                            v-if="Object.keys(user).length > 0"
+                            class="d-flex"
+                            style="font-size: 31px;"
+                        >
+                            <transition
+                                name="custom-classes-transition"
+                                enter-active-class="animate__animated animate__bounceIn"
                             >
-                                Like
-                            </button>
-                            <span>{{ post.likes.length }}</span>
+                                <span
+                                    style="cursor:pointer"
+                                    v-if="isLiked"
+                                    class="text-dark"
+                                    @click.prevent="likePost(post.id)"
+                                >
+                                    <i class="fas fa-heart"></i>
+                                </span>
+                            </transition>
+                            <transition
+                                name="custom-classes-transition"
+                                enter-active-class="animate__animated animate__bounceIn"
+                            >
+                                <span
+                                    style="cursor:pointer"
+                                    v-if="!isLiked"
+                                    class="text-dark"
+                                    @click.prevent="likePost(post.id)"
+                                >
+                                    <i class="far fa-heart"></i>
+                                </span>
+                            </transition>
+
+                            <span class="text-dark ml-2">
+                                {{ post.likes.length }}
+                            </span>
                         </div>
 
                         <div
@@ -172,13 +199,25 @@ export default {
     data() {
         return {
             post: {},
-            sameCat: {}
+            sameCat: {},
+            isLiked: false,
+            user: {}
         };
     },
     computed: {},
     methods: {
+        async getUser() {
+            try {
+                const res = await axios.get("/api/user");
+                this.user = res.data;
+            } catch (err) {
+                console.log(err);
+            }
+        },
         async likePost(postId) {
-            await axios.post("/api/like/" + postId);
+            const res = await axios.post("/api/like/" + postId);
+
+            Reload.$emit("like");
         },
         async getPost() {
             try {
@@ -186,6 +225,7 @@ export default {
                 const res = await axios.get("/api/post/" + slug);
                 this.post = res.data.post;
                 this.sameCat = res.data.sameCat;
+                this.isLiked = res.data.isLiked;
             } catch (error) {
                 console.log(error);
             }
@@ -196,6 +236,10 @@ export default {
     },
     created() {
         this.getPost();
+        Reload.$on("like", () => {
+            this.getPost();
+        });
+        this.getUser();
     }
 };
 </script>

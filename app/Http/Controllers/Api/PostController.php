@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\Models\Like;
+use App\Models\Like;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -19,7 +19,7 @@ class PostController extends Controller
     // all books
     public function index(Request $request)
     {
-        $posts = Post::with('user', 'category')->latest()->get();
+        $posts = Post::with('user', 'category', 'likes')->latest()->get();
         return response()->json($posts);
     }
     public function add(Request $request)
@@ -64,12 +64,19 @@ class PostController extends Controller
     }
     public function show($slug)
     {
-        $post = Post::with('user', 'category')->where('slug', $slug)->first();
+        $post = Post::with('user', 'category', 'likes')->where('slug', $slug)->first();
         $sameCatPosts = Post::with('user', 'category')->where('category_id', $post->category_id)->latest()->get();
+        $isLiked = false;
+        if (auth()->user()) {
+            if ($post->isLikedByLoggedInUser()) {
+                $isLiked = true;
+            };
+        }
         return response()->json(
             [
                 'post' => $post,
-                'sameCat' => $sameCatPosts
+                'sameCat' => $sameCatPosts,
+                'isLiked' => $isLiked
             ]
         );
     }

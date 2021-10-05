@@ -65,6 +65,9 @@
                                                 )
                                             }}</span
                                         >
+                                        &mdash;
+                                        {{ topic.likes.length }}
+                                        <i class="fas fa-heart text-light"></i>
                                     </div>
                                     <h2 class="heading text-light">
                                         <a

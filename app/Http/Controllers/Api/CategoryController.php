@@ -11,12 +11,9 @@ class CategoryController extends Controller
 {
     public function createCat(Request $request)
     {
-
         $request->validate([
             'name' => 'required|unique:categories|max:255'
         ]);
-        $dta = array();
-
         $category = new Category;
         $category->name = $request->name;
         $category->save();
