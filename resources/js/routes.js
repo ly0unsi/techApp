@@ -1,5 +1,3 @@
-
-
 // End Authentication
 let home = require('./components/home.vue').default;
 let login = require('./components/auth/login.vue').default;
@@ -8,6 +6,7 @@ let logout = require('./components/auth/logout.vue').default;
 
 let createPost = require('./components/post/create.vue').default;
 let showPost = require('./components/post/show.vue').default;
+let editPost = require('./components/post/edit.vue').default;
 
 let createCat = require('./components/category/create.vue').default;
 let catPosts = require('./components/category/index.vue').default;
@@ -50,6 +49,11 @@ export const routes = [
         name: 'catposts',
         path: '/category/:catName',
         component: catPosts
+    },
+    {
+        name: 'editpost',
+        path: '/editpost/:postSlug',
+        component: editPost
     },
 
 ]

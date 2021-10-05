@@ -16,6 +16,67 @@ class PostController extends Controller
     {
         $this->middleware('getauth');
     }
+    public function edit($postSlug)
+    {
+
+        request()->validate([
+            'slug' => 'required|max:255',
+            'title' => 'required|max:255',
+            'desc' => 'required|max:255',
+            'category_id' => 'required',
+            'photo' => 'required',
+            'newPhoto' => 'required',
+            'content' => 'required',
+        ]);
+        $post = Post::find($postSlug);
+
+        if (request()->newPhoto) {
+            return response()->json('new photo');
+            $position = strpos(request()->newPhoto, ';');
+            $sub = substr(request()->newPhoto, 0, $position);
+            $ext = explode('/', $sub)[1];
+
+            $name = time() . "." . $ext;
+
+            $img = Image::make(request()->newPhoto);
+
+            $upload_path = 'images/posts/';
+
+            $image_url = $upload_path . $name;
+
+            $done = $img->save($image_url);
+            if ($done) {
+                unlink($post->photo);
+                $post->title = request()->title;
+
+                $post->slug = request()->slug;
+                $post->desc = request()->desc;
+                $post->content = request()->content;
+                $post->photo = $image_url;
+                $category = Category::where('id', request()->category_id)->first();
+
+                $post->category()->associate($category);
+                $user = Auth::user();
+                $post->user()->associate($user);
+
+                $post->update();
+            }
+        } else {
+            $post->title = request()->title;
+
+            $post->slug = request()->slug;
+            $post->desc = request()->desc;
+            $post->content = request()->content;
+            $post->photo = request()->photo;
+            $category = Category::where('id', request()->category_id)->first();
+
+            $post->category()->associate($category);
+            $user = Auth::user();
+            $post->user()->associate($user);
+
+            $post->update();
+        }
+    }
     // all books
     public function index(Request $request)
     {
@@ -31,7 +92,6 @@ class PostController extends Controller
             'category_id' => 'required',
             'photo' => 'required',
             'content' => 'required',
-
         ]);
 
         $position = strpos($request->photo, ';');

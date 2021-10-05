@@ -1,10 +1,10 @@
 <template>
-    <div class="section pt-5 pb-0">
+    <div class="section pt-2 pb-0">
         <div class="container">
-            <div class="row mb-5 justify-content-center">
+            <div class="row mb-2 justify-content-center">
                 <div class="col-lg-9">
                     <span class="fw-normal text-uppercase d-block mb-1"
-                        >Categories</span
+                        >Category</span
                     >
                     <h2 class="heading">'{{ catName }}'</h2>
                 </div>
@@ -17,7 +17,7 @@
                     :key="post.id"
                 >
                     <div class="post-entry d-md-flex small-horizontal mb-5">
-                        <div class="me-md-5 thumbnail mb-3 mb-md-0">
+                        <div class="me-md-4 thumbnail mb-3 mb-md-0">
                             <img
                                 :src="'/' + post.photo"
                                 alt="Image"
@@ -25,7 +25,7 @@
                             />
                         </div>
                         <div class="content">
-                            <div class="post-meta mb-3">
+                            <div class="post-meta mb-1">
                                 <span class="date">{{
                                     moment(post.created_at).format(
                                         "MMM DD,YYYY"
@@ -58,7 +58,7 @@
                 </div>
             </div>
 
-            <div class="row align-items-center justify-content-center py-5">
+            <div class="row align-items-center justify-content-center py-2">
                 <div class="col-lg-6 text-center">
                     <jw-pagination
                         :items="catPosts"

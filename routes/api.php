@@ -40,3 +40,4 @@ Route::post('createpost', 'Api\PostController@add');
 Route::get('posts', 'Api\PostController@index');
 Route::get('post/{slug}', 'Api\PostController@show');
 Route::post('/like/{postId}', 'Api\PostController@like');
+Route::patch('/editpost/{postSlug}', 'Api\PostController@edit');

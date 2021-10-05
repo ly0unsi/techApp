@@ -4,65 +4,78 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
-                        <div class="text-center">
-                            <img
-                                :src="post.user.profilePic"
-                                alt="Image"
-                                class="author-pic img-fluid rounded-circle mx-auto"
-                            />
-                        </div>
-                        <span class="d-block text-center">{{
-                            post.user.name
-                        }}</span>
-                        <span
-                            class="date d-block text-center small text-uppercase text-black-50 mb-5"
-                            >{{
-                                moment(post.created_at).format("MMM DD,YYYY")
-                            }}</span
-                        >
                         <h2 class="heading text-center">{{ post.title }}</h2>
                         <p class="lead mb-4 text-center">{{ post.desc }}</p>
-                        <img
-                            :src="'/' + post.photo"
-                            class="img-fluid rounded mb-4"
-                        />
-                        <div
-                            v-if="Object.keys(user).length > 0"
-                            class="d-flex"
-                            style="font-size: 31px;"
-                        >
-                            <transition
-                                name="custom-classes-transition"
-                                enter-active-class="animate__animated animate__bounceIn"
+                        <div class="position-relative">
+                            <img
+                                :src="'/' + post.photo"
+                                class="img-fluid rounded mb-4 position-relative"
+                            />
+                            <div
+                                v-if="Object.keys(user).length > 0"
+                                style="font-size: 20px;"
+                                class="singlepost_ship"
                             >
-                                <span
-                                    style="cursor:pointer"
-                                    v-if="isLiked"
-                                    class="text-dark"
-                                    @click.prevent="likePost(post.id)"
+                                <transition
+                                    name="custom-classes-transition"
+                                    enter-active-class="animate__animated animate__bounceIn"
                                 >
-                                    <i class="fas fa-heart"></i>
-                                </span>
-                            </transition>
-                            <transition
-                                name="custom-classes-transition"
-                                enter-active-class="animate__animated animate__bounceIn"
-                            >
-                                <span
-                                    style="cursor:pointer"
-                                    v-if="!isLiked"
-                                    class="text-dark"
-                                    @click.prevent="likePost(post.id)"
+                                    <span
+                                        style="cursor:pointer"
+                                        v-if="isLiked"
+                                        class="text-light"
+                                        @click.prevent="likePost(post.id)"
+                                    >
+                                        <i class="fas fa-heart"></i>
+                                    </span>
+                                </transition>
+                                <transition
+                                    name="custom-classes-transition"
+                                    enter-active-class="animate__animated animate__bounceIn"
                                 >
-                                    <i class="far fa-heart"></i>
-                                </span>
-                            </transition>
+                                    <span
+                                        style="cursor:pointer"
+                                        v-if="!isLiked"
+                                        class="text-light"
+                                        @click.prevent="likePost(post.id)"
+                                    >
+                                        <i class="far fa-heart"></i>
+                                    </span>
+                                </transition>
 
-                            <span class="text-dark ml-2">
-                                {{ post.likes.length }}
-                            </span>
+                                <span
+                                    class="text-light"
+                                    style="margin-left:5px"
+                                >
+                                    {{ post.likes.length }}
+                                </span>
+                                &mdash;
+                                <img
+                                    :src="post.user.profilePic"
+                                    alt="Image"
+                                    class="author-pic img-fluid rounded-circle mx-auto"
+                                />
+                                &mdash;
+                                <span>{{
+                                    moment(post.created_at).format(
+                                        "MMM DD,YYYY"
+                                    )
+                                }}</span>
+                                <span v-if="post.user_id === user.id">
+                                    &mdash;
+                                    <router-link
+                                        class="text-white"
+                                        :to="{
+                                            name: 'editpost',
+                                            params: {
+                                                postSlug: post.slug
+                                            }
+                                        }"
+                                        >Edit</router-link
+                                    >
+                                </span>
+                            </div>
                         </div>
-
                         <div
                             style="text-align:justify"
                             v-html="post.content"

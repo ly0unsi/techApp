@@ -143,8 +143,8 @@ export default {
                 this.$router.push({ name: "home" });
             } catch (error) {
                 if (error) {
-                    this.errors = error.response.data.errors;
                     this.showSpinner = false;
+                    this.errors = error.response.data.errors;
 
                     Toast.fire({
                         icon: "warning",

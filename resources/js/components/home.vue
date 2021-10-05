@@ -28,7 +28,6 @@
                         >
                             <div class="post-entry d-lg-flex container">
                                 <router-link
-                                    class="stretched-link"
                                     :to="{
                                         name: 'post',
                                         params: { slug: topic.slug }
@@ -36,7 +35,14 @@
                                 ></router-link>
 
                                 <div class="me-lg-5 thumbnail mb-4 mb-lg-0">
-                                    <a href="single.html">
+                                    <router-link
+                                        :to="{
+                                            name: 'post',
+                                            params: {
+                                                slug: topic.slug
+                                            }
+                                        }"
+                                    >
                                         <img
                                             style="width: 569px;
                                                         height: 500px;object-fit: cover;"
@@ -44,7 +50,7 @@
                                             alt="Image"
                                             class="img-fluid"
                                         />
-                                    </a>
+                                    </router-link>
                                 </div>
                                 <div class="content align-self-center">
                                     <div class="post-meta mb-3">
@@ -68,13 +74,32 @@
                                         &mdash;
                                         {{ topic.likes.length }}
                                         <i class="fas fa-heart text-light"></i>
+
+                                        <span v-if="topic.user_id === user.id">
+                                            &mdash;
+                                            <router-link
+                                                class="text-white"
+                                                :to="{
+                                                    name: 'editpost',
+                                                    params: {
+                                                        postSlug: topic.slug
+                                                    }
+                                                }"
+                                                >Edit</router-link
+                                            >
+                                        </span>
                                     </div>
                                     <h2 class="heading text-light">
-                                        <a
-                                            href="single.html"
-                                            style="color:white"
-                                            >{{ topic.title }}</a
-                                        >
+                                        <router-link
+                                            class="text-light"
+                                            :to="{
+                                                name: 'post',
+                                                params: {
+                                                    slug: topic.slug
+                                                }
+                                            }"
+                                            >{{ topic.title }}
+                                        </router-link>
                                     </h2>
                                     <p style="color:whitesmoke">
                                         {{ topic.desc }}
@@ -1065,10 +1090,19 @@
 export default {
     data() {
         return {
-            topics: []
+            topics: [],
+            user: {}
         };
     },
     methods: {
+        async getUser() {
+            try {
+                const res = await axios.get("/api/user");
+                this.user = res.data;
+            } catch (err) {
+                console.log(err);
+            }
+        },
         async getPosts() {
             const res = await axios.get("/api/posts/");
             this.topics = res.data;
@@ -1079,6 +1113,7 @@ export default {
     },
     created() {
         this.getPosts();
+        this.getUser();
     }
 };
 </script>
