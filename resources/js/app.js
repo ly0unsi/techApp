@@ -13,6 +13,10 @@ import axios from 'axios'
 Vue.component('layout', require('./components/layout.vue').default);
 Vue.use(VueRouter)
 
+// register jw pagination component globally
+import JwPagination from 'jw-vue-pagination';
+Vue.component('jw-pagination', JwPagination);
+
 import VueProgressBar from 'vue-progressbar'
 const options = {
     color: '##dc3545',

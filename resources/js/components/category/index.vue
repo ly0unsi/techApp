@@ -9,8 +9,13 @@
                     <h2 class="heading">'{{ catName }}'</h2>
                 </div>
             </div>
+
             <div class="row justify-content-center">
-                <div class="col-lg-9" v-for="post in catPosts" :key="post.id">
+                <div
+                    class="col-lg-9"
+                    v-for="post in pageOfPosts"
+                    :key="post.id"
+                >
                     <div class="post-entry d-md-flex small-horizontal mb-5">
                         <div class="me-md-5 thumbnail mb-3 mb-md-0">
                             <img
@@ -52,29 +57,41 @@
                     </div>
                 </div>
             </div>
+
             <div class="row align-items-center justify-content-center py-5">
                 <div class="col-lg-6 text-center">
-                    <div class="custom-pagination">
-                        <a href="#">1</a>
-                        <a href="#" class="active">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">5</a>
-                    </div>
+                    <jw-pagination
+                        :items="catPosts"
+                        @changePage="onChangePage"
+                        :labels="customLabels"
+                        :pageSize="6"
+                    ></jw-pagination>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
+const customLabels = {
+    first: "<<",
+    last: ">>",
+    previous: "<",
+    next: ">"
+};
 export default {
     data() {
         return {
-            catPosts: {},
-            catName: null
+            catPosts: [],
+            catName: null,
+            pageOfPosts: [],
+            customLabels
         };
     },
     methods: {
+        onChangePage(pageOfPosts) {
+            // update page of items
+            this.pageOfPosts = pageOfPosts;
+        },
         async getPosts() {
             try {
                 let catName = this.$route.params.catName;

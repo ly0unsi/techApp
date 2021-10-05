@@ -33,7 +33,10 @@
 .icon-instagram:before {
     content: "\f16d";
 }
-
+.page-item.active .page-link {
+    background-color: var(--bs-dark);
+    border: solid 1px var(--bs-dark);
+}
 .createModal {
     z-index: 3;
     margin: auto;
