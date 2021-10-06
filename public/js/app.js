@@ -5822,6 +5822,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -5834,12 +5836,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       },
       errors: {},
       showSpinner: false,
-      profilePosts: {}
+      profilePosts: {},
+      isFollowing: false
     };
   },
   methods: {
-    onFileSelected: function onFileSelected(event) {
+    follow: function follow() {
       var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return axios.post("/api/follow/" + _this.form.id);
+
+              case 2:
+                res = _context.sent;
+
+              case 3:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
+    onFileSelected: function onFileSelected(event) {
+      var _this2 = this;
 
       var file = event.target.files[0];
 
@@ -5849,107 +5875,109 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         var reader = new FileReader();
 
         reader.onload = function (event) {
-          _this.form.profilePic = event.target.result;
+          _this2.form.profilePic = event.target.result;
         };
 
         reader.readAsDataURL(file);
       }
     },
     getUser: function getUser() {
-      var _this2 = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var res;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.prev = 0;
-                _context.next = 3;
-                return axios.get("/api/user");
-
-              case 3:
-                res = _context.sent;
-                _this2.user = res.data;
-                _context.next = 10;
-                break;
-
-              case 7:
-                _context.prev = 7;
-                _context.t0 = _context["catch"](0);
-                console.log(_context.t0);
-
-              case 10:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, null, [[0, 7]]);
-      }))();
-    },
-    getProfile: function getProfile() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var username, res;
+        var res;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                username = _this3.$route.params.username;
+                _context2.prev = 0;
                 _context2.next = 3;
-                return axios.get("/api/profile/" + username);
+                return axios.get("/api/user");
 
               case 3:
                 res = _context2.sent;
-                _this3.form = res.data.profile;
-                _this3.profilePosts = res.data.profilePosts;
+                _this3.user = res.data;
+                _context2.next = 10;
+                break;
 
-              case 6:
+              case 7:
+                _context2.prev = 7;
+                _context2.t0 = _context2["catch"](0);
+                console.log(_context2.t0);
+
+              case 10:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2);
+        }, _callee2, null, [[0, 7]]);
       }))();
     },
-    editProfile: function editProfile() {
+    getProfile: function getProfile() {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-        var username;
+        var username, res;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                try {
-                  username = _this4.$route.params.username;
-                  _this4.showSpinner = true;
-                  axios.patch("/api/editProfile/" + username, _this4.form);
-                  _this4.showSpinner = false;
-                  Toast.fire({
-                    icon: "success",
-                    title: "Profile updated in successfully"
-                  });
+                username = _this4.$route.params.username;
+                _context3.next = 3;
+                return axios.get("/api/profile/" + username);
 
-                  _this4.$router.push({
-                    name: "profile",
-                    params: {
-                      username: _this4.form.name
-                    }
-                  });
+              case 3:
+                res = _context3.sent;
+                _this4.form = res.data.profile;
+                _this4.profilePosts = res.data.profilePosts;
+                _this4.isFollowing = res.data.isFollowing;
+                Reload.$emit("follow");
 
-                  Reload.$emit("profileChanged");
-                } catch (error) {
-                  _this4.errors = error.res.data;
-                }
-
-              case 1:
+              case 8:
               case "end":
                 return _context3.stop();
             }
           }
         }, _callee3);
+      }))();
+    },
+    editProfile: function editProfile() {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        var username;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                try {
+                  username = _this5.$route.params.username;
+                  _this5.showSpinner = true;
+                  axios.patch("/api/editProfile/" + username, _this5.form);
+                  _this5.showSpinner = false;
+                  Toast.fire({
+                    icon: "success",
+                    title: "Profile updated in successfully"
+                  });
+
+                  _this5.$router.push({
+                    name: "profile",
+                    params: {
+                      username: _this5.form.name
+                    }
+                  });
+
+                  Reload.$emit("profileChanged");
+                } catch (error) {
+                  _this5.errors = error.res.data;
+                }
+
+              case 1:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
       }))();
     },
     moment: function (_moment) {
@@ -5967,12 +5995,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     })
   },
   created: function created() {
-    var _this5 = this;
+    var _this6 = this;
 
     this.getUser();
     this.getProfile();
     Reload.$on("profileChanged", function () {
-      _this5.getProfile();
+      _this6.getProfile();
+    });
+    Reload.$on("follow", function () {
+      _this6.getProfile();
     });
   }
 });
@@ -87136,11 +87167,23 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _vm.user.id !== _vm.form.id
-                      ? _c("button", { staticClass: "btn btn-primary" }, [
-                          _vm._v(
-                            "\n                                    Follow\n                                "
-                          )
-                        ])
+                      ? _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary",
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.follow.apply(null, arguments)
+                              }
+                            }
+                          },
+                          [
+                            _vm.isFollowing
+                              ? _c("span", [_vm._v("Unfollow")])
+                              : _c("span", [_vm._v("Follow")])
+                          ]
+                        )
                       : _vm._e(),
                     _vm._v(" "),
                     _vm.user.id !== _vm.form.id

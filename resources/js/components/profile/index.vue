@@ -42,9 +42,11 @@
                                     </p>
                                     <button
                                         v-if="user.id !== form.id"
+                                        @click.prevent="follow"
                                         class="btn btn-primary"
                                     >
-                                        Follow
+                                        <span v-if="isFollowing">Unfollow</span>
+                                        <span v-else>Follow</span>
                                     </button>
                                     <button
                                         v-if="user.id !== form.id"
@@ -325,10 +327,14 @@ export default {
             },
             errors: {},
             showSpinner: false,
-            profilePosts: {}
+            profilePosts: {},
+            isFollowing: false
         };
     },
     methods: {
+        async follow() {
+            const res = await axios.post("/api/follow/" + this.form.id);
+        },
         onFileSelected(event) {
             let file = event.target.files[0];
             if (file.size > 1048770) {
@@ -354,6 +360,8 @@ export default {
             const res = await axios.get("/api/profile/" + username);
             this.form = res.data.profile;
             this.profilePosts = res.data.profilePosts;
+            this.isFollowing = res.data.isFollowing;
+            Reload.$emit("follow");
         },
         async editProfile() {
             try {
@@ -382,6 +390,9 @@ export default {
         this.getUser();
         this.getProfile();
         Reload.$on("profileChanged", () => {
+            this.getProfile();
+        });
+        Reload.$on("follow", () => {
             this.getProfile();
         });
     }

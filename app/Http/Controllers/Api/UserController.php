@@ -14,13 +14,30 @@ class UserController extends Controller
     {
         $this->middleware('getauth');
     }
+    public function follow($profileId)
+    {
+        $profile = User::find($profileId);
+
+        if ($profile->isFollowedBy(auth()->user())) {
+            $profile->followers()->detach(auth()->user()->id);
+            $count = $profile->followers()->count();
+        } else {
+            $profile->followers()->attach(auth()->user()->id);
+            $count = $profile->followers()->count();
+        }
+    }
     public function index($username)
     {
         $profile = User::where('name', $username)->with('posts')->first();
         $profilePosts = Post::where('user_id', $profile->id)->with('category')->latest()->get();
+        $isFollowing = false;
+        if ($profile->isFollowedBy(auth()->user())) {
+            $isFollowing = true;
+        }
         return response()->json([
             'profile' => $profile,
-            'profilePosts' => $profilePosts
+            'profilePosts' => $profilePosts,
+            'isFollowing' => $isFollowing
         ]);
     }
     public function edit($username)
