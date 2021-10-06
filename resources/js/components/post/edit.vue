@@ -288,11 +288,15 @@ export default {
                     this.form
                 );
                 console.log(res.data);
-                // this.showSpinner = false;
-                // Toast.fire({
-                //     icon: "success",
-                //     title: "Post updated in successfully"
-                // });
+                this.showSpinner = false;
+                Toast.fire({
+                    icon: "success",
+                    title: "Post updated in successfully"
+                });
+                this.$router.push({
+                    name: "editpost",
+                    params: { postSlug: postSlug }
+                });
             } catch (error) {
                 if (error.response !== undefined) {
                     this.showSpinner = false;

@@ -2066,9 +2066,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 Reload.$emit("login");
                 _this3.showSpinner = false;
 
-                _this3.$router.push({
-                  name: "home"
-                });
+                _this3.$router.back();
 
                 _context3.next = 13;
                 break;
@@ -2126,9 +2124,7 @@ __webpack_require__.r(__webpack_exports__);
         title: res.data.message
       });
     });
-    this.$router.push({
-      name: "home"
-    });
+    this.$router.back();
   }
 });
 
@@ -3567,242 +3563,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      topics: [],
-      user: {}
+      trend: [],
+      user: {},
+      mostLiked: []
     };
   },
   methods: {
@@ -3852,9 +3618,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 res = _context2.sent;
-                _this2.topics = res.data;
+                _this2.trend = res.data.trend;
+                _this2.mostLiked = res.data.mostLiked;
 
-              case 4:
+              case 5:
               case "end":
                 return _context2.stop();
             }
@@ -4246,7 +4013,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 2:
                 res = _context3.sent;
-                _this3.posts = res.data;
+                _this3.posts = res.data.trend;
 
               case 4:
               case "end":
@@ -5039,17 +4806,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 4:
                 res = _context2.sent;
-                console.log(res.data); // this.showSpinner = false;
-                // Toast.fire({
-                //     icon: "success",
-                //     title: "Post updated in successfully"
-                // });
+                console.log(res.data);
+                _this3.showSpinner = false;
+                Toast.fire({
+                  icon: "success",
+                  title: "Post updated in successfully"
+                });
 
-                _context2.next = 11;
+                _this3.$router.push({
+                  name: "editpost",
+                  params: {
+                    postSlug: postSlug
+                  }
+                });
+
+                _context2.next = 14;
                 break;
 
-              case 8:
-                _context2.prev = 8;
+              case 11:
+                _context2.prev = 11;
                 _context2.t0 = _context2["catch"](0);
 
                 if (_context2.t0.response !== undefined) {
@@ -5061,12 +4836,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   });
                 }
 
-              case 11:
+              case 14:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 8]]);
+        }, _callee2, null, [[0, 11]]);
       }))();
     },
     getCategories: function getCategories() {
@@ -5329,13 +5104,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       post: {},
       sameCat: {},
       isLiked: false,
-      user: {}
+      user: {},
+      title: this.$route.params.slug
     };
   },
   computed: {},
@@ -5451,6 +5237,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       _this3.getPost();
     });
     this.getUser();
+  },
+  head: {
+    // To use "this" in the component, it is necessary to return the object through a function
+    title: function title() {
+      return {
+        inner: this.title
+      };
+    }
   }
 });
 
@@ -5766,16 +5560,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var jw_vue_pagination__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jw-vue-pagination */ "./node_modules/jw-vue-pagination/lib/JwPagination.js");
 /* harmony import */ var jw_vue_pagination__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jw_vue_pagination__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var vue_progressbar__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-progressbar */ "./node_modules/vue-progressbar/dist/vue-progressbar.js");
-/* harmony import */ var vue_progressbar__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_progressbar__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _Helpers_User__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Helpers/User */ "./resources/js/Helpers/User.js");
-/* harmony import */ var vue_tiny_slider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-tiny-slider */ "./node_modules/vue-tiny-slider/dist/index.js");
-/* harmony import */ var vue_tiny_slider__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(vue_tiny_slider__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var vue2_editor__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue2-editor */ "./node_modules/vue2-editor/dist/vue2-editor.esm.js");
-/* harmony import */ var _Helpers_Notification__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Helpers/Notification */ "./resources/js/Helpers/Notification.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
+/* harmony import */ var vue_head__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-head */ "./node_modules/vue-head/vue-head.js");
+/* harmony import */ var vue_head__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue_head__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var vue_progressbar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-progressbar */ "./node_modules/vue-progressbar/dist/vue-progressbar.js");
+/* harmony import */ var vue_progressbar__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(vue_progressbar__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _Helpers_User__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Helpers/User */ "./resources/js/Helpers/User.js");
+/* harmony import */ var vue_tiny_slider__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue-tiny-slider */ "./node_modules/vue-tiny-slider/dist/index.js");
+/* harmony import */ var vue_tiny_slider__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(vue_tiny_slider__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var vue2_editor__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue2-editor */ "./node_modules/vue2-editor/dist/vue2-editor.esm.js");
+/* harmony import */ var _Helpers_Notification__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Helpers/Notification */ "./resources/js/Helpers/Notification.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -5792,6 +5588,8 @@ vue__WEBPACK_IMPORTED_MODULE_1__.default.use(vue_router__WEBPACK_IMPORTED_MODULE
 
 vue__WEBPACK_IMPORTED_MODULE_1__.default.component('jw-pagination', (jw_vue_pagination__WEBPACK_IMPORTED_MODULE_3___default()));
 
+vue__WEBPACK_IMPORTED_MODULE_1__.default.use((vue_head__WEBPACK_IMPORTED_MODULE_4___default()));
+
 var options = {
   color: '##dc3545',
   failedColor: '#874b4b',
@@ -5805,29 +5603,29 @@ var options = {
   location: 'left',
   inverse: false
 };
-vue__WEBPACK_IMPORTED_MODULE_1__.default.use((vue_progressbar__WEBPACK_IMPORTED_MODULE_4___default()), options);
+vue__WEBPACK_IMPORTED_MODULE_1__.default.use((vue_progressbar__WEBPACK_IMPORTED_MODULE_5___default()), options);
 
-window.User = _Helpers_User__WEBPACK_IMPORTED_MODULE_5__.default;
+window.User = _Helpers_User__WEBPACK_IMPORTED_MODULE_6__.default;
 
-vue__WEBPACK_IMPORTED_MODULE_1__.default.component('tiny-slider', (vue_tiny_slider__WEBPACK_IMPORTED_MODULE_6___default()));
+vue__WEBPACK_IMPORTED_MODULE_1__.default.component('tiny-slider', (vue_tiny_slider__WEBPACK_IMPORTED_MODULE_7___default()));
 
-vue__WEBPACK_IMPORTED_MODULE_1__.default.component('VueEditor', vue2_editor__WEBPACK_IMPORTED_MODULE_7__.VueEditor); // Import Notification Class
+vue__WEBPACK_IMPORTED_MODULE_1__.default.component('VueEditor', vue2_editor__WEBPACK_IMPORTED_MODULE_8__.VueEditor); // Import Notification Class
 
 
-window.Notification = _Helpers_Notification__WEBPACK_IMPORTED_MODULE_8__.default;
+window.Notification = _Helpers_Notification__WEBPACK_IMPORTED_MODULE_9__.default;
 window.moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js"); // Sweet Alert start
 
 
-window.Swal = (sweetalert2__WEBPACK_IMPORTED_MODULE_9___default());
-var Toast = sweetalert2__WEBPACK_IMPORTED_MODULE_9___default().mixin({
+window.Swal = (sweetalert2__WEBPACK_IMPORTED_MODULE_10___default());
+var Toast = sweetalert2__WEBPACK_IMPORTED_MODULE_10___default().mixin({
   toast: true,
   position: 'top-end',
   showConfirmButton: false,
   timer: 3000,
   timerProgressBar: true,
   onOpen: function onOpen(toast) {
-    toast.addEventListener('mouseenter', (sweetalert2__WEBPACK_IMPORTED_MODULE_9___default().stopTimer));
-    toast.addEventListener('mouseleave', (sweetalert2__WEBPACK_IMPORTED_MODULE_9___default().resumeTimer));
+    toast.addEventListener('mouseenter', (sweetalert2__WEBPACK_IMPORTED_MODULE_10___default().stopTimer));
+    toast.addEventListener('mouseleave', (sweetalert2__WEBPACK_IMPORTED_MODULE_10___default().resumeTimer));
   }
 });
 
@@ -5839,7 +5637,7 @@ window.Toast = Toast; // Sweet Alert End
 
 
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_2__.default({
-  routes: _routes__WEBPACK_IMPORTED_MODULE_10__.routes,
+  routes: _routes__WEBPACK_IMPORTED_MODULE_11__.routes,
   mode: 'history'
 });
 window.Reload = new vue__WEBPACK_IMPORTED_MODULE_1__.default();
@@ -80382,6 +80180,278 @@ if (typeof this !== 'undefined' && this.Sweetalert2){  this.swal = this.sweetAle
 
 /***/ }),
 
+/***/ "./node_modules/vue-head/vue-head.js":
+/*!*******************************************!*\
+  !*** ./node_modules/vue-head/vue-head.js ***!
+  \*******************************************/
+/***/ ((module) => {
+
+/* eslint-disable */
+;(function() {
+
+  'use strict'
+
+  var opt = {
+    complement: window.document.title,
+    separator: '|'
+  }
+
+  var diffTitle = {}
+  var els = []
+  var diffEls = []
+  var installed = false
+
+  var util = {
+    /**
+     * Shorthand
+     * @type {Object}
+     */
+    shorthand: {
+      ch: 'charset',
+      tg: 'target',
+      n: 'name',
+      he: 'http-equiv',
+      ip: 'itemprop',
+      c: 'content',
+      p: 'property',
+      sc: 'scheme',
+      r: 'rel',
+      h: 'href',
+      sz: 'sizes',
+      t: 'type',
+      s: 'src',
+      a: 'async',
+      d: 'defer',
+      i: 'inner'
+    },
+
+    /**
+     * This function return the element <head>
+     * @type {Function}
+     * @return {Object}
+     */
+    getPlace: function (place) {
+      return window.document.getElementsByTagName(place)[0]
+    },
+
+    /**
+     * Undo the window.document title for previous state
+     * @type {Function}
+     * @param  {Object} state
+     */
+    undoTitle: function (state) {
+      if (!state.before) return
+      window.document.title = state.before
+    },
+
+    /**
+     * Undo elements to its previous state
+     * @type {Function}
+     */
+    undo: function () {
+      if (!els.length) return
+      els.forEach(function (el) {
+        el.parentElement.removeChild(el)
+      })
+      els = []
+    },
+
+    /**
+     * Set attributes in element
+     * @type {Function}
+     * @param  {Object} obj
+     * @param  {HTMLElement} el
+     * @return {HTMLElement} with defined attributes
+     */
+    prepareElement: function (obj, el) {
+      var self = this
+      Object.keys(obj).forEach(function (prop) {
+        var sh = self.shorthand[prop] || prop
+        if (sh.match(/(body|undo|replace)/g)) return
+        if (sh === 'inner') {
+          el.textContent = obj[prop]
+          return
+        }
+        el.setAttribute(sh, obj[prop])
+      })
+      return el
+    },
+
+    /**
+     * Change window.document title
+     * @type {Function}
+     * @param  {Object} obj
+     */
+    title: function (obj) {
+      if (!obj) return
+      diffTitle.before = opt.complement
+      var title = obj.inner + ' ' + (obj.separator || opt.separator) +
+        ' ' +  (obj.complement || opt.complement)
+      window.document.title = title.trim()
+    },
+
+    /**
+     * Update Element
+     */
+    update: function () {
+      if (!els.length) return
+      els.forEach(function(el, key) {
+        if (diffEls[key] && !diffEls[key].isEqualNode(el)) {
+          el.parentElement.replaceChild(diffEls[key], els[key])
+          els.splice(key, 1, diffEls[key])
+          return
+        }
+      })
+      diffEls = []
+    },
+
+    /**
+     * Add Elements
+     * @param {Object} obj
+     * @param {HTMLElement} el
+     * @param {HTMLElement} parent
+     */
+    add: function (obj, el, parent) {
+      parent.appendChild(el)
+      // Fixed elements that do not suffer removal
+      if (obj.undo !== undefined && !obj.undo) return
+      // Elements which are removed
+      els.push(el)
+    },
+
+    /**
+     * Handle of create elements
+     * @type {Function}
+     * @param  {Array} arr
+     * @param  {String} tag   - style, link, meta, script, base
+     * @param  {String} place - Default 'head'
+     * @param  {Boolean} update
+     */
+    handle: function (arr, tag, place, update) {
+      var self = this
+      if (!arr) return
+      arr.forEach(function (obj) {
+        var parent = (obj.body) ? self.getPlace('body') : self.getPlace(place)
+        var el = window.document.getElementById(obj.id)
+        if (!el) {
+          el = window.document.createElement(tag)
+          update = false
+        }
+        // Elements that will substitute data
+        if (el.hasAttribute('id')) {
+          self.prepareElement(obj, el)
+          return
+        }
+        // Other elements
+        el = self.prepareElement(obj, el)
+        // Updated elements
+        if (update) {
+          diffEls.push(el)
+          return
+        }
+        // Append Elements
+        self.add(obj, el, parent)
+      })
+    }
+  }
+
+  /**
+   * Plugin | vue-head
+   * @param  {Function} Vue
+   * @param  {Object} options
+   */
+  function VueHead (Vue, options) {
+    if (installed) return
+
+    installed = true
+
+    if (options) {
+      Vue.util.extend(opt, options)
+    }
+
+    /**
+     * Initializes and updates the elements in the head
+     * @param  {Boolean} update
+     */
+    function init (update) {
+      var self = this
+      var head = (typeof self.$options.head === 'function') ? self.$options.head.bind(self)() : self.$options.head
+      if (!head) return
+      Object.keys(head).forEach(function (key) {
+        var prop = head[key]
+        if (!prop) return
+        var obj = (typeof prop === 'function') ? head[key].bind(self)() : head[key]
+        if (key === 'title') {
+          util[key](obj)
+          return
+        }
+        util.handle(obj, key, 'head', update)
+      })
+      self.$emit('okHead')
+    }
+
+    /**
+     * Remove the meta tags elements in the head
+     */
+    function destroy () {
+      if (!this.$options.head) return
+      util.undoTitle(diffTitle)
+      util.undo()
+    }
+
+    // v1
+    if (Vue.version.match(/[1].(.)+/g)) {
+      Vue.mixin({
+        ready: function () {
+          init.call(this)
+        },
+        destroyed: function () {
+          destroy.call(this)
+        },
+        events: {
+          updateHead: function () {
+            init.call(this, true)
+            util.update()
+          }
+        }
+      })
+    }
+    // v2
+    if (Vue.version.match(/[2].(.)+/g)) {
+      Vue.mixin({
+        created: function () {
+          var self = this
+          self.$on('updateHead', function () {
+            init.call(this, true)
+            util.update()
+          })
+        },
+        mounted: function () {
+          init.call(this)
+        },
+        beforeDestroy: function () {
+          destroy.call(this)
+        }
+      })
+    }
+  }
+
+  VueHead.version = '2.2.0'
+
+  // auto install
+  if (typeof Vue !== 'undefined') {
+    Vue.use(VueHead)
+  }
+
+  if(true) {
+    module.exports = VueHead
+  } else {}
+
+})()
+
+
+/***/ }),
+
 /***/ "./resources/js/components/auth/login.vue":
 /*!************************************************!*\
   !*** ./resources/js/components/auth/login.vue ***!
@@ -82009,9 +82079,9 @@ var render = function() {
             _c(
               "ol",
               { staticClass: "carousel-indicators" },
-              _vm._l(_vm.topics.slice(0, 4), function(topic, index) {
+              _vm._l(_vm.trend.slice(0, 4), function(post, index) {
                 return _c("li", {
-                  key: topic.id,
+                  key: post.id,
                   class: { active: index === 0 },
                   attrs: {
                     "data-target": "#carouselExampleIndicators",
@@ -82031,11 +82101,11 @@ var render = function() {
                   color: "white!important"
                 }
               },
-              _vm._l(_vm.topics.slice(0, 4), function(topic, index) {
+              _vm._l(_vm.trend.slice(0, 4), function(post, index) {
                 return _c(
                   "div",
                   {
-                    key: topic.id,
+                    key: post.id,
                     staticClass: "carousel-item position-relative",
                     class: { active: index === 0 }
                   },
@@ -82048,7 +82118,7 @@ var render = function() {
                           attrs: {
                             to: {
                               name: "post",
-                              params: { slug: topic.slug }
+                              params: { slug: post.slug }
                             }
                           }
                         }),
@@ -82064,7 +82134,7 @@ var render = function() {
                                   to: {
                                     name: "post",
                                     params: {
-                                      slug: topic.slug
+                                      slug: post.slug
                                     }
                                   }
                                 }
@@ -82077,7 +82147,7 @@ var render = function() {
                                     height: "500px",
                                     "object-fit": "cover"
                                   },
-                                  attrs: { src: topic.photo, alt: "Image" }
+                                  attrs: { src: post.photo, alt: "Image" }
                                 })
                               ]
                             )
@@ -82100,7 +82170,7 @@ var render = function() {
                                 [
                                   _vm._v(
                                     "\n                                        " +
-                                      _vm._s(topic.category.name) +
+                                      _vm._s(post.category.name) +
                                       "\n                                    "
                                   )
                                 ]
@@ -82118,7 +82188,7 @@ var render = function() {
                                   _vm._v(
                                     _vm._s(
                                       _vm
-                                        .moment(topic.created_at)
+                                        .moment(post.created_at)
                                         .format("MMM DD,YYYY")
                                     )
                                   )
@@ -82126,14 +82196,14 @@ var render = function() {
                               ),
                               _vm._v(
                                 "\n                                    —\n                                    " +
-                                  _vm._s(topic.likes.length) +
+                                  _vm._s(post.likes.length) +
                                   "\n                                    "
                               ),
                               _c("i", {
                                 staticClass: "fas fa-heart text-light"
                               }),
                               _vm._v(" "),
-                              topic.user_id === _vm.user.id
+                              post.user_id === _vm.user.id
                                 ? _c(
                                     "span",
                                     [
@@ -82148,7 +82218,7 @@ var render = function() {
                                             to: {
                                               name: "editpost",
                                               params: {
-                                                postSlug: topic.slug
+                                                postSlug: post.slug
                                               }
                                             }
                                           }
@@ -82173,14 +82243,14 @@ var render = function() {
                                       to: {
                                         name: "post",
                                         params: {
-                                          slug: topic.slug
+                                          slug: post.slug
                                         }
                                       }
                                     }
                                   },
                                   [
                                     _vm._v(
-                                      _vm._s(topic.title) +
+                                      _vm._s(post.title) +
                                         "\n                                    "
                                     )
                                   ]
@@ -82192,7 +82262,7 @@ var render = function() {
                             _c("p", { staticStyle: { color: "whitesmoke" } }, [
                               _vm._v(
                                 "\n                                    " +
-                                  _vm._s(topic.desc) +
+                                  _vm._s(post.desc) +
                                   "\n                                "
                               )
                             ]),
@@ -82208,7 +82278,7 @@ var render = function() {
                                 _c("div", { staticClass: "author-pic" }, [
                                   _c("img", {
                                     attrs: {
-                                      src: topic.user.profilePic,
+                                      src: post.user.profilePic,
                                       alt: "Image"
                                     }
                                   })
@@ -82218,7 +82288,7 @@ var render = function() {
                                   _c(
                                     "strong",
                                     { staticStyle: { color: "whitesmoke" } },
-                                    [_vm._v(_vm._s(topic.user.name))]
+                                    [_vm._v(_vm._s(post.user.name))]
                                   ),
                                   _vm._v(" "),
                                   _c("span", [_vm._v("CEO and Founder")])
@@ -82242,11 +82312,90 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _vm._m(1),
+    _c("div", { staticClass: "section" }, [
+      _c("div", { staticClass: "container" }, [
+        _c(
+          "div",
+          { staticClass: "row g-5" },
+          _vm._l(_vm.mostLiked.slice(0, 6), function(post) {
+            return _c("div", { key: post.key, staticClass: "col-lg-4" }, [
+              _c(
+                "div",
+                { staticClass: "post-entry d-block small-post-entry-v" },
+                [
+                  _c("div", { staticClass: "thumbnail" }, [
+                    _c("a", { attrs: { href: "single.html" } }, [
+                      _c("img", {
+                        staticClass: "img-fluid",
+                        attrs: { src: post.photo, alt: "Image" }
+                      })
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "content" }, [
+                    _c("div", { staticClass: "post-meta mb-1" }, [
+                      _c(
+                        "a",
+                        { staticClass: "category", attrs: { href: "#" } },
+                        [_vm._v(_vm._s(post.category.name))]
+                      ),
+                      _vm._v(", —\n                                "),
+                      _c("span", { staticClass: "date" }, [
+                        _vm._v(
+                          _vm._s(
+                            _vm.moment(post.created_at).format("MMM DD,YYYY")
+                          )
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("h2", { staticClass: "heading mb-3" }, [
+                      _c("a", { attrs: { href: "single.html" } }, [
+                        _vm._v(_vm._s(post.title))
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v(
+                        "\n                                " +
+                          _vm._s(post.desc) +
+                          "\n                            "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "post-author d-flex align-items-center",
+                        attrs: { href: "#" }
+                      },
+                      [
+                        _c("div", { staticClass: "author-pic" }, [
+                          _c("img", {
+                            attrs: { src: post.user.profilePic, alt: "Image" }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "text" }, [
+                          _c("strong", [_vm._v(_vm._s(post.user.name))]),
+                          _vm._v(" "),
+                          _c("span", [_vm._v("CEO and Founder")])
+                        ])
+                      ]
+                    )
+                  ])
+                ]
+              )
+            ])
+          }),
+          0
+        )
+      ])
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "section" }, [
       _c("div", { staticClass: "container" }, [
-        _vm._m(2),
+        _vm._m(1),
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "col-lg-12" }, [
@@ -82648,9 +82797,9 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _vm._m(3),
+    _vm._m(2),
     _vm._v(" "),
-    _vm._m(4)
+    _vm._m(3)
   ])
 }
 var staticRenderFns = [
@@ -82702,436 +82851,6 @@ var staticRenderFns = [
           )
         ]
       )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "section" }, [
-      _c("div", { staticClass: "container" }, [
-        _c("div", { staticClass: "row g-5" }, [
-          _c("div", { staticClass: "col-lg-4" }, [
-            _c(
-              "div",
-              { staticClass: "post-entry d-block small-post-entry-v" },
-              [
-                _c("div", { staticClass: "thumbnail" }, [
-                  _c("a", { attrs: { href: "single.html" } }, [
-                    _c("img", {
-                      staticClass: "img-fluid",
-                      attrs: { src: "images/img_2.jpg", alt: "Image" }
-                    })
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "content" }, [
-                  _c("div", { staticClass: "post-meta mb-1" }, [
-                    _c("a", { staticClass: "category", attrs: { href: "#" } }, [
-                      _vm._v("Business")
-                    ]),
-                    _vm._v(",\n                                "),
-                    _c("a", { staticClass: "category", attrs: { href: "#" } }, [
-                      _vm._v("Travel")
-                    ]),
-                    _vm._v(
-                      "\n                                —\n                                "
-                    ),
-                    _c("span", { staticClass: "date" }, [
-                      _vm._v("July 2, 2020")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("h2", { staticClass: "heading mb-3" }, [
-                    _c("a", { attrs: { href: "single.html" } }, [
-                      _vm._v(
-                        "Your most unhappy customers are your\n                                    greatest source of learning."
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("p", [
-                    _vm._v(
-                      "\n                                Far far away, behind the word mountains, far\n                                from the countries Vokalia and Consonantia,\n                                there live the blind texts.\n                            "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    {
-                      staticClass: "post-author d-flex align-items-center",
-                      attrs: { href: "#" }
-                    },
-                    [
-                      _c("div", { staticClass: "author-pic" }, [
-                        _c("img", {
-                          attrs: { src: "images/person_1.jpg", alt: "Image" }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "text" }, [
-                        _c("strong", [_vm._v("Sergy Campbell")]),
-                        _vm._v(" "),
-                        _c("span", [_vm._v("CEO and Founder")])
-                      ])
-                    ]
-                  )
-                ])
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-lg-4" }, [
-            _c(
-              "div",
-              { staticClass: "post-entry d-block small-post-entry-v" },
-              [
-                _c("div", { staticClass: "thumbnail" }, [
-                  _c("a", { attrs: { href: "single.html" } }, [
-                    _c("img", {
-                      staticClass: "img-fluid",
-                      attrs: { src: "images/img_3.jpg", alt: "Image" }
-                    })
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "content" }, [
-                  _c("div", { staticClass: "post-meta mb-1" }, [
-                    _c("a", { staticClass: "category", attrs: { href: "#" } }, [
-                      _vm._v("Business")
-                    ]),
-                    _vm._v(",\n                                "),
-                    _c("a", { staticClass: "category", attrs: { href: "#" } }, [
-                      _vm._v("Travel")
-                    ]),
-                    _vm._v(
-                      "\n                                —\n                                "
-                    ),
-                    _c("span", { staticClass: "date" }, [
-                      _vm._v("July 2, 2020")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("h2", { staticClass: "heading mb-3" }, [
-                    _c("a", { attrs: { href: "single.html" } }, [
-                      _vm._v(
-                        "Your most unhappy customers are your\n                                    greatest source of learning."
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("p", [
-                    _vm._v(
-                      "\n                                Far far away, behind the word mountains, far\n                                from the countries Vokalia and Consonantia,\n                                there live the blind texts.\n                            "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    {
-                      staticClass: "post-author d-flex align-items-center",
-                      attrs: { href: "#" }
-                    },
-                    [
-                      _c("div", { staticClass: "author-pic" }, [
-                        _c("img", {
-                          attrs: { src: "images/person_1.jpg", alt: "Image" }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "text" }, [
-                        _c("strong", [_vm._v("Sergy Campbell")]),
-                        _vm._v(" "),
-                        _c("span", [_vm._v("CEO and Founder")])
-                      ])
-                    ]
-                  )
-                ])
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-lg-4" }, [
-            _c(
-              "div",
-              { staticClass: "post-entry d-block small-post-entry-v" },
-              [
-                _c("div", { staticClass: "thumbnail" }, [
-                  _c("a", { attrs: { href: "single.html" } }, [
-                    _c("img", {
-                      staticClass: "img-fluid",
-                      attrs: { src: "images/img_4.jpg", alt: "Image" }
-                    })
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "content" }, [
-                  _c("div", { staticClass: "post-meta mb-1" }, [
-                    _c("a", { staticClass: "category", attrs: { href: "#" } }, [
-                      _vm._v("Business")
-                    ]),
-                    _vm._v(",\n                                "),
-                    _c("a", { staticClass: "category", attrs: { href: "#" } }, [
-                      _vm._v("Travel")
-                    ]),
-                    _vm._v(
-                      "\n                                —\n                                "
-                    ),
-                    _c("span", { staticClass: "date" }, [
-                      _vm._v("July 2, 2020")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("h2", { staticClass: "heading mb-3" }, [
-                    _c("a", { attrs: { href: "#" } }, [
-                      _vm._v(
-                        "Your most unhappy customers are your\n                                    greatest source of learning."
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("p", [
-                    _vm._v(
-                      "\n                                Far far away, behind the word mountains, far\n                                from the countries Vokalia and Consonantia,\n                                there live the blind texts.\n                            "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    {
-                      staticClass: "post-author d-flex align-items-center",
-                      attrs: { href: "#" }
-                    },
-                    [
-                      _c("div", { staticClass: "author-pic" }, [
-                        _c("img", {
-                          attrs: { src: "images/person_1.jpg", alt: "Image" }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "text" }, [
-                        _c("strong", [_vm._v("Sergy Campbell")]),
-                        _vm._v(" "),
-                        _c("span", [_vm._v("CEO and Founder")])
-                      ])
-                    ]
-                  )
-                ])
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-lg-4" }, [
-            _c(
-              "div",
-              { staticClass: "post-entry d-block small-post-entry-v" },
-              [
-                _c("div", { staticClass: "thumbnail" }, [
-                  _c("a", { attrs: { href: "single.html" } }, [
-                    _c("img", {
-                      staticClass: "img-fluid",
-                      attrs: { src: "images/img_4.jpg", alt: "Image" }
-                    })
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "content" }, [
-                  _c("div", { staticClass: "post-meta mb-1" }, [
-                    _c("a", { staticClass: "category", attrs: { href: "#" } }, [
-                      _vm._v("Business")
-                    ]),
-                    _vm._v(",\n                                "),
-                    _c("a", { staticClass: "category", attrs: { href: "#" } }, [
-                      _vm._v("Travel")
-                    ]),
-                    _vm._v(
-                      "\n                                —\n                                "
-                    ),
-                    _c("span", { staticClass: "date" }, [
-                      _vm._v("July 2, 2020")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("h2", { staticClass: "heading mb-3" }, [
-                    _c("a", { attrs: { href: "#" } }, [
-                      _vm._v(
-                        "Your most unhappy customers are your\n                                    greatest source of learning."
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("p", [
-                    _vm._v(
-                      "\n                                Far far away, behind the word mountains, far\n                                from the countries Vokalia and Consonantia,\n                                there live the blind texts.\n                            "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    {
-                      staticClass: "post-author d-flex align-items-center",
-                      attrs: { href: "#" }
-                    },
-                    [
-                      _c("div", { staticClass: "author-pic" }, [
-                        _c("img", {
-                          attrs: { src: "images/person_1.jpg", alt: "Image" }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "text" }, [
-                        _c("strong", [_vm._v("Sergy Campbell")]),
-                        _vm._v(" "),
-                        _c("span", [_vm._v("CEO and Founder")])
-                      ])
-                    ]
-                  )
-                ])
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-lg-4" }, [
-            _c(
-              "div",
-              { staticClass: "post-entry d-block small-post-entry-v" },
-              [
-                _c("div", { staticClass: "thumbnail" }, [
-                  _c("a", { attrs: { href: "single.html" } }, [
-                    _c("img", {
-                      staticClass: "img-fluid",
-                      attrs: { src: "images/img_5.jpg", alt: "Image" }
-                    })
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "content" }, [
-                  _c("div", { staticClass: "post-meta mb-1" }, [
-                    _c("a", { staticClass: "category", attrs: { href: "#" } }, [
-                      _vm._v("Business")
-                    ]),
-                    _vm._v(",\n                                "),
-                    _c("a", { staticClass: "category", attrs: { href: "#" } }, [
-                      _vm._v("Travel")
-                    ]),
-                    _vm._v(
-                      "\n                                —\n                                "
-                    ),
-                    _c("span", { staticClass: "date" }, [
-                      _vm._v("July 2, 2020")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("h2", { staticClass: "heading mb-3" }, [
-                    _c("a", { attrs: { href: "#" } }, [
-                      _vm._v(
-                        "Your most unhappy customers are your\n                                    greatest source of learning."
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("p", [
-                    _vm._v(
-                      "\n                                Far far away, behind the word mountains, far\n                                from the countries Vokalia and Consonantia,\n                                there live the blind texts.\n                            "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    {
-                      staticClass: "post-author d-flex align-items-center",
-                      attrs: { href: "#" }
-                    },
-                    [
-                      _c("div", { staticClass: "author-pic" }, [
-                        _c("img", {
-                          attrs: { src: "images/person_1.jpg", alt: "Image" }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "text" }, [
-                        _c("strong", [_vm._v("Sergy Campbell")]),
-                        _vm._v(" "),
-                        _c("span", [_vm._v("CEO and Founder")])
-                      ])
-                    ]
-                  )
-                ])
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-lg-4" }, [
-            _c(
-              "div",
-              { staticClass: "post-entry d-block small-post-entry-v" },
-              [
-                _c("div", { staticClass: "thumbnail" }, [
-                  _c("a", { attrs: { href: "single.html" } }, [
-                    _c("img", {
-                      staticClass: "img-fluid",
-                      attrs: { src: "images/img_6.jpg", alt: "Image" }
-                    })
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "content" }, [
-                  _c("div", { staticClass: "post-meta mb-1" }, [
-                    _c("a", { staticClass: "category", attrs: { href: "#" } }, [
-                      _vm._v("Business")
-                    ]),
-                    _vm._v(",\n                                "),
-                    _c("a", { staticClass: "category", attrs: { href: "#" } }, [
-                      _vm._v("Travel")
-                    ]),
-                    _vm._v(
-                      "\n                                —\n                                "
-                    ),
-                    _c("span", { staticClass: "date" }, [
-                      _vm._v("July 2, 2020")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("h2", { staticClass: "heading mb-3" }, [
-                    _c("a", { attrs: { href: "#" } }, [
-                      _vm._v(
-                        "Your most unhappy customers are your\n                                    greatest source of learning."
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("p", [
-                    _vm._v(
-                      "\n                                Far far away, behind the word mountains, far\n                                from the countries Vokalia and Consonantia,\n                                there live the blind texts.\n                            "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    {
-                      staticClass: "post-author d-flex align-items-center",
-                      attrs: { href: "#" }
-                    },
-                    [
-                      _c("div", { staticClass: "author-pic" }, [
-                        _c("img", {
-                          attrs: { src: "images/person_1.jpg", alt: "Image" }
-                        })
-                      ]),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "text" }, [
-                        _c("strong", [_vm._v("Sergy Campbell")]),
-                        _vm._v(" "),
-                        _c("span", [_vm._v("CEO and Founder")])
-                      ])
-                    ]
-                  )
-                ])
-              ]
-            )
-          ])
-        ])
-      ])
     ])
   },
   function() {
@@ -85329,137 +85048,164 @@ var render = function() {
                 attrs: { src: "/" + _vm.post.photo }
               }),
               _vm._v(" "),
-              Object.keys(_vm.user).length > 0
-                ? _c(
-                    "div",
+              _c(
+                "div",
+                {
+                  staticClass: "singlepost_ship d-flex",
+                  staticStyle: { "align-items": "center" }
+                },
+                [
+                  Object.keys(_vm.user).length > 0
+                    ? _c(
+                        "div",
+                        [
+                          _c(
+                            "transition",
+                            {
+                              attrs: {
+                                name: "custom-classes-transition",
+                                "enter-active-class":
+                                  "animate__animated animate__bounceIn"
+                              }
+                            },
+                            [
+                              _vm.isLiked
+                                ? _c(
+                                    "span",
+                                    {
+                                      staticClass: "text-light",
+                                      staticStyle: {
+                                        "font-size": "22px",
+                                        cursor: "pointer"
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.likePost(_vm.post.id)
+                                        }
+                                      }
+                                    },
+                                    [_c("i", { staticClass: "fas fa-heart" })]
+                                  )
+                                : _vm._e()
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "transition",
+                            {
+                              attrs: {
+                                name: "custom-classes-transition",
+                                "enter-active-class":
+                                  "animate__animated animate__bounceIn"
+                              }
+                            },
+                            [
+                              !_vm.isLiked
+                                ? _c(
+                                    "span",
+                                    {
+                                      staticClass: "text-light",
+                                      staticStyle: {
+                                        "font-size": "22px",
+                                        cursor: "pointer"
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.likePost(_vm.post.id)
+                                        }
+                                      }
+                                    },
+                                    [_c("i", { staticClass: "far fa-heart" })]
+                                  )
+                                : _vm._e()
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    : _c(
+                        "div",
+                        [
+                          _c("router-link", { attrs: { to: "/login" } }, [
+                            _c(
+                              "span",
+                              {
+                                staticClass: "text-light",
+                                staticStyle: {
+                                  "font-size": "22px",
+                                  cursor: "pointer"
+                                }
+                              },
+                              [_c("i", { staticClass: "far fa-heart" })]
+                            )
+                          ])
+                        ],
+                        1
+                      ),
+                  _vm._v(" "),
+                  _c(
+                    "span",
                     {
-                      staticClass: "singlepost_ship",
-                      staticStyle: { "font-size": "20px" }
+                      staticClass: "text-light",
+                      staticStyle: { "margin-left": "5px", "font-size": "22px" }
                     },
                     [
-                      _c(
-                        "transition",
-                        {
-                          attrs: {
-                            name: "custom-classes-transition",
-                            "enter-active-class":
-                              "animate__animated animate__bounceIn"
-                          }
-                        },
-                        [
-                          _vm.isLiked
-                            ? _c(
-                                "span",
-                                {
-                                  staticClass: "text-light",
-                                  staticStyle: { cursor: "pointer" },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      return _vm.likePost(_vm.post.id)
-                                    }
-                                  }
-                                },
-                                [_c("i", { staticClass: "fas fa-heart" })]
-                              )
-                            : _vm._e()
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "transition",
-                        {
-                          attrs: {
-                            name: "custom-classes-transition",
-                            "enter-active-class":
-                              "animate__animated animate__bounceIn"
-                          }
-                        },
-                        [
-                          !_vm.isLiked
-                            ? _c(
-                                "span",
-                                {
-                                  staticClass: "text-light",
-                                  staticStyle: { cursor: "pointer" },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      return _vm.likePost(_vm.post.id)
-                                    }
-                                  }
-                                },
-                                [_c("i", { staticClass: "far fa-heart" })]
-                              )
-                            : _vm._e()
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
+                      _vm._v(
+                        "\n                                " +
+                          _vm._s(_vm.post.likes.length) +
+                          "\n                            "
+                      )
+                    ]
+                  ),
+                  _vm._v(
+                    "\n                            —\n                            "
+                  ),
+                  _c("img", {
+                    staticClass: "author-pic img-fluid rounded-circle mx-auto",
+                    attrs: { src: _vm.post.user.profilePic, alt: "Image" }
+                  }),
+                  _vm._v(
+                    "\n                            —\n                            "
+                  ),
+                  _c("span", { staticStyle: { "font-size": "17px" } }, [
+                    _vm._v(
+                      _vm._s(
+                        _vm.moment(_vm.post.created_at).format("MMM DD,YYYY")
+                      )
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _vm.post.user_id === _vm.user.id
+                    ? _c(
                         "span",
-                        {
-                          staticClass: "text-light",
-                          staticStyle: { "margin-left": "5px" }
-                        },
+                        { staticStyle: { "font-size": "17px" } },
                         [
                           _vm._v(
-                            "\n                                " +
-                              _vm._s(_vm.post.likes.length) +
-                              "\n                            "
-                          )
-                        ]
-                      ),
-                      _vm._v(
-                        "\n                            —\n                            "
-                      ),
-                      _c("img", {
-                        staticClass:
-                          "author-pic img-fluid rounded-circle mx-auto",
-                        attrs: { src: _vm.post.user.profilePic, alt: "Image" }
-                      }),
-                      _vm._v(
-                        "\n                            —\n                            "
-                      ),
-                      _c("span", [
-                        _vm._v(
-                          _vm._s(
-                            _vm
-                              .moment(_vm.post.created_at)
-                              .format("MMM DD,YYYY")
-                          )
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _vm.post.user_id === _vm.user.id
-                        ? _c(
-                            "span",
-                            [
-                              _vm._v(
-                                "\n                                —\n                                "
-                              ),
-                              _c(
-                                "router-link",
-                                {
-                                  staticClass: "text-white",
-                                  attrs: {
-                                    to: {
-                                      name: "editpost",
-                                      params: {
-                                        postSlug: _vm.post.slug
-                                      }
-                                    }
+                            "\n                                —\n                                "
+                          ),
+                          _c(
+                            "router-link",
+                            {
+                              staticClass: "text-white",
+                              attrs: {
+                                to: {
+                                  name: "editpost",
+                                  params: {
+                                    postSlug: _vm.post.slug
                                   }
-                                },
-                                [_vm._v("Edit")]
-                              )
-                            ],
-                            1
+                                }
+                              }
+                            },
+                            [_vm._v("Edit")]
                           )
-                        : _vm._e()
-                    ],
-                    1
-                  )
-                : _vm._e()
+                        ],
+                        1
+                      )
+                    : _vm._e()
+                ]
+              )
             ]),
             _vm._v(" "),
             _c("div", {
@@ -85473,8 +85219,8 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "section pb-0" }, [
-      _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "pb-0" }, [
+      _c("div", { staticClass: "col-lg-9", staticStyle: { margin: "auto" } }, [
         _vm._m(1),
         _vm._v(" "),
         _c(
@@ -85510,7 +85256,7 @@ var render = function() {
                       ])
                     ]),
                     _vm._v(" "),
-                    _c("h2", { staticClass: "heading" }, [
+                    _c("h2", { staticClass: "heading bold" }, [
                       _c("a", [
                         _vm._v(
                           "\n                                    " +
@@ -85542,15 +85288,7 @@ var render = function() {
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "text" }, [
-                          _c("strong", [_vm._v(_vm._s(post.user.name))]),
-                          _vm._v(" "),
-                          _c("span", [
-                            _vm._v(
-                              "\n                                        " +
-                                _vm._s(post.user.length) +
-                                "\n                                    "
-                            )
-                          ])
+                          _c("strong", [_vm._v(_vm._s(post.user.name))])
                         ])
                       ]
                     )
@@ -85572,7 +85310,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row mt-5 pt-5 border-top" }, [
+    return _c("div", { staticClass: "row mt-2 border-top" }, [
       _c("div", { staticClass: "col-12" }, [
         _c("span", { staticClass: "fw-bold text-black small mb-1" }, [
           _vm._v("Share")

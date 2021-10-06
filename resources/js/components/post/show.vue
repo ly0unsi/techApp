@@ -12,40 +12,50 @@
                                 class="img-fluid rounded mb-4 position-relative"
                             />
                             <div
-                                v-if="Object.keys(user).length > 0"
-                                style="font-size: 20px;"
-                                class="singlepost_ship"
+                                style="align-items: center"
+                                class="singlepost_ship d-flex"
                             >
-                                <transition
-                                    name="custom-classes-transition"
-                                    enter-active-class="animate__animated animate__bounceIn"
-                                >
-                                    <span
-                                        style="cursor:pointer"
-                                        v-if="isLiked"
-                                        class="text-light"
-                                        @click.prevent="likePost(post.id)"
+                                <div v-if="Object.keys(user).length > 0">
+                                    <transition
+                                        name="custom-classes-transition"
+                                        enter-active-class="animate__animated animate__bounceIn"
                                     >
-                                        <i class="fas fa-heart"></i>
-                                    </span>
-                                </transition>
-                                <transition
-                                    name="custom-classes-transition"
-                                    enter-active-class="animate__animated animate__bounceIn"
-                                >
-                                    <span
-                                        style="cursor:pointer"
-                                        v-if="!isLiked"
-                                        class="text-light"
-                                        @click.prevent="likePost(post.id)"
+                                        <span
+                                            style="font-size:22px;cursor:pointer"
+                                            v-if="isLiked"
+                                            class="text-light"
+                                            @click.prevent="likePost(post.id)"
+                                        >
+                                            <i class="fas fa-heart"></i>
+                                        </span>
+                                    </transition>
+                                    <transition
+                                        name="custom-classes-transition"
+                                        enter-active-class="animate__animated animate__bounceIn"
                                     >
-                                        <i class="far fa-heart"></i>
-                                    </span>
-                                </transition>
-
+                                        <span
+                                            style="font-size:22px;cursor:pointer"
+                                            v-if="!isLiked"
+                                            class="text-light"
+                                            @click.prevent="likePost(post.id)"
+                                        >
+                                            <i class="far fa-heart"></i>
+                                        </span>
+                                    </transition>
+                                </div>
+                                <div v-else>
+                                    <router-link to="/login">
+                                        <span
+                                            style="font-size:22px;cursor:pointer"
+                                            class="text-light"
+                                        >
+                                            <i class="far fa-heart"></i>
+                                        </span>
+                                    </router-link>
+                                </div>
                                 <span
                                     class="text-light"
-                                    style="margin-left:5px"
+                                    style="margin-left:5px;font-size:22px"
                                 >
                                     {{ post.likes.length }}
                                 </span>
@@ -56,12 +66,15 @@
                                     class="author-pic img-fluid rounded-circle mx-auto"
                                 />
                                 &mdash;
-                                <span>{{
+                                <span style="font-size:17px">{{
                                     moment(post.created_at).format(
                                         "MMM DD,YYYY"
                                     )
                                 }}</span>
-                                <span v-if="post.user_id === user.id">
+                                <span
+                                    v-if="post.user_id === user.id"
+                                    style="font-size: 17px"
+                                >
                                     &mdash;
                                     <router-link
                                         class="text-white"
@@ -81,7 +94,7 @@
                             v-html="post.content"
                         ></div>
 
-                        <div class="row mt-5 pt-5 border-top">
+                        <div class="row mt-2 border-top">
                             <div class="col-12">
                                 <span class="fw-bold text-black small mb-1"
                                     >Share</span
@@ -114,8 +127,8 @@
                 </div>
             </div>
         </div>
-        <div class="section pb-0">
-            <div class="container">
+        <div class="pb-0">
+            <div class="col-lg-9" style="margin:auto">
                 <div class="row">
                     <div class="col-lg-12">
                         <h2 class="heading">Related</h2>
@@ -147,7 +160,7 @@
                                         )
                                     }}</span>
                                 </div>
-                                <h2 class="heading">
+                                <h2 class="heading bold">
                                     <a>
                                         {{ post.title }}
                                     </a>
@@ -167,9 +180,6 @@
                                     </div>
                                     <div class="text">
                                         <strong>{{ post.user.name }}</strong>
-                                        <span>
-                                            {{ post.user.length }}
-                                        </span>
                                     </div>
                                 </a>
                             </div>
@@ -214,7 +224,8 @@ export default {
             post: {},
             sameCat: {},
             isLiked: false,
-            user: {}
+            user: {},
+            title: this.$route.params.slug
         };
     },
     computed: {},
@@ -253,6 +264,14 @@ export default {
             this.getPost();
         });
         this.getUser();
+    },
+    head: {
+        // To use "this" in the component, it is necessary to return the object through a function
+        title: function() {
+            return {
+                inner: this.title
+            };
+        }
     }
 };
 </script>

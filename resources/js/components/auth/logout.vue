@@ -15,7 +15,7 @@ export default {
                 });
             });
 
-        this.$router.push({ name: "home" });
+        this.$router.back();
     }
 };
 </script>

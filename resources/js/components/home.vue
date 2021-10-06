@@ -10,8 +10,8 @@
                     <ol class="carousel-indicators">
                         <li
                             v-bind:class="{ active: index === 0 }"
-                            :key="topic.id"
-                            v-for="(topic, index) in topics.slice(0, 4)"
+                            :key="post.id"
+                            v-for="(post, index) in trend.slice(0, 4)"
                             data-target="#carouselExampleIndicators"
                             :data-slide-to="index"
                         ></li>
@@ -23,14 +23,14 @@
                         <div
                             v-bind:class="{ active: index === 0 }"
                             class="carousel-item position-relative"
-                            :key="topic.id"
-                            v-for="(topic, index) in topics.slice(0, 4)"
+                            :key="post.id"
+                            v-for="(post, index) in trend.slice(0, 4)"
                         >
                             <div class="post-entry d-lg-flex container">
                                 <router-link
                                     :to="{
                                         name: 'post',
-                                        params: { slug: topic.slug }
+                                        params: { slug: post.slug }
                                     }"
                                 ></router-link>
 
@@ -39,14 +39,14 @@
                                         :to="{
                                             name: 'post',
                                             params: {
-                                                slug: topic.slug
+                                                slug: post.slug
                                             }
                                         }"
                                     >
                                         <img
                                             style="width: 569px;
                                                         height: 500px;object-fit: cover;"
-                                            :src="topic.photo"
+                                            :src="post.photo"
                                             alt="Image"
                                             class="img-fluid"
                                         />
@@ -59,30 +59,30 @@
                                             class="category"
                                             style="color:whitesmoke"
                                         >
-                                            {{ topic.category.name }}
+                                            {{ post.category.name }}
                                         </a>
                                         &mdash;
                                         <span
                                             class="date"
                                             style="color:whitesmoke"
                                             >{{
-                                                moment(topic.created_at).format(
+                                                moment(post.created_at).format(
                                                     "MMM DD,YYYY"
                                                 )
                                             }}</span
                                         >
                                         &mdash;
-                                        {{ topic.likes.length }}
+                                        {{ post.likes.length }}
                                         <i class="fas fa-heart text-light"></i>
 
-                                        <span v-if="topic.user_id === user.id">
+                                        <span v-if="post.user_id === user.id">
                                             &mdash;
                                             <router-link
                                                 class="text-white"
                                                 :to="{
                                                     name: 'editpost',
                                                     params: {
-                                                        postSlug: topic.slug
+                                                        postSlug: post.slug
                                                     }
                                                 }"
                                                 >Edit</router-link
@@ -95,14 +95,14 @@
                                             :to="{
                                                 name: 'post',
                                                 params: {
-                                                    slug: topic.slug
+                                                    slug: post.slug
                                                 }
                                             }"
-                                            >{{ topic.title }}
+                                            >{{ post.title }}
                                         </router-link>
                                     </h2>
                                     <p style="color:whitesmoke">
-                                        {{ topic.desc }}
+                                        {{ post.desc }}
                                     </p>
                                     <a
                                         href="#"
@@ -110,13 +110,13 @@
                                     >
                                         <div class="author-pic">
                                             <img
-                                                :src="topic.user.profilePic"
+                                                :src="post.user.profilePic"
                                                 alt="Image"
                                             />
                                         </div>
                                         <div class="text">
                                             <strong style="color:whitesmoke">{{
-                                                topic.user.name
+                                                post.user.name
                                             }}</strong>
                                             <span>CEO and Founder</span>
                                         </div>
@@ -157,12 +157,16 @@
         <div class="section">
             <div class="container">
                 <div class="row g-5">
-                    <div class="col-lg-4">
+                    <div
+                        class="col-lg-4"
+                        v-for="post in mostLiked.slice(0, 6)"
+                        :key="post.key"
+                    >
                         <div class="post-entry d-block small-post-entry-v">
                             <div class="thumbnail">
                                 <a href="single.html">
                                     <img
-                                        src="images/img_2.jpg"
+                                        :src="post.photo"
                                         alt="Image"
                                         class="img-fluid"
                                     />
@@ -170,21 +174,21 @@
                             </div>
                             <div class="content">
                                 <div class="post-meta mb-1">
-                                    <a href="#" class="category">Business</a>,
-                                    <a href="#" class="category">Travel</a>
-                                    &mdash;
-                                    <span class="date">July 2, 2020</span>
+                                    <a href="#" class="category">{{
+                                        post.category.name
+                                    }}</a
+                                    >, &mdash;
+                                    <span class="date">{{
+                                        moment(post.created_at).format(
+                                            "MMM DD,YYYY"
+                                        )
+                                    }}</span>
                                 </div>
                                 <h2 class="heading mb-3">
-                                    <a href="single.html"
-                                        >Your most unhappy customers are your
-                                        greatest source of learning.</a
-                                    >
+                                    <a href="single.html">{{ post.title }}</a>
                                 </h2>
                                 <p>
-                                    Far far away, behind the word mountains, far
-                                    from the countries Vokalia and Consonantia,
-                                    there live the blind texts.
+                                    {{ post.desc }}
                                 </p>
                                 <a
                                     href="#"
@@ -192,247 +196,12 @@
                                 >
                                     <div class="author-pic">
                                         <img
-                                            src="images/person_1.jpg"
+                                            :src="post.user.profilePic"
                                             alt="Image"
                                         />
                                     </div>
                                     <div class="text">
-                                        <strong>Sergy Campbell</strong>
-                                        <span>CEO and Founder</span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="post-entry d-block small-post-entry-v">
-                            <div class="thumbnail">
-                                <a href="single.html">
-                                    <img
-                                        src="images/img_3.jpg"
-                                        alt="Image"
-                                        class="img-fluid"
-                                    />
-                                </a>
-                            </div>
-                            <div class="content">
-                                <div class="post-meta mb-1">
-                                    <a href="#" class="category">Business</a>,
-                                    <a href="#" class="category">Travel</a>
-                                    &mdash;
-                                    <span class="date">July 2, 2020</span>
-                                </div>
-                                <h2 class="heading mb-3">
-                                    <a href="single.html"
-                                        >Your most unhappy customers are your
-                                        greatest source of learning.</a
-                                    >
-                                </h2>
-                                <p>
-                                    Far far away, behind the word mountains, far
-                                    from the countries Vokalia and Consonantia,
-                                    there live the blind texts.
-                                </p>
-                                <a
-                                    href="#"
-                                    class="post-author d-flex align-items-center"
-                                >
-                                    <div class="author-pic">
-                                        <img
-                                            src="images/person_1.jpg"
-                                            alt="Image"
-                                        />
-                                    </div>
-                                    <div class="text">
-                                        <strong>Sergy Campbell</strong>
-                                        <span>CEO and Founder</span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="post-entry d-block small-post-entry-v">
-                            <div class="thumbnail">
-                                <a href="single.html">
-                                    <img
-                                        src="images/img_4.jpg"
-                                        alt="Image"
-                                        class="img-fluid"
-                                    />
-                                </a>
-                            </div>
-                            <div class="content">
-                                <div class="post-meta mb-1">
-                                    <a href="#" class="category">Business</a>,
-                                    <a href="#" class="category">Travel</a>
-                                    &mdash;
-                                    <span class="date">July 2, 2020</span>
-                                </div>
-                                <h2 class="heading mb-3">
-                                    <a href="#"
-                                        >Your most unhappy customers are your
-                                        greatest source of learning.</a
-                                    >
-                                </h2>
-                                <p>
-                                    Far far away, behind the word mountains, far
-                                    from the countries Vokalia and Consonantia,
-                                    there live the blind texts.
-                                </p>
-                                <a
-                                    href="#"
-                                    class="post-author d-flex align-items-center"
-                                >
-                                    <div class="author-pic">
-                                        <img
-                                            src="images/person_1.jpg"
-                                            alt="Image"
-                                        />
-                                    </div>
-                                    <div class="text">
-                                        <strong>Sergy Campbell</strong>
-                                        <span>CEO and Founder</span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="post-entry d-block small-post-entry-v">
-                            <div class="thumbnail">
-                                <a href="single.html">
-                                    <img
-                                        src="images/img_4.jpg"
-                                        alt="Image"
-                                        class="img-fluid"
-                                    />
-                                </a>
-                            </div>
-                            <div class="content">
-                                <div class="post-meta mb-1">
-                                    <a href="#" class="category">Business</a>,
-                                    <a href="#" class="category">Travel</a>
-                                    &mdash;
-                                    <span class="date">July 2, 2020</span>
-                                </div>
-                                <h2 class="heading mb-3">
-                                    <a href="#"
-                                        >Your most unhappy customers are your
-                                        greatest source of learning.</a
-                                    >
-                                </h2>
-                                <p>
-                                    Far far away, behind the word mountains, far
-                                    from the countries Vokalia and Consonantia,
-                                    there live the blind texts.
-                                </p>
-                                <a
-                                    href="#"
-                                    class="post-author d-flex align-items-center"
-                                >
-                                    <div class="author-pic">
-                                        <img
-                                            src="images/person_1.jpg"
-                                            alt="Image"
-                                        />
-                                    </div>
-                                    <div class="text">
-                                        <strong>Sergy Campbell</strong>
-                                        <span>CEO and Founder</span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="post-entry d-block small-post-entry-v">
-                            <div class="thumbnail">
-                                <a href="single.html">
-                                    <img
-                                        src="images/img_5.jpg"
-                                        alt="Image"
-                                        class="img-fluid"
-                                    />
-                                </a>
-                            </div>
-                            <div class="content">
-                                <div class="post-meta mb-1">
-                                    <a href="#" class="category">Business</a>,
-                                    <a href="#" class="category">Travel</a>
-                                    &mdash;
-                                    <span class="date">July 2, 2020</span>
-                                </div>
-                                <h2 class="heading mb-3">
-                                    <a href="#"
-                                        >Your most unhappy customers are your
-                                        greatest source of learning.</a
-                                    >
-                                </h2>
-                                <p>
-                                    Far far away, behind the word mountains, far
-                                    from the countries Vokalia and Consonantia,
-                                    there live the blind texts.
-                                </p>
-                                <a
-                                    href="#"
-                                    class="post-author d-flex align-items-center"
-                                >
-                                    <div class="author-pic">
-                                        <img
-                                            src="images/person_1.jpg"
-                                            alt="Image"
-                                        />
-                                    </div>
-                                    <div class="text">
-                                        <strong>Sergy Campbell</strong>
-                                        <span>CEO and Founder</span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="post-entry d-block small-post-entry-v">
-                            <div class="thumbnail">
-                                <a href="single.html">
-                                    <img
-                                        src="images/img_6.jpg"
-                                        alt="Image"
-                                        class="img-fluid"
-                                    />
-                                </a>
-                            </div>
-                            <div class="content">
-                                <div class="post-meta mb-1">
-                                    <a href="#" class="category">Business</a>,
-                                    <a href="#" class="category">Travel</a>
-                                    &mdash;
-                                    <span class="date">July 2, 2020</span>
-                                </div>
-                                <h2 class="heading mb-3">
-                                    <a href="#"
-                                        >Your most unhappy customers are your
-                                        greatest source of learning.</a
-                                    >
-                                </h2>
-                                <p>
-                                    Far far away, behind the word mountains, far
-                                    from the countries Vokalia and Consonantia,
-                                    there live the blind texts.
-                                </p>
-                                <a
-                                    href="#"
-                                    class="post-author d-flex align-items-center"
-                                >
-                                    <div class="author-pic">
-                                        <img
-                                            src="images/person_1.jpg"
-                                            alt="Image"
-                                        />
-                                    </div>
-                                    <div class="text">
-                                        <strong>Sergy Campbell</strong>
+                                        <strong>{{ post.user.name }}</strong>
                                         <span>CEO and Founder</span>
                                     </div>
                                 </a>
@@ -1090,8 +859,9 @@
 export default {
     data() {
         return {
-            topics: [],
-            user: {}
+            trend: [],
+            user: {},
+            mostLiked: []
         };
     },
     methods: {
@@ -1105,7 +875,8 @@ export default {
         },
         async getPosts() {
             const res = await axios.get("/api/posts/");
-            this.topics = res.data;
+            this.trend = res.data.trend;
+            this.mostLiked = res.data.mostLiked;
         },
         moment() {
             return moment();

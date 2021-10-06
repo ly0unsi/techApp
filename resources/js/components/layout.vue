@@ -283,7 +283,7 @@ export default {
         },
         async getPosts() {
             const res = await axios.get("/api/posts/");
-            this.posts = res.data;
+            this.posts = res.data.trend;
         },
         closeModal() {
             this.showModal = false;

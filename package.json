@@ -30,6 +30,7 @@
         "slugify": "^1.6.0",
         "sweet-alert": "^2.0.5",
         "sweetalert2": "^9.10.12",
+        "vue-head": "^2.2.0",
         "vue-moment": "^4.1.0",
         "vue-progressbar": "^0.7.5",
         "vue-router": "^3.5.2",

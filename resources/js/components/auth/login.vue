@@ -140,7 +140,7 @@ export default {
                 const res = await axios.post("/api/auth/login", this.form);
                 Reload.$emit("login");
                 this.showSpinner = false;
-                this.$router.push({ name: "home" });
+                this.$router.back();
             } catch (error) {
                 if (error) {
                     this.showSpinner = false;

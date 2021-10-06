@@ -16,29 +16,27 @@ class PostController extends Controller
     {
         $this->middleware('getauth');
     }
-    public function edit($postSlug)
+    public function edit(Request $request, $postSlug)
     {
 
-        request()->validate([
+        $request->validate([
             'slug' => 'required|max:255',
             'title' => 'required|max:255',
             'desc' => 'required|max:255',
             'category_id' => 'required',
-            'photo' => 'required',
-            'newPhoto' => 'required',
             'content' => 'required',
         ]);
-        $post = Post::find($postSlug);
+        $post = Post::where('slug', $postSlug)->first();
+        $newPhoto = $request->newPhoto;
+        if ($newPhoto) {
 
-        if (request()->newPhoto) {
-            return response()->json('new photo');
-            $position = strpos(request()->newPhoto, ';');
-            $sub = substr(request()->newPhoto, 0, $position);
+            $position = strpos($request->newPhoto, ';');
+            $sub = substr($request->newPhoto, 0, $position);
             $ext = explode('/', $sub)[1];
 
             $name = time() . "." . $ext;
 
-            $img = Image::make(request()->newPhoto);
+            $img = Image::make($request->newPhoto);
 
             $upload_path = 'images/posts/';
 
@@ -47,28 +45,24 @@ class PostController extends Controller
             $done = $img->save($image_url);
             if ($done) {
                 unlink($post->photo);
-                $post->title = request()->title;
-
-                $post->slug = request()->slug;
-                $post->desc = request()->desc;
-                $post->content = request()->content;
+                $post->title = $request->title;
+                $post->slug = $request->slug;
+                $post->desc = $request->desc;
+                $post->content = $request->content;
                 $post->photo = $image_url;
-                $category = Category::where('id', request()->category_id)->first();
-
+                $category = Category::where('id', $request->category_id)->first();
                 $post->category()->associate($category);
                 $user = Auth::user();
                 $post->user()->associate($user);
-
                 $post->update();
             }
         } else {
-            $post->title = request()->title;
-
-            $post->slug = request()->slug;
-            $post->desc = request()->desc;
-            $post->content = request()->content;
-            $post->photo = request()->photo;
-            $category = Category::where('id', request()->category_id)->first();
+            $post->title = $request->title;
+            $post->slug = $request->slug;
+            $post->desc = $request->desc;
+            $post->content = $request->content;
+            $post->photo = $post->photo;
+            $category = Category::where('id', $request->category_id)->first();
 
             $post->category()->associate($category);
             $user = Auth::user();
@@ -80,8 +74,12 @@ class PostController extends Controller
     // all books
     public function index(Request $request)
     {
-        $posts = Post::with('user', 'category', 'likes')->latest()->get();
-        return response()->json($posts);
+        $mostLiked = Post::with('user', 'category', 'likes')->withCount('likes')->orderBy('likes_count', 'DESC')->get();
+        $trend = Post::with('user', 'category', 'likes')->latest()->get();
+        return response()->json([
+            'trend' => $trend,
+            'mostLiked' => $mostLiked
+        ]);
     }
     public function add(Request $request)
     {

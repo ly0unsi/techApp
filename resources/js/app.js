@@ -17,6 +17,9 @@ Vue.use(VueRouter)
 import JwPagination from 'jw-vue-pagination';
 Vue.component('jw-pagination', JwPagination);
 
+import VueHead from 'vue-head'
+Vue.use(VueHead)
+
 import VueProgressBar from 'vue-progressbar'
 const options = {
     color: '##dc3545',
