@@ -22,7 +22,7 @@ Vue.use(VueHead)
 
 import VueProgressBar from 'vue-progressbar'
 const options = {
-    color: '##dc3545',
+    color: '#dc3545',
     failedColor: '#874b4b',
     thickness: '2px',
     transition: {
@@ -31,10 +31,11 @@ const options = {
         termination: 300
     },
     autoRevert: true,
-    location: 'left',
+    location: 'top',
     inverse: false
 }
 Vue.use(VueProgressBar, options)
+
 
 import User from './Helpers/User';
 window.User = User
@@ -87,5 +88,6 @@ window.Reload = new Vue();
 const app = new Vue({
     el: '#app',
     router,
+
 
 });

@@ -34,7 +34,7 @@ class PostController extends Controller
             $sub = substr($request->newPhoto, 0, $position);
             $ext = explode('/', $sub)[1];
 
-            $name = time() . "." . $ext;
+            $name = $request->slug . "." . $ext;
 
             $img = Image::make($request->newPhoto);
 
@@ -95,8 +95,7 @@ class PostController extends Controller
         $position = strpos($request->photo, ';');
         $sub = substr($request->photo, 0, $position);
         $ext = explode('/', $sub)[1];
-
-        $name = time() . "." . $ext;
+        $name = $request->slug . "." . $ext;
 
         $img = Image::make($request->photo);
 
@@ -130,11 +129,16 @@ class PostController extends Controller
                 $isLiked = true;
             };
         }
+        $nextPost =  Post::where('id', '>', $post->id)->orderBy('id', 'asc')->first();
+        $prevPost =  Post::where('id', '<', $post->id)->orderBy('id', 'desc')->first();
+
         return response()->json(
             [
                 'post' => $post,
                 'sameCat' => $sameCatPosts,
-                'isLiked' => $isLiked
+                'isLiked' => $isLiked,
+                'nextPost' => $nextPost,
+                'prevPost' => $prevPost
             ]
         );
     }
@@ -158,12 +162,9 @@ class PostController extends Controller
 
             $like->user_id = auth()->user()->id;
             $like->post_id = $postId;
+            $like->username = auth()->user()->name;
 
             $like->save();
-
-            return response()->json([
-                'count' => Post::find($postId)->likes->count()
-            ]);
         }
     }
 }

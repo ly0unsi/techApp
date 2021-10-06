@@ -282,12 +282,11 @@ export default {
         async postUpdate() {
             try {
                 let postSlug = this.$route.params.postSlug;
-                // this.showSpinner = true;
+                this.showSpinner = true;
                 const res = await axios.patch(
                     "/api/editpost/" + postSlug,
                     this.form
                 );
-                console.log(res.data);
                 this.showSpinner = false;
                 Toast.fire({
                     icon: "success",

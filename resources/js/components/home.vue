@@ -54,13 +54,18 @@
                                 </div>
                                 <div class="content align-self-center">
                                     <div class="post-meta mb-3">
-                                        <a
-                                            href="#"
+                                        <router-link
                                             class="category"
                                             style="color:whitesmoke"
+                                            :to="{
+                                                name: 'catposts',
+                                                params: {
+                                                    catName: post.category.name
+                                                }
+                                            }"
                                         >
                                             {{ post.category.name }}
-                                        </a>
+                                        </router-link>
                                         &mdash;
                                         <span
                                             class="date"
@@ -101,7 +106,9 @@
                                             >{{ post.title }}
                                         </router-link>
                                     </h2>
-                                    <p style="color:whitesmoke">
+                                    <p
+                                        style="color:whitesmoke;text-align:justify"
+                                    >
                                         {{ post.desc }}
                                     </p>
                                     <a
@@ -161,34 +168,66 @@
                         class="col-lg-4"
                         v-for="post in mostLiked.slice(0, 6)"
                         :key="post.key"
+                        data-aos="zoom-in"
                     >
                         <div class="post-entry d-block small-post-entry-v">
                             <div class="thumbnail">
-                                <a href="single.html">
+                                <router-link
+                                    :to="{
+                                        name: 'post',
+                                        params: {
+                                            slug: post.slug
+                                        }
+                                    }"
+                                >
                                     <img
                                         :src="post.photo"
                                         alt="Image"
                                         class="img-fluid"
                                     />
-                                </a>
+                                </router-link>
                             </div>
                             <div class="content">
                                 <div class="post-meta mb-1">
-                                    <a href="#" class="category">{{
-                                        post.category.name
-                                    }}</a
-                                    >, &mdash;
+                                    <router-link
+                                        class="category text-dark"
+                                        style="color:whitesmoke"
+                                        :to="{
+                                            name: 'catposts',
+                                            params: {
+                                                catName: post.category.name
+                                            }
+                                        }"
+                                        >{{ post.category.name }}</router-link
+                                    >
+                                    &mdash;
                                     <span class="date">{{
                                         moment(post.created_at).format(
                                             "MMM DD,YYYY"
                                         )
                                     }}</span>
+                                    &mdash;
+                                    <span class="text-dark">
+                                        {{ post.likes.length }}
+                                    </span>
+
+                                    <i class="fas fa-heart text-dark"></i>
                                 </div>
                                 <h2 class="heading mb-3">
-                                    <a href="single.html">{{ post.title }}</a>
+                                    <router-link
+                                        :to="{
+                                            name: 'post',
+                                            params: {
+                                                slug: post.slug
+                                            }
+                                        }"
+                                        >{{
+                                            post.title.slice(0, 68)
+                                        }}..</router-link
+                                    >
                                 </h2>
-                                <p>
-                                    {{ post.desc }}
+                                <p style="text-align:justify">
+                                    {{ post.desc.slice(0, 100) }}..
                                 </p>
                                 <a
                                     href="#"
@@ -856,7 +895,12 @@
     </div>
 </template>
 <script>
+import AOS from "aos";
+import "aos/dist/aos.css";
 export default {
+    mounted() {
+        AOS.init();
+    },
     data() {
         return {
             trend: [],

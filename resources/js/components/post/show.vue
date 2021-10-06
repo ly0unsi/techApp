@@ -53,12 +53,71 @@
                                         </span>
                                     </router-link>
                                 </div>
+
                                 <span
-                                    class="text-light"
-                                    style="margin-left:5px;font-size:22px"
+                                    v-if="user.name"
+                                    style="margin-left:5px;font-size:16px;cursor:pointer"
+                                    class="dropdown text-light"
                                 >
-                                    {{ post.likes.length }}
+                                    <div
+                                        alt=""
+                                        id="dropdownMenuButton"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                    >
+                                        <transition
+                                            name="custom-classes-transition"
+                                            enter-active-class="animate__animated animate__bounceIn"
+                                        >
+                                            <span v-if="post.likes.length > 0">
+                                                <span
+                                                    v-for="user in post.likes.slice(
+                                                        0,
+                                                        1
+                                                    )"
+                                                    :key="user.id"
+                                                >
+                                                    {{ user.username }}
+                                                </span>
+                                                <transition
+                                                    name="custom-classes-transition"
+                                                    enter-active-class="animate__animated animate__bounceIn"
+                                                >
+                                                    <span
+                                                        v-if="
+                                                            post.likes.length >
+                                                                1
+                                                        "
+                                                    >
+                                                        and
+                                                        {{
+                                                            post.likes.length -
+                                                                1
+                                                        }}
+                                                        other
+                                                    </span>
+                                                </transition>
+                                            </span>
+                                        </transition>
+                                    </div>
+
+                                    <div
+                                        class="dropdown-menu"
+                                        aria-labelledby="dropdownMenuButton"
+                                        style="background:#000000bd"
+                                    >
+                                        <div
+                                            class="dropdown-item"
+                                            style="cursor:pointer;color:white"
+                                            v-for="user in post.likes"
+                                            :key="user.id"
+                                        >
+                                            {{ user.username }}
+                                        </div>
+                                    </div>
                                 </span>
+
                                 &mdash;
                                 <img
                                     :src="post.user.profilePic"
@@ -94,34 +153,68 @@
                             v-html="post.content"
                         ></div>
 
-                        <div class="row mt-2 border-top">
-                            <div class="col-12">
-                                <span class="fw-bold text-black small mb-1"
-                                    >Share</span
-                                >
+                        <div class="row mt-2 border-top text-center">
+                            <div class="col-4" style="margin:auto">
                                 <ul class="social list-unstyled">
                                     <li>
                                         <a href="#"
-                                            ><span class="icon-facebook"></span
+                                            ><i
+                                                class="fas fa-share text-secondary"
+                                            ></i
                                         ></a>
                                     </li>
                                     <li>
                                         <a href="#"
-                                            ><span class="icon-twitter"></span
+                                            ><span
+                                                class="icon-facebook text-primary"
+                                            ></span
                                         ></a>
                                     </li>
                                     <li>
                                         <a href="#"
-                                            ><span class="icon-linkedin"></span
+                                            ><span
+                                                class="icon-twitter text-info"
+                                            ></span
                                         ></a>
                                     </li>
                                     <li>
                                         <a href="#"
-                                            ><span class="icon-pinterest"></span
+                                            ><span
+                                                class="icon-linkedin text-primary"
+                                            ></span
+                                        ></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"
+                                            ><span
+                                                class="icon-pinterest text-danger"
+                                            ></span
                                         ></a>
                                     </li>
                                 </ul>
                             </div>
+                        </div>
+                        <div class="col-md-12">
+                            <router-link
+                                style="float:right"
+                                class="fw-bold text-dark"
+                                v-if="nextPost != null"
+                                :to="{
+                                    name: 'post',
+                                    params: { slug: nextPost.slug }
+                                }"
+                                >Next</router-link
+                            >
+                            <router-link
+                                style="float:left"
+                                class="fw-bold text-dark"
+                                v-if="prevPost != null"
+                                :to="{
+                                    name: 'post',
+                                    params: { slug: prevPost.slug }
+                                }"
+                                >Prev</router-link
+                            >
                         </div>
                     </div>
                 </div>
@@ -137,36 +230,62 @@
                 <div class="row justify-content-center">
                     <div
                         class="col-lg-12"
-                        v-for="post in sameCat.slice(0, 3)"
-                        :key="post.id"
+                        v-for="rpost in sameCat.slice(0, 3)"
+                        :key="rpost.id"
                     >
-                        <div class="post-entry d-md-flex small-horizontal mb-5">
+                        <div
+                            class="post-entry d-md-flex small-horizontal mb-5"
+                            v-if="rpost.id !== post.id"
+                        >
                             <div class="me-md-5 thumbnail mb-3 mb-md-0">
-                                <img
-                                    :src="'/' + post.photo"
-                                    alt="Image"
-                                    class="img-fluid"
-                                />
+                                <router-link
+                                    :to="{
+                                        name: 'post',
+                                        params: {
+                                            slug: rpost.slug
+                                        }
+                                    }"
+                                >
+                                    <img
+                                        :src="'/' + rpost.photo"
+                                        alt="Image"
+                                        class="img-fluid"
+                                    />
+                                </router-link>
                             </div>
                             <div class="content">
                                 <div class="post-meta mb-3">
-                                    <a href="#" class="category">{{
-                                        post.category.name
-                                    }}</a
-                                    >, &mdash;
+                                    <router-link
+                                        class="category text-dark"
+                                        :to="{
+                                            name: 'catposts',
+                                            params: {
+                                                catName: rpost.category.name
+                                            }
+                                        }"
+                                        >{{ rpost.category.name }}</router-link
+                                    >
+                                    &mdash;
                                     <span class="date">{{
-                                        moment(post.created_at).format(
+                                        moment(rpost.created_at).format(
                                             "MMM DD,YYYY"
                                         )
                                     }}</span>
                                 </div>
                                 <h2 class="heading bold">
-                                    <a>
-                                        {{ post.title }}
-                                    </a>
+                                    <router-link
+                                        :to="{
+                                            name: 'post',
+                                            params: {
+                                                slug: rpost.slug
+                                            }
+                                        }"
+                                    >
+                                        {{ rpost.title }}
+                                    </router-link>
                                 </h2>
                                 <p>
-                                    {{ post.desc }}
+                                    {{ rpost.desc }}
                                 </p>
                                 <a
                                     href="#"
@@ -174,12 +293,12 @@
                                 >
                                     <div class="author-pic">
                                         <img
-                                            :src="post.user.profilePic"
+                                            :src="rpost.user.profilePic"
                                             alt="Image"
                                         />
                                     </div>
                                     <div class="text">
-                                        <strong>{{ post.user.name }}</strong>
+                                        <strong>{{ rpost.user.name }}</strong>
                                     </div>
                                 </a>
                             </div>
@@ -225,7 +344,9 @@ export default {
             sameCat: {},
             isLiked: false,
             user: {},
-            title: this.$route.params.slug
+            title: this.$route.params.slug,
+            nextPost: {},
+            prevPost: {}
         };
     },
     computed: {},
@@ -250,6 +371,8 @@ export default {
                 this.post = res.data.post;
                 this.sameCat = res.data.sameCat;
                 this.isLiked = res.data.isLiked;
+                this.nextPost = res.data.nextPost;
+                this.prevPost = res.data.prevPost;
             } catch (error) {
                 console.log(error);
             }

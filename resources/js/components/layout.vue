@@ -105,59 +105,49 @@
                                         </li>
                                     </div>
                                     <div style="float:right">
-                                        <transition
-                                            name="custom-classes-transition"
-                                            enter-active-class="animate__animated animate__bounceIn"
-                                            leave-active-class="animate__animated animate__bounceOut"
-                                        >
-                                            <li
-                                                v-if="user.name"
-                                                class="dropdown"
+                                        <li v-if="user.name" class="dropdown">
+                                            <div
+                                                alt=""
+                                                id="dropdownMenuButton"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true"
+                                                aria-expanded="false"
                                             >
-                                                <div
-                                                    alt=""
-                                                    id="dropdownMenuButton"
-                                                    data-toggle="dropdown"
-                                                    aria-haspopup="true"
-                                                    aria-expanded="false"
-                                                >
-                                                    <img
-                                                        style="width: 30px;
+                                                <img
+                                                    style="width: 30px;
                                                             border-radius: 50%;
                                                             border:1px solid #303030;
                                                             height: 30px;
                                                             object-fit: cover;"
-                                                        :src="user.profilePic"
-                                                    />
-                                                </div>
+                                                    :src="user.profilePic"
+                                                />
+                                            </div>
 
+                                            <div
+                                                class="dropdown-menu"
+                                                aria-labelledby="dropdownMenuButton"
+                                            >
                                                 <div
-                                                    class="dropdown-menu"
-                                                    aria-labelledby="dropdownMenuButton"
+                                                    class="dropdown-item"
+                                                    v-if="user.name"
                                                 >
-                                                    <div
-                                                        class="dropdown-item"
-                                                        v-if="user.name"
+                                                    <span
+                                                        v-on:click="onShowModal"
+                                                        style="cursor:pointer;color:#303030"
+                                                        >Add a post</span
                                                     >
-                                                        <span
-                                                            v-on:click="
-                                                                onShowModal
-                                                            "
-                                                            style="cursor:pointer;color:#303030"
-                                                            >Add a post</span
-                                                        >
-                                                    </div>
-                                                    <div class="dropdown-item">
-                                                        <router-link
-                                                            style="padding:0"
-                                                            :user="user"
-                                                            to="/logout"
-                                                            >Logout
-                                                        </router-link>
-                                                    </div>
                                                 </div>
-                                            </li>
-                                        </transition>
+                                                <div class="dropdown-item">
+                                                    <router-link
+                                                        style="padding:0"
+                                                        :user="user"
+                                                        to="/logout"
+                                                        >Logout
+                                                    </router-link>
+                                                </div>
+                                            </div>
+                                        </li>
+
                                         <li v-if="!user.name">
                                             <router-link to="/login"
                                                 >Login</router-link
