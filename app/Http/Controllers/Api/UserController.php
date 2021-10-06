@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Post;
 use App\User;
 use Intervention\Image\Facades\Image;
 use Illuminate\Http\Request;
@@ -15,8 +16,12 @@ class UserController extends Controller
     }
     public function index($username)
     {
-        $profile = User::where('name', $username)->first();
-        return response()->json($profile);
+        $profile = User::where('name', $username)->with('posts')->first();
+        $profilePosts = Post::where('user_id', $profile->id)->with('category')->latest()->get();
+        return response()->json([
+            'profile' => $profile,
+            'profilePosts' => $profilePosts
+        ]);
     }
     public function edit($username)
     {

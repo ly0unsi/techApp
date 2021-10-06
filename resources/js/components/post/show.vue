@@ -118,11 +118,21 @@
                                 </span>
 
                                 &mdash;
-                                <img
-                                    :src="post.user.profilePic"
-                                    alt="Image"
-                                    class="author-pic img-fluid rounded-circle mx-auto"
-                                />
+                                <router-link
+                                    style="padding:0"
+                                    :to="{
+                                        name: 'profile',
+                                        params: {
+                                            username: post.user.name
+                                        }
+                                    }"
+                                >
+                                    <img
+                                        :src="post.user.profilePic"
+                                        alt="Image"
+                                        class="author-pic img-fluid rounded-circle mx-auto"
+                                    />
+                                </router-link>
                                 &mdash;
                                 <span style="font-size:17px">{{
                                     moment(post.created_at).format(
@@ -153,7 +163,7 @@
                         ></div>
 
                         <div class="row mt-2 border-top text-center">
-                            <div class="col-4" style="margin:auto">
+                            <div class="col-md-4 col-sm-12" style="margin:auto">
                                 <ul class="social list-unstyled">
                                     <li>
                                         <a href="#"
@@ -229,7 +239,7 @@
                 <div class="row justify-content-center">
                     <div
                         class="col-lg-12"
-                        v-for="rpost in sameCat.slice(0, 3)"
+                        v-for="rpost in sameCat.slice(0, 4)"
                         :key="rpost.id"
                     >
                         <div
@@ -291,10 +301,20 @@
                                     class="post-author d-flex align-items-center"
                                 >
                                     <div class="author-pic">
-                                        <img
-                                            :src="rpost.user.profilePic"
-                                            alt="Image"
-                                        />
+                                        <router-link
+                                            style="padding:0"
+                                            :to="{
+                                                name: 'profile',
+                                                params: {
+                                                    username: rpost.user.name
+                                                }
+                                            }"
+                                        >
+                                            <img
+                                                :src="rpost.user.profilePic"
+                                                alt="Image"
+                                            />
+                                        </router-link>
                                     </div>
                                     <div class="text">
                                         <strong>{{ rpost.user.name }}</strong>

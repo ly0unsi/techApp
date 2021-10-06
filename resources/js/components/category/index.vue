@@ -43,10 +43,20 @@
                                 class="post-author d-flex align-items-center"
                             >
                                 <div class="author-pic">
-                                    <img
-                                        :src="post.user.profilePic"
-                                        alt="Image"
-                                    />
+                                    <router-link
+                                        style="padding:0"
+                                        :to="{
+                                            name: 'profile',
+                                            params: {
+                                                username: post.user.name
+                                            }
+                                        }"
+                                    >
+                                        <img
+                                            :src="post.user.profilePic"
+                                            alt="Image"
+                                        />
+                                    </router-link>
                                 </div>
                                 <div class="text">
                                     <strong>{{ post.user.name }}</strong>

@@ -116,10 +116,20 @@
                                         class="post-author d-flex align-items-center"
                                     >
                                         <div class="author-pic">
-                                            <img
-                                                :src="post.user.profilePic"
-                                                alt="Image"
-                                            />
+                                            <router-link
+                                                style="padding:0"
+                                                :to="{
+                                                    name: 'profile',
+                                                    params: {
+                                                        username: post.user.name
+                                                    }
+                                                }"
+                                            >
+                                                <img
+                                                    :src="post.user.profilePic"
+                                                    alt="Image"
+                                                />
+                                            </router-link>
                                         </div>
                                         <div class="text">
                                             <strong style="color:whitesmoke">{{
@@ -169,7 +179,7 @@
                         v-for="post in mostLiked.slice(0, 6)"
                         :key="post.key"
                         data-aos="zoom-in-down"
-                        data-aos-duration="800"
+                        data-aos-duration="600"
                     >
                         <div class="post-entry d-block small-post-entry-v">
                             <div class="thumbnail">
@@ -235,10 +245,20 @@
                                     class="post-author d-flex align-items-center"
                                 >
                                     <div class="author-pic">
-                                        <img
-                                            :src="post.user.profilePic"
-                                            alt="Image"
-                                        />
+                                        <router-link
+                                            style="padding:0"
+                                            :to="{
+                                                name: 'profile',
+                                                params: {
+                                                    username: post.user.name
+                                                }
+                                            }"
+                                        >
+                                            <img
+                                                :src="post.user.profilePic"
+                                                alt="Image"
+                                            />
+                                        </router-link>
                                     </div>
                                     <div class="text">
                                         <strong>{{ post.user.name }}</strong>

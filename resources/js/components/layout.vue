@@ -141,7 +141,7 @@
                                                             }
                                                         }"
                                                     >
-                                                        Check
+                                                        {{ user.name }}
                                                     </router-link>
                                                 </div>
                                                 <div

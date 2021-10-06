@@ -2625,6 +2625,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var customLabels = {
   first: "<<",
   last: ">>",
@@ -2722,6 +2732,26 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5299,6 +5329,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -5772,52 +5822,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -5829,7 +5833,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         id: null
       },
       errors: {},
-      showSpinner: false
+      showSpinner: false,
+      profilePosts: {}
     };
   },
   methods: {
@@ -5897,9 +5902,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 3:
                 res = _context2.sent;
-                _this3.form = res.data;
+                _this3.form = res.data.profile;
+                _this3.profilePosts = res.data.profilePosts;
 
-              case 5:
+              case 6:
               case "end":
                 return _context2.stop();
             }
@@ -5933,7 +5939,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     }
                   });
 
-                  _this4.$router.go();
+                  Reload.$emit("profileChanged");
                 } catch (error) {
                   _this4.errors = error.res.data;
                 }
@@ -5945,11 +5951,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee3);
       }))();
-    }
+    },
+    moment: function (_moment) {
+      function moment() {
+        return _moment.apply(this, arguments);
+      }
+
+      moment.toString = function () {
+        return _moment.toString();
+      };
+
+      return moment;
+    }(function () {
+      return moment();
+    })
   },
   created: function created() {
+    var _this5 = this;
+
     this.getUser();
     this.getProfile();
+    Reload.$on("profileChanged", function () {
+      _this5.getProfile();
+    });
   }
 });
 
@@ -83215,11 +83239,35 @@ var render = function() {
                       attrs: { href: "#" }
                     },
                     [
-                      _c("div", { staticClass: "author-pic" }, [
-                        _c("img", {
-                          attrs: { src: post.user.profilePic, alt: "Image" }
-                        })
-                      ]),
+                      _c(
+                        "div",
+                        { staticClass: "author-pic" },
+                        [
+                          _c(
+                            "router-link",
+                            {
+                              staticStyle: { padding: "0" },
+                              attrs: {
+                                to: {
+                                  name: "profile",
+                                  params: {
+                                    username: post.user.name
+                                  }
+                                }
+                              }
+                            },
+                            [
+                              _c("img", {
+                                attrs: {
+                                  src: post.user.profilePic,
+                                  alt: "Image"
+                                }
+                              })
+                            ]
+                          )
+                        ],
+                        1
+                      ),
                       _vm._v(" "),
                       _c("div", { staticClass: "text" }, [
                         _c("strong", [_vm._v(_vm._s(post.user.name))]),
@@ -83516,14 +83564,35 @@ var render = function() {
                                 attrs: { href: "#" }
                               },
                               [
-                                _c("div", { staticClass: "author-pic" }, [
-                                  _c("img", {
-                                    attrs: {
-                                      src: post.user.profilePic,
-                                      alt: "Image"
-                                    }
-                                  })
-                                ]),
+                                _c(
+                                  "div",
+                                  { staticClass: "author-pic" },
+                                  [
+                                    _c(
+                                      "router-link",
+                                      {
+                                        staticStyle: { padding: "0" },
+                                        attrs: {
+                                          to: {
+                                            name: "profile",
+                                            params: {
+                                              username: post.user.name
+                                            }
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c("img", {
+                                          attrs: {
+                                            src: post.user.profilePic,
+                                            alt: "Image"
+                                          }
+                                        })
+                                      ]
+                                    )
+                                  ],
+                                  1
+                                ),
                                 _vm._v(" "),
                                 _c("div", { staticClass: "text" }, [
                                   _c(
@@ -83566,7 +83635,7 @@ var render = function() {
                 staticClass: "col-lg-4",
                 attrs: {
                   "data-aos": "zoom-in-down",
-                  "data-aos-duration": "800"
+                  "data-aos-duration": "600"
                 }
               },
               [
@@ -83687,11 +83756,35 @@ var render = function() {
                           attrs: { href: "#" }
                         },
                         [
-                          _c("div", { staticClass: "author-pic" }, [
-                            _c("img", {
-                              attrs: { src: post.user.profilePic, alt: "Image" }
-                            })
-                          ]),
+                          _c(
+                            "div",
+                            { staticClass: "author-pic" },
+                            [
+                              _c(
+                                "router-link",
+                                {
+                                  staticStyle: { padding: "0" },
+                                  attrs: {
+                                    to: {
+                                      name: "profile",
+                                      params: {
+                                        username: post.user.name
+                                      }
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("img", {
+                                    attrs: {
+                                      src: post.user.profilePic,
+                                      alt: "Image"
+                                    }
+                                  })
+                                ]
+                              )
+                            ],
+                            1
+                          ),
                           _vm._v(" "),
                           _c("div", { staticClass: "text" }, [
                             _c("strong", [_vm._v(_vm._s(post.user.name))]),
@@ -84992,7 +85085,9 @@ var render = function() {
                                                 },
                                                 [
                                                   _vm._v(
-                                                    "\n                                                    Check\n                                                "
+                                                    "\n                                                    " +
+                                                      _vm._s(_vm.user.name) +
+                                                      "\n                                                "
                                                   )
                                                 ]
                                               )
@@ -86578,10 +86673,27 @@ var render = function() {
                   _vm._v(
                     "\n\n                            —\n                            "
                   ),
-                  _c("img", {
-                    staticClass: "author-pic img-fluid rounded-circle mx-auto",
-                    attrs: { src: _vm.post.user.profilePic, alt: "Image" }
-                  }),
+                  _c(
+                    "router-link",
+                    {
+                      staticStyle: { padding: "0" },
+                      attrs: {
+                        to: {
+                          name: "profile",
+                          params: {
+                            username: _vm.post.user.name
+                          }
+                        }
+                      }
+                    },
+                    [
+                      _c("img", {
+                        staticClass:
+                          "author-pic img-fluid rounded-circle mx-auto",
+                        attrs: { src: _vm.post.user.profilePic, alt: "Image" }
+                      })
+                    ]
+                  ),
                   _vm._v(
                     "\n                            —\n                            "
                   ),
@@ -86620,7 +86732,8 @@ var render = function() {
                         1
                       )
                     : _vm._e()
-                ]
+                ],
+                1
               )
             ]),
             _vm._v(" "),
@@ -86683,7 +86796,7 @@ var render = function() {
         _c(
           "div",
           { staticClass: "row justify-content-center" },
-          _vm._l(_vm.sameCat.slice(0, 3), function(rpost) {
+          _vm._l(_vm.sameCat.slice(0, 4), function(rpost) {
             return _c("div", { key: rpost.id, staticClass: "col-lg-12" }, [
               rpost.id !== _vm.post.id
                 ? _c(
@@ -86799,14 +86912,35 @@ var render = function() {
                             attrs: { href: "#" }
                           },
                           [
-                            _c("div", { staticClass: "author-pic" }, [
-                              _c("img", {
-                                attrs: {
-                                  src: rpost.user.profilePic,
-                                  alt: "Image"
-                                }
-                              })
-                            ]),
+                            _c(
+                              "div",
+                              { staticClass: "author-pic" },
+                              [
+                                _c(
+                                  "router-link",
+                                  {
+                                    staticStyle: { padding: "0" },
+                                    attrs: {
+                                      to: {
+                                        name: "profile",
+                                        params: {
+                                          username: rpost.user.name
+                                        }
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("img", {
+                                      attrs: {
+                                        src: rpost.user.profilePic,
+                                        alt: "Image"
+                                      }
+                                    })
+                                  ]
+                                )
+                              ],
+                              1
+                            ),
                             _vm._v(" "),
                             _c("div", { staticClass: "text" }, [
                               _c("strong", [_vm._v(_vm._s(rpost.user.name))])
@@ -86833,39 +86967,43 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "row mt-2 border-top text-center" }, [
-      _c("div", { staticClass: "col-4", staticStyle: { margin: "auto" } }, [
-        _c("ul", { staticClass: "social list-unstyled" }, [
-          _c("li", [
-            _c("a", { attrs: { href: "#" } }, [
-              _c("i", { staticClass: "fas fa-share text-secondary" })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("a", { attrs: { href: "#" } }, [
-              _c("span", { staticClass: "icon-facebook text-primary" })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("a", { attrs: { href: "#" } }, [
-              _c("span", { staticClass: "icon-twitter text-info" })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("a", { attrs: { href: "#" } }, [
-              _c("span", { staticClass: "icon-linkedin text-primary" })
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("a", { attrs: { href: "#" } }, [
-              _c("span", { staticClass: "icon-pinterest text-danger" })
+      _c(
+        "div",
+        { staticClass: "col-md-4 col-sm-12", staticStyle: { margin: "auto" } },
+        [
+          _c("ul", { staticClass: "social list-unstyled" }, [
+            _c("li", [
+              _c("a", { attrs: { href: "#" } }, [
+                _c("i", { staticClass: "fas fa-share text-secondary" })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("li", [
+              _c("a", { attrs: { href: "#" } }, [
+                _c("span", { staticClass: "icon-facebook text-primary" })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("li", [
+              _c("a", { attrs: { href: "#" } }, [
+                _c("span", { staticClass: "icon-twitter text-info" })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("li", [
+              _c("a", { attrs: { href: "#" } }, [
+                _c("span", { staticClass: "icon-linkedin text-primary" })
+              ])
+            ]),
+            _vm._v(" "),
+            _c("li", [
+              _c("a", { attrs: { href: "#" } }, [
+                _c("span", { staticClass: "icon-pinterest text-danger" })
+              ])
             ])
           ])
-        ])
-      ])
+        ]
+      )
     ])
   },
   function() {
@@ -86948,14 +87086,39 @@ var render = function() {
                     "d-flex flex-column align-items-center text-center"
                 },
                 [
-                  _c("img", {
-                    staticClass: "rounded-circle p-1 bg-primary",
-                    attrs: {
-                      src: _vm.form.profilePic,
-                      alt: "Admin",
-                      width: "110"
-                    }
-                  }),
+                  _c("div", { staticClass: "position-relative" }, [
+                    _c("img", {
+                      staticClass:
+                        "rounded-circle p-1 bg-dark position-relative",
+                      attrs: {
+                        src: _vm.form.profilePic,
+                        alt: "Admin",
+                        width: "110"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _vm.form.id === _vm.user.id
+                      ? _c(
+                          "label",
+                          {
+                            staticClass:
+                              "btn btn-sm btn-dark position-absolute",
+                            staticStyle: { right: "35%", top: "35%" },
+                            attrs: { type: "submit" }
+                          },
+                          [
+                            _c("input", {
+                              staticClass: "custom-file-input",
+                              staticStyle: { display: "none" },
+                              attrs: { type: "file", id: "customFile" },
+                              on: { change: _vm.onFileSelected }
+                            }),
+                            _vm._v(" "),
+                            _c("i", { staticClass: "fas fa-edit" })
+                          ]
+                        )
+                      : _vm._e()
+                  ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "mt-3" }, [
                     _c("h4", [_vm._v(_vm._s(_vm.form.name))]),
@@ -86972,266 +87135,32 @@ var render = function() {
                       )
                     ]),
                     _vm._v(" "),
-                    _c("button", { staticClass: "btn btn-primary" }, [
-                      _vm._v(
-                        "\n                                    Follow\n                                "
-                      )
-                    ]),
+                    _vm.user.id !== _vm.form.id
+                      ? _c("button", { staticClass: "btn btn-primary" }, [
+                          _vm._v(
+                            "\n                                    Follow\n                                "
+                          )
+                        ])
+                      : _vm._e(),
                     _vm._v(" "),
-                    _c("button", { staticClass: "btn btn-outline-primary" }, [
-                      _vm._v(
-                        "\n                                    Message\n                                "
-                      )
-                    ])
+                    _vm.user.id !== _vm.form.id
+                      ? _c(
+                          "button",
+                          { staticClass: "btn btn-outline-primary" },
+                          [
+                            _vm._v(
+                              "\n                                    Message\n                                "
+                            )
+                          ]
+                        )
+                      : _vm._e()
                   ])
                 ]
               ),
               _vm._v(" "),
               _c("hr", { staticClass: "my-4" }),
               _vm._v(" "),
-              _c("ul", { staticClass: "list-group list-group-flush" }, [
-                _c(
-                  "li",
-                  {
-                    staticClass:
-                      "list-group-item d-flex justify-content-between align-items-center flex-wrap"
-                  },
-                  [
-                    _c("h6", { staticClass: "mb-0" }, [
-                      _c(
-                        "svg",
-                        {
-                          staticClass: "feather feather-globe me-2 icon-inline",
-                          attrs: {
-                            xmlns: "http://www.w3.org/2000/svg",
-                            width: "24",
-                            height: "24",
-                            viewBox: "0 0 24 24",
-                            fill: "none",
-                            stroke: "currentColor",
-                            "stroke-width": "2",
-                            "stroke-linecap": "round",
-                            "stroke-linejoin": "round"
-                          }
-                        },
-                        [
-                          _c("circle", {
-                            attrs: { cx: "12", cy: "12", r: "10" }
-                          }),
-                          _vm._v(" "),
-                          _c("line", {
-                            attrs: { x1: "2", y1: "12", x2: "22", y2: "12" }
-                          }),
-                          _vm._v(" "),
-                          _c("path", {
-                            attrs: {
-                              d:
-                                "M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
-                            }
-                          })
-                        ]
-                      ),
-                      _vm._v("Website\n                                ")
-                    ]),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "text-secondary" }, [
-                      _vm._v("https://bootdey.com")
-                    ])
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "li",
-                  {
-                    staticClass:
-                      "list-group-item d-flex justify-content-between align-items-center flex-wrap"
-                  },
-                  [
-                    _c("h6", { staticClass: "mb-0" }, [
-                      _c(
-                        "svg",
-                        {
-                          staticClass:
-                            "feather feather-github me-2 icon-inline",
-                          attrs: {
-                            xmlns: "http://www.w3.org/2000/svg",
-                            width: "24",
-                            height: "24",
-                            viewBox: "0 0 24 24",
-                            fill: "none",
-                            stroke: "currentColor",
-                            "stroke-width": "2",
-                            "stroke-linecap": "round",
-                            "stroke-linejoin": "round"
-                          }
-                        },
-                        [
-                          _c("path", {
-                            attrs: {
-                              d:
-                                "M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
-                            }
-                          })
-                        ]
-                      ),
-                      _vm._v("Github\n                                ")
-                    ]),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "text-secondary" }, [
-                      _vm._v("bootdey")
-                    ])
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "li",
-                  {
-                    staticClass:
-                      "list-group-item d-flex justify-content-between align-items-center flex-wrap"
-                  },
-                  [
-                    _c("h6", { staticClass: "mb-0" }, [
-                      _c(
-                        "svg",
-                        {
-                          staticClass:
-                            "feather feather-twitter me-2 icon-inline text-info",
-                          attrs: {
-                            xmlns: "http://www.w3.org/2000/svg",
-                            width: "24",
-                            height: "24",
-                            viewBox: "0 0 24 24",
-                            fill: "none",
-                            stroke: "currentColor",
-                            "stroke-width": "2",
-                            "stroke-linecap": "round",
-                            "stroke-linejoin": "round"
-                          }
-                        },
-                        [
-                          _c("path", {
-                            attrs: {
-                              d:
-                                "M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"
-                            }
-                          })
-                        ]
-                      ),
-                      _vm._v("Twitter\n                                ")
-                    ]),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "text-secondary" }, [
-                      _vm._v("@bootdey")
-                    ])
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "li",
-                  {
-                    staticClass:
-                      "list-group-item d-flex justify-content-between align-items-center flex-wrap"
-                  },
-                  [
-                    _c("h6", { staticClass: "mb-0" }, [
-                      _c(
-                        "svg",
-                        {
-                          staticClass:
-                            "feather feather-instagram me-2 icon-inline text-danger",
-                          attrs: {
-                            xmlns: "http://www.w3.org/2000/svg",
-                            width: "24",
-                            height: "24",
-                            viewBox: "0 0 24 24",
-                            fill: "none",
-                            stroke: "currentColor",
-                            "stroke-width": "2",
-                            "stroke-linecap": "round",
-                            "stroke-linejoin": "round"
-                          }
-                        },
-                        [
-                          _c("rect", {
-                            attrs: {
-                              x: "2",
-                              y: "2",
-                              width: "20",
-                              height: "20",
-                              rx: "5",
-                              ry: "5"
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("path", {
-                            attrs: {
-                              d:
-                                "M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
-                            }
-                          }),
-                          _vm._v(" "),
-                          _c("line", {
-                            attrs: {
-                              x1: "17.5",
-                              y1: "6.5",
-                              x2: "17.51",
-                              y2: "6.5"
-                            }
-                          })
-                        ]
-                      ),
-                      _vm._v("Instagram\n                                ")
-                    ]),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "text-secondary" }, [
-                      _vm._v("bootdey")
-                    ])
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "li",
-                  {
-                    staticClass:
-                      "list-group-item d-flex justify-content-between align-items-center flex-wrap"
-                  },
-                  [
-                    _c("h6", { staticClass: "mb-0" }, [
-                      _c(
-                        "svg",
-                        {
-                          staticClass:
-                            "feather feather-facebook me-2 icon-inline text-primary",
-                          attrs: {
-                            xmlns: "http://www.w3.org/2000/svg",
-                            width: "24",
-                            height: "24",
-                            viewBox: "0 0 24 24",
-                            fill: "none",
-                            stroke: "currentColor",
-                            "stroke-width": "2",
-                            "stroke-linecap": "round",
-                            "stroke-linejoin": "round"
-                          }
-                        },
-                        [
-                          _c("path", {
-                            attrs: {
-                              d:
-                                "M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
-                            }
-                          })
-                        ]
-                      ),
-                      _vm._v("Facebook\n                                ")
-                    ]),
-                    _vm._v(" "),
-                    _c("span", { staticClass: "text-secondary" }, [
-                      _vm._v("bootdey")
-                    ])
-                  ]
-                )
-              ])
+              _vm._m(0)
             ])
           ])
         ]),
@@ -87239,56 +87168,6 @@ var render = function() {
         _c("div", { staticClass: "col-lg-8" }, [
           _c("div", { staticClass: "card" }, [
             _c("div", { staticClass: "card-body" }, [
-              _c("div", { staticClass: "row mb-3" }, [
-                _vm._m(0),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-sm-9 text-secondary" }, [
-                  _vm.user.id != _vm.form.id
-                    ? _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.form.name,
-                            expression: "form.name"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text", readonly: "" },
-                        domProps: { value: _vm.form.name },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.form, "name", $event.target.value)
-                          }
-                        }
-                      })
-                    : _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.form.name,
-                            expression: "form.name"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text" },
-                        domProps: { value: _vm.form.name },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.form, "name", $event.target.value)
-                          }
-                        }
-                      })
-                ])
-              ]),
-              _vm._v(" "),
               _c("div", { staticClass: "row mb-3" }, [
                 _vm._m(1),
                 _vm._v(" "),
@@ -87299,6 +87178,56 @@ var render = function() {
                           {
                             name: "model",
                             rawName: "v-model",
+                            value: _vm.form.name,
+                            expression: "form.name"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text", readonly: "" },
+                        domProps: { value: _vm.form.name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.form, "name", $event.target.value)
+                          }
+                        }
+                      })
+                    : _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.name,
+                            expression: "form.name"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text" },
+                        domProps: { value: _vm.form.name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.form, "name", $event.target.value)
+                          }
+                        }
+                      })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row mb-3" }, [
+                _vm._m(2),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-sm-9 text-secondary" }, [
+                  _vm.user.id != _vm.form.id
+                    ? _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
                             value: _vm.form.email,
                             expression: "form.email"
                           }
@@ -87340,7 +87269,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "row mb-3" }, [
-                _vm._m(2),
+                _vm._m(3),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-sm-9 text-secondary" }, [
                   _vm.user.id != _vm.form.id
@@ -87360,7 +87289,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "row mb-3" }, [
-                _vm._m(3),
+                _vm._m(4),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-sm-9 text-secondary" }, [
                   _vm.user.id != _vm.form.id
@@ -87383,72 +87312,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _vm.user.id === _vm.form.id
-                ? _c("div", { staticClass: "form-group pt-1 text-center" }, [
-                    _c("div", { staticClass: "form-row" }, [
-                      _c(
-                        "div",
-                        { staticClass: "col-md-12" },
-                        [
-                          _c(
-                            "label",
-                            {
-                              staticClass: "btn btn-sm btn-dark btn-block",
-                              attrs: { type: "submit" }
-                            },
-                            [
-                              _c("input", {
-                                staticClass: "custom-file-input",
-                                staticStyle: { display: "none" },
-                                attrs: { type: "file", id: "customFile" },
-                                on: { change: _vm.onFileSelected }
-                              }),
-                              _vm._v(
-                                "\n                                        Profile Pic >\n                                    "
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _vm.errors.profilePic
-                            ? _c("small", { staticClass: "text-danger" }, [
-                                _vm._v(
-                                  "\n                                        " +
-                                    _vm._s(_vm.errors.profilePic[0]) +
-                                    "\n                                    "
-                                )
-                              ])
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _c(
-                            "transition",
-                            {
-                              attrs: {
-                                name: "custom-classes-transition",
-                                "enter-active-class":
-                                  "animate__animated animate__bounceIn",
-                                "leave-active-class":
-                                  "animate__animated animate__bounceOut"
-                              }
-                            },
-                            [
-                              _vm.form.profilePic !== null
-                                ? _c("img", {
-                                    key: _vm.form.profilePic,
-                                    staticClass:
-                                      "rounded-circle border border-dark",
-                                    staticStyle: {
-                                      height: "40px",
-                                      width: "40px"
-                                    },
-                                    attrs: { src: _vm.form.profilePic }
-                                  })
-                                : _vm._e()
-                            ]
-                          )
-                        ],
-                        1
-                      )
-                    ])
-                  ])
+                ? _c("div", { staticClass: "form-group pt-1 text-center" })
                 : _vm._e(),
               _vm._v(" "),
               _c("div", { staticClass: "row" }, [
@@ -87495,13 +87359,249 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
-          _vm._m(4)
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-sm-12" }, [
+              _c("div", { staticClass: "card" }, [
+                _c(
+                  "div",
+                  { staticClass: "card-body" },
+                  [
+                    _c(
+                      "h5",
+                      { staticClass: "d-flex align-items-center mb-3" },
+                      [
+                        _vm._v(
+                          "\n                                    Posts\n                                "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm._l(_vm.profilePosts, function(post) {
+                      return _c(
+                        "div",
+                        {
+                          key: post.id,
+                          staticClass:
+                            "post-entry d-md-flex small-horizontal mb-5"
+                        },
+                        [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "me-md-4 mb-3 mb-md-0",
+                              staticStyle: { flex: "0 0 219px" }
+                            },
+                            [
+                              _c(
+                                "router-link",
+                                {
+                                  attrs: {
+                                    to: {
+                                      name: "post",
+                                      params: {
+                                        slug: post.slug
+                                      }
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("img", {
+                                    staticClass: "img-fluid",
+                                    attrs: {
+                                      src: "/" + post.photo,
+                                      alt: "Image"
+                                    }
+                                  })
+                                ]
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "content" }, [
+                            _c(
+                              "div",
+                              { staticClass: "post-meta mb-1" },
+                              [
+                                _c(
+                                  "router-link",
+                                  {
+                                    staticClass: "category text-dark",
+                                    staticStyle: { color: "whitesmoke" },
+                                    attrs: {
+                                      to: {
+                                        name: "catposts",
+                                        params: {
+                                          catName: post.category.name
+                                        }
+                                      }
+                                    }
+                                  },
+                                  [_vm._v(_vm._s(post.category.name))]
+                                ),
+                                _vm._v(
+                                  "\n                                            —\n                                            "
+                                ),
+                                _c("span", { staticClass: "date" }, [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm
+                                        .moment(post.created_at)
+                                        .format("MMM DD,YYYY")
+                                    )
+                                  )
+                                ])
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "h2",
+                              { staticClass: "heading" },
+                              [
+                                _c(
+                                  "router-link",
+                                  {
+                                    attrs: {
+                                      to: {
+                                        name: "post",
+                                        params: {
+                                          slug: post.slug
+                                        }
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(post.title.slice(0, 90)) + ".."
+                                    )
+                                  ]
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c("p", [
+                              _vm._v(
+                                "\n                                            " +
+                                  _vm._s(post.desc.slice(0, 130)) +
+                                  "..\n                                        "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("a", {
+                              staticClass:
+                                "post-author d-flex align-items-center",
+                              attrs: { href: "#" }
+                            })
+                          ])
+                        ]
+                      )
+                    })
+                  ],
+                  2
+                )
+              ])
+            ])
+          ])
         ])
       ])
     ])
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ul", { staticClass: "list-group list-group-flush" }, [
+      _c(
+        "li",
+        {
+          staticClass:
+            "list-group-item d-flex justify-content-between align-items-center flex-wrap"
+        },
+        [
+          _c("h6", { staticClass: "mb-0" }, [
+            _c("i", { staticClass: "fas fa-globe" }),
+            _vm._v(
+              "\n                                    Website\n                                "
+            )
+          ]),
+          _vm._v(" "),
+          _c("span", { staticClass: "text-secondary" }, [
+            _vm._v("https://bootdey.com")
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "li",
+        {
+          staticClass:
+            "list-group-item d-flex justify-content-between align-items-center flex-wrap"
+        },
+        [
+          _c("h6", { staticClass: "mb-0" }, [
+            _c("i", { staticClass: "fab fa-github" }),
+            _vm._v(
+              "\n                                    Github\n                                "
+            )
+          ]),
+          _vm._v(" "),
+          _c("span", { staticClass: "text-secondary" }, [_vm._v("bootdey")])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "li",
+        {
+          staticClass:
+            "list-group-item d-flex justify-content-between align-items-center flex-wrap"
+        },
+        [
+          _c("h6", { staticClass: "mb-0" }, [
+            _c("span", { staticClass: "icon-twitter text-info" }),
+            _vm._v("Twitter\n                                ")
+          ]),
+          _vm._v(" "),
+          _c("span", { staticClass: "text-secondary" }, [_vm._v("@bootdey")])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "li",
+        {
+          staticClass:
+            "list-group-item d-flex justify-content-between align-items-center flex-wrap"
+        },
+        [
+          _c("h6", { staticClass: "mb-0" }, [
+            _c("span", { staticClass: "icon-pinterest text-danger" }),
+            _vm._v("Pinterest\n                                ")
+          ]),
+          _vm._v(" "),
+          _c("span", { staticClass: "text-secondary" }, [_vm._v("bootdey")])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "li",
+        {
+          staticClass:
+            "list-group-item d-flex justify-content-between align-items-center flex-wrap"
+        },
+        [
+          _c("h6", { staticClass: "mb-0" }, [
+            _c("span", { staticClass: "icon-facebook text-primary" }),
+            _vm._v("Facebook\n                                ")
+          ]),
+          _vm._v(" "),
+          _c("span", { staticClass: "text-secondary" }, [_vm._v("bootdey")])
+        ]
+      )
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -87532,43 +87632,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-sm-3" }, [
       _c("h6", { staticClass: "mb-0" }, [_vm._v("Address")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-sm-12" }, [
-        _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-body" }, [
-            _c("h5", { staticClass: "d-flex align-items-center mb-3" }, [
-              _vm._v(
-                "\n                                    Posts\n                                "
-              )
-            ]),
-            _vm._v(" "),
-            _c("p", [_vm._v("Web Design")]),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "progress mb-3", staticStyle: { height: "5px" } },
-              [
-                _c("div", {
-                  staticClass: "progress-bar bg-primary",
-                  staticStyle: { width: "80%" },
-                  attrs: {
-                    role: "progressbar",
-                    "aria-valuenow": "80",
-                    "aria-valuemin": "0",
-                    "aria-valuemax": "100"
-                  }
-                })
-              ]
-            )
-          ])
-        ])
-      ])
     ])
   }
 ]
