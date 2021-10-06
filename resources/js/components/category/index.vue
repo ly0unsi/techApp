@@ -19,7 +19,7 @@
                     <div class="post-entry d-md-flex small-horizontal mb-5">
                         <div class="me-md-4 thumbnail mb-3 mb-md-0">
                             <img
-                                :src="'/' + post.photo"
+                                :src="post.photo"
                                 alt="Image"
                                 class="img-fluid"
                             />
@@ -58,7 +58,10 @@
                 </div>
             </div>
 
-            <div class="row align-items-center justify-content-center py-2">
+            <div
+                class="row align-items-center justify-content-center py-2
+            "
+            >
                 <div class="col-lg-6 text-center">
                     <jw-pagination
                         :items="catPosts"

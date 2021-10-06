@@ -45,7 +45,7 @@
                                             border:1px solid #303030;
                                             height: 37px;
                                             object-fit: cover;"
-                                                :src="'/' + post.photo"
+                                                :src="post.photo"
                                                 alt=""
                                             />
                                             <span
@@ -127,6 +127,23 @@
                                                 class="dropdown-menu"
                                                 aria-labelledby="dropdownMenuButton"
                                             >
+                                                <div
+                                                    class="dropdown-item"
+                                                    v-if="user.name"
+                                                >
+                                                    <router-link
+                                                        style="padding:0"
+                                                        :to="{
+                                                            name: 'profile',
+                                                            params: {
+                                                                username:
+                                                                    user.name
+                                                            }
+                                                        }"
+                                                    >
+                                                        Check
+                                                    </router-link>
+                                                </div>
                                                 <div
                                                     class="dropdown-item"
                                                     v-if="user.name"

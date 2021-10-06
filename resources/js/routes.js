@@ -11,6 +11,8 @@ let editPost = require('./components/post/edit.vue').default;
 let createCat = require('./components/category/create.vue').default;
 let catPosts = require('./components/category/index.vue').default;
 
+let profile = require('./components/profile/index.vue').default;
+
 
 
 export const routes = [
@@ -54,6 +56,11 @@ export const routes = [
         name: 'editpost',
         path: '/editpost/:postSlug',
         component: editPost
+    },
+    {
+        name: 'profile',
+        path: '/profile/:username',
+        component: profile
     },
 
 ]

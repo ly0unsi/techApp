@@ -144,7 +144,7 @@ export default {
             } catch (error) {
                 if (error) {
                     this.showSpinner = false;
-                    this.errors = error.response.data.errors;
+                    this.errors = error;
 
                     Toast.fire({
                         icon: "warning",

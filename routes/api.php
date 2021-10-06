@@ -41,3 +41,5 @@ Route::get('posts', 'Api\PostController@index');
 Route::get('post/{slug}', 'Api\PostController@show');
 Route::post('/like/{postId}', 'Api\PostController@like');
 Route::patch('/editpost/{postSlug}', 'Api\PostController@edit');
+Route::get('/profile/{username}', 'Api\UserController@index');
+Route::patch('/editProfile/{username}', 'Api\UserController@edit');

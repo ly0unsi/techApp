@@ -55,7 +55,6 @@
                                 </div>
 
                                 <span
-                                    v-if="user.name"
                                     style="margin-left:5px;font-size:16px;cursor:pointer"
                                     class="dropdown text-light"
                                 >

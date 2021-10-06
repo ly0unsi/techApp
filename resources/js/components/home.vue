@@ -168,7 +168,8 @@
                         class="col-lg-4"
                         v-for="post in mostLiked.slice(0, 6)"
                         :key="post.key"
-                        data-aos="zoom-in"
+                        data-aos="zoom-in-down"
+                        data-aos-duration="800"
                     >
                         <div class="post-entry d-block small-post-entry-v">
                             <div class="thumbnail">
