@@ -28,7 +28,7 @@ class UserController extends Controller
     }
     public function index($username)
     {
-        $profile = User::where('name', $username)->with('posts')->first();
+        $profile = User::where('name', $username)->with('posts', 'followers', 'followings')->first();
         $profilePosts = Post::where('user_id', $profile->id)->with('category')->latest()->get();
         $isFollowing = false;
         if ($profile->isFollowedBy(auth()->user())) {
@@ -44,28 +44,28 @@ class UserController extends Controller
     {
 
         $profile = User::where('name', $username)->first();
-        if (request()->profilePic) {
-            $position = strpos(request()->profilePic, ';');
-            $sub = substr(request()->profilePic, 0, $position);
-            $ext = explode('/', $sub)[1];
 
-            $name = request()->name . "." . $ext;
+        $position = strpos(request()->profilePic, ';');
+        $sub = substr(request()->profilePic, 0, $position);
+        $ext = explode('/', $sub)[1];
 
-            $img = Image::make(request()->profilePic);
+        $name = request()->name . "." . $ext;
 
-            $upload_path = 'images/users/';
+        $img = Image::make(request()->profilePic);
 
-            $image_url = $upload_path . $name;
+        $upload_path = 'images/users/';
 
-            $img->save($image_url);
-            $profile->name = request()->name;
-            $profile->email = request()->email;
-            $profile->profilePic = '/' . $image_url;
-            $profile->update();
-        } else {
-            $profile->name = request()->name;
-            $profile->email = request()->email;
-            $profile->update();
-        }
+        $image_url = $upload_path . $name;
+
+        $img->save($image_url);
+        $profile->name = request()->name;
+        $profile->email = request()->email;
+        $profile->profilePic = '/' . $image_url;
+        $profile->update();
+
+        $profile->name = request()->name;
+        $profile->email = request()->email;
+        $profile->profilePic = $profile->profilePic;
+        $profile->update();
     }
 }

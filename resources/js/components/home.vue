@@ -271,7 +271,7 @@
                 </div>
             </div>
         </div>
-        <div class="section">
+        <div class="section mt-1">
             <div class="container">
                 <div class="row justify-content-center mb-5">
                     <div class="col-lg-7 text-center">

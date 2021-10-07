@@ -1,6 +1,17 @@
 <template>
     <div class="container">
-        <div class="main-body">
+        <div
+            class="spinner text-dark"
+            style="margin: auto;width: 35px;padding: 20%"
+            v-if="
+                Object.keys(user).length === 0 || Object.keys(form).length === 0
+            "
+        >
+            <div style="margin:auto" class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <div v-else class="main-body">
             <div class="row">
                 <div class="col-lg-4">
                     <div class="card">
@@ -118,11 +129,11 @@
                 <div class="col-lg-8">
                     <div class="card">
                         <div class="card-body">
-                            <div class="row mb-3">
-                                <div class="col-sm-3">
+                            <div class="row mb-3" style="align-items: center;">
+                                <div class="col-sm-2">
                                     <h6 class="mb-0">Full Name</h6>
                                 </div>
-                                <div class="col-sm-9 text-secondary">
+                                <div class="col-sm-10 text-secondary">
                                     <input
                                         v-if="user.id != form.id"
                                         type="text"
@@ -138,11 +149,11 @@
                                     />
                                 </div>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-sm-3">
+                            <div class="row mb-3" style="align-items: center;">
+                                <div class="col-sm-2">
                                     <h6 class="mb-0">Email</h6>
                                 </div>
-                                <div class="col-sm-9 text-secondary">
+                                <div class="col-sm-10 text-secondary">
                                     <input
                                         v-if="user.id != form.id"
                                         type="text"
@@ -159,11 +170,11 @@
                                 </div>
                             </div>
 
-                            <div class="row mb-3">
-                                <div class="col-sm-3">
+                            <div class="row mb-3" style="align-items: center;">
+                                <div class="col-sm-2">
                                     <h6 class="mb-0">Mobile</h6>
                                 </div>
-                                <div class="col-sm-9 text-secondary">
+                                <div class="col-sm-10 text-secondary">
                                     <input
                                         v-if="user.id != form.id"
                                         type="text"
@@ -179,11 +190,11 @@
                                     />
                                 </div>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-sm-3">
+                            <div class="row mb-3" style="align-items: center;">
+                                <div class="col-sm-2">
                                     <h6 class="mb-0">Address</h6>
                                 </div>
-                                <div class="col-sm-9 text-secondary">
+                                <div class="col-sm-10 text-secondary">
                                     <input
                                         v-if="user.id != form.id"
                                         type="text"
@@ -204,8 +215,8 @@
                                 class="form-group pt-1 text-center"
                             ></div>
                             <div class="row">
-                                <div class="col-sm-3"></div>
-                                <div class="col-sm-9 text-secondary">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-10 text-secondary">
                                     <button
                                         v-if="user.id === form.id"
                                         type="submit"
@@ -252,7 +263,7 @@
                                                 }"
                                             >
                                                 <img
-                                                    :src="'/' + post.photo"
+                                                    :src="post.photo"
                                                     alt="Image"
                                                     class="img-fluid"
                                                 />
@@ -334,6 +345,7 @@ export default {
     methods: {
         async follow() {
             const res = await axios.post("/api/follow/" + this.form.id);
+            Reload.$emit("follow");
         },
         onFileSelected(event) {
             let file = event.target.files[0];
@@ -351,6 +363,9 @@ export default {
             try {
                 const res = await axios.get("/api/user");
                 this.user = res.data;
+                if (Object.keys(this.user).length === 0) {
+                    this.$router.back();
+                }
             } catch (err) {
                 console.log(err);
             }
@@ -361,7 +376,6 @@ export default {
             this.form = res.data.profile;
             this.profilePosts = res.data.profilePosts;
             this.isFollowing = res.data.isFollowing;
-            Reload.$emit("follow");
         },
         async editProfile() {
             try {

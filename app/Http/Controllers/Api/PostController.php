@@ -49,7 +49,7 @@ class PostController extends Controller
                 $post->slug = $request->slug;
                 $post->desc = $request->desc;
                 $post->content = $request->content;
-                $post->photo = $image_url;
+                $post->photo = '/' . $image_url;
                 $category = Category::where('id', $request->category_id)->first();
                 $post->category()->associate($category);
                 $user = Auth::user();
@@ -110,7 +110,7 @@ class PostController extends Controller
         $post->slug = $request->slug;
         $post->desc = $request->desc;
         $post->content = $request->content;
-        $post->photo = $image_url;
+        $post->photo = '/' . $image_url;
         $category = Category::where('id', $request->category_id)->first();
 
         $post->category()->associate($category);

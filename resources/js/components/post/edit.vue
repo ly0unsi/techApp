@@ -176,9 +176,7 @@
                                                                 form.photo !==
                                                                     null
                                                             "
-                                                            :src="
-                                                                '/' + form.photo
-                                                            "
+                                                            :src="form.photo"
                                                             :key="form.photo"
                                                             style="height: 40px; width: 40px;"
                                                             class="rounded-circle border border-dark"

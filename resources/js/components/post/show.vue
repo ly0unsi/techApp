@@ -8,7 +8,7 @@
                         <p class="lead mb-4 text-center">{{ post.desc }}</p>
                         <div class="position-relative">
                             <img
-                                :src="'/' + post.photo"
+                                :src="post.photo"
                                 class="img-fluid rounded mb-4 position-relative"
                             />
                             <div
@@ -77,7 +77,18 @@
                                                     )"
                                                     :key="user.id"
                                                 >
-                                                    {{ user.username }}
+                                                    <router-link
+                                                        style="padding:0;color:white"
+                                                        :to="{
+                                                            name: 'profile',
+                                                            params: {
+                                                                username:
+                                                                    user.username
+                                                            }
+                                                        }"
+                                                    >
+                                                        {{ user.username }}
+                                                    </router-link>
                                                 </span>
                                                 <transition
                                                     name="custom-classes-transition"
@@ -112,7 +123,17 @@
                                             v-for="user in post.likes"
                                             :key="user.id"
                                         >
-                                            {{ user.username }}
+                                            <router-link
+                                                style="padding:0;color:white"
+                                                :to="{
+                                                    name: 'profile',
+                                                    params: {
+                                                        username: user.name
+                                                    }
+                                                }"
+                                            >
+                                                {{ user.username }}
+                                            </router-link>
                                         </div>
                                     </div>
                                 </span>
@@ -229,7 +250,7 @@
                 </div>
             </div>
         </div>
-        <div class="pb-0">
+        <div class="pb-0 section">
             <div class="col-lg-9" style="margin:auto">
                 <div class="row">
                     <div class="col-lg-12">
@@ -256,7 +277,7 @@
                                     }"
                                 >
                                     <img
-                                        :src="'/' + rpost.photo"
+                                        :src="rpost.photo"
                                         alt="Image"
                                         class="img-fluid"
                                     />

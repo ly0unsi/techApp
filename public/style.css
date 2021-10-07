@@ -1770,8 +1770,8 @@ a {
     transform: translate(-50%, -50%);
 }
 .section {
-    padding-top: 7rem;
-    padding-bottom: 7rem;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
 }
 .section .heading {
     font-size: 40px;
