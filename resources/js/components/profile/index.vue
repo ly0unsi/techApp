@@ -17,21 +17,24 @@
                     <div class="card">
                         <div class="card-body">
                             <div
-                                class="d-flex flex-column align-items-center text-center"
+                                class="row  align-items-center text-center"
+                                style="justify-content: center"
                             >
-                                <div class="position-relative">
+                                <div class="position-relative col-md-3">
                                     <img
                                         :src="form.profilePic"
                                         alt="Admin"
-                                        class="rounded-circle p-1 bg-dark position-relative"
-                                        width="110"
+                                        style="object-fit:cover"
+                                        class="rounded-circle p-1 bg-dark position-relative float-right"
+                                        width="80"
+                                        height="80"
                                     />
 
                                     <label
                                         v-if="form.id === user.id"
                                         type="submit"
                                         class="btn btn-sm btn-dark position-absolute"
-                                        style="right: 35%;top: 35%;"
+                                        style="right: 39%;padding: 3px;bottom: 5%;"
                                     >
                                         <input
                                             style="display: none;"
@@ -43,28 +46,47 @@
                                         <i class="fas fa-edit"></i>
                                     </label>
                                 </div>
-                                <div class="mt-3">
+                                <div class="col-md-3">
                                     <h4>{{ form.name }}</h4>
-                                    <p class="text-secondary mb-1">
-                                        Full Stack Developer
-                                    </p>
-                                    <p class="text-muted font-size-sm">
-                                        Bay Area, San Francisco, CA
-                                    </p>
+
                                     <button
                                         v-if="user.id !== form.id"
-                                        @click.prevent="follow"
-                                        class="btn btn-primary"
+                                        @click.prevent="follow(form.id)"
+                                        class="btn btn-sm btn-dark"
                                     >
                                         <span v-if="isFollowing">Unfollow</span>
                                         <span v-else>Follow</span>
                                     </button>
+                                    <!--
                                     <button
                                         v-if="user.id !== form.id"
                                         class="btn btn-outline-primary"
                                     >
                                         Message
                                     </button>
+                                    -->
+                                </div>
+                                <div class="row mt-4">
+                                    <div class="col border-right text-center">
+                                        <span class="text-dark fw-bold">{{
+                                            form.posts.length
+                                        }}</span>
+                                        <span class="text-dark">Posts</span>
+                                    </div>
+                                    <div class="col border-right text-center">
+                                        <span class="text-dark fw-bold">{{
+                                            form.followers.length
+                                        }}</span>
+                                        <span class="text-dark">Followers</span>
+                                    </div>
+                                    <div class="col text-center">
+                                        <span class="text-dark fw-bold">{{
+                                            form.followings.length
+                                        }}</span>
+                                        <span class="text-dark"
+                                            >Followings</span
+                                        >
+                                    </div>
                                 </div>
                             </div>
                             <hr class="my-4" />
@@ -242,78 +264,277 @@
                         <div class="col-sm-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="d-flex align-items-center mb-3">
-                                        Posts
-                                    </h5>
+                                    <nav>
+                                        <div
+                                            class="nav nav-tabs"
+                                            id="nav-tab"
+                                            role="tablist"
+                                        >
+                                            <button
+                                                class="nav-link active"
+                                                id="nav-posts-tab"
+                                                data-bs-toggle="tab"
+                                                data-bs-target="#nav-posts"
+                                                type="button"
+                                                role="tab"
+                                                aria-controls="nav-posts"
+                                                aria-selected="true"
+                                            >
+                                                Posts
+                                            </button>
+                                            <button
+                                                class="nav-link"
+                                                id="nav-followings-tab"
+                                                data-bs-toggle="tab"
+                                                data-bs-target="#nav-followings"
+                                                type="button"
+                                                role="tab"
+                                                aria-controls="nav-followings"
+                                                aria-selected="false"
+                                            >
+                                                Followings
+                                            </button>
+                                            <button
+                                                class="nav-link"
+                                                id="nav-contact-tab"
+                                                data-bs-toggle="tab"
+                                                data-bs-target="#nav-contact"
+                                                type="button"
+                                                role="tab"
+                                                aria-controls="nav-contact"
+                                                aria-selected="false"
+                                            >
+                                                Followers
+                                            </button>
+                                        </div>
+                                    </nav>
                                     <div
-                                        v-for="post in profilePosts"
-                                        :key="post.id"
-                                        class="post-entry d-md-flex small-horizontal mb-5"
+                                        class="tab-content"
+                                        id="nav-tabContent"
                                     >
                                         <div
-                                            class="me-md-4 mb-3 mb-md-0"
-                                            style="flex: 0 0 219px;"
+                                            class="tab-pane fade show active"
+                                            id="nav-posts"
+                                            role="tabpanel"
+                                            aria-labelledby="nav-posts-tab"
                                         >
-                                            <router-link
-                                                :to="{
-                                                    name: 'post',
-                                                    params: {
-                                                        slug: post.slug
-                                                    }
-                                                }"
+                                            <div
+                                                v-for="post in profilePosts"
+                                                :key="post.id"
+                                                class="post-entry d-md-flex small-horizontal mt-3"
                                             >
-                                                <img
-                                                    :src="post.photo"
-                                                    alt="Image"
-                                                    class="img-fluid"
-                                                />
-                                            </router-link>
-                                        </div>
-                                        <div class="content">
-                                            <div class="post-meta mb-1">
-                                                <router-link
-                                                    class="category text-dark"
-                                                    style="color:whitesmoke"
-                                                    :to="{
-                                                        name: 'catposts',
-                                                        params: {
-                                                            catName:
+                                                <div
+                                                    class="me-md-4 mb-3 mb-md-0"
+                                                    style="flex: 0 0 219px;"
+                                                >
+                                                    <router-link
+                                                        :to="{
+                                                            name: 'post',
+                                                            params: {
+                                                                slug: post.slug
+                                                            }
+                                                        }"
+                                                    >
+                                                        <img
+                                                            :src="post.photo"
+                                                            alt="Image"
+                                                            class="img-fluid"
+                                                        />
+                                                    </router-link>
+                                                </div>
+                                                <div class="content">
+                                                    <div class="post-meta mb-1">
+                                                        <router-link
+                                                            class="category text-dark"
+                                                            style="color:whitesmoke"
+                                                            :to="{
+                                                                name:
+                                                                    'catposts',
+                                                                params: {
+                                                                    catName:
+                                                                        post
+                                                                            .category
+                                                                            .name
+                                                                }
+                                                            }"
+                                                            >{{
                                                                 post.category
                                                                     .name
-                                                        }
-                                                    }"
-                                                    >{{
-                                                        post.category.name
-                                                    }}</router-link
-                                                >
-                                                &mdash;
-                                                <span class="date">{{
-                                                    moment(
-                                                        post.created_at
-                                                    ).format("MMM DD,YYYY")
-                                                }}</span>
+                                                            }}</router-link
+                                                        >
+                                                        &mdash;
+                                                        <span class="date">{{
+                                                            moment(
+                                                                post.created_at
+                                                            ).format(
+                                                                "MMM DD,YYYY"
+                                                            )
+                                                        }}</span>
+                                                    </div>
+                                                    <h2 class="heading">
+                                                        <router-link
+                                                            :to="{
+                                                                name: 'post',
+                                                                params: {
+                                                                    slug:
+                                                                        post.slug
+                                                                }
+                                                            }"
+                                                            >{{
+                                                                post.title.slice(
+                                                                    0,
+                                                                    90
+                                                                )
+                                                            }}..</router-link
+                                                        >
+                                                    </h2>
+                                                    <p>
+                                                        {{
+                                                            post.desc.slice(
+                                                                0,
+                                                                130
+                                                            )
+                                                        }}..
+                                                    </p>
+                                                    <a
+                                                        href="#"
+                                                        class="post-author d-flex align-items-center"
+                                                    >
+                                                    </a>
+                                                </div>
                                             </div>
-                                            <h2 class="heading">
-                                                <router-link
-                                                    :to="{
-                                                        name: 'post',
-                                                        params: {
-                                                            slug: post.slug
-                                                        }
-                                                    }"
-                                                    >{{
-                                                        post.title.slice(0, 90)
-                                                    }}..</router-link
-                                                >
-                                            </h2>
-                                            <p>
-                                                {{ post.desc.slice(0, 130) }}..
-                                            </p>
-                                            <a
-                                                href="#"
-                                                class="post-author d-flex align-items-center"
+                                        </div>
+                                        <div
+                                            class="tab-pane fade"
+                                            id="nav-followings"
+                                            role="tabpanel"
+                                            aria-labelledby="nav-followings-tab"
+                                        >
+                                            <div class="row">
+                                                <div class="col-xl-12">
+                                                    <div
+                                                        class="tab-content p-0"
+                                                    >
+                                                        <div
+                                                            class="tab-pane fade active show"
+                                                            v-for="following in form.followings"
+                                                            :key="following.id"
+                                                        >
+                                                            <div
+                                                                class="list-group"
+                                                            >
+                                                                <div
+                                                                    class="list-group-item d-flex align-items-center"
+                                                                >
+                                                                    <img
+                                                                        :src="
+                                                                            following.profilePic
+                                                                        "
+                                                                        alt=""
+                                                                        width="50px"
+                                                                        class="rounded-circle ml-n2"
+                                                                    />
+                                                                    <div
+                                                                        class="flex-fill ps-3 pe-3"
+                                                                    >
+                                                                        <div>
+                                                                            <a
+                                                                                href="#"
+                                                                                class="text-dark font-weight-600"
+                                                                            >
+                                                                                {{
+                                                                                    following.name
+                                                                                }}
+                                                                            </a>
+                                                                        </div>
+                                                                        <div
+                                                                            class="text-muted fs-13px"
+                                                                        >
+                                                                            {{
+                                                                                following.email
+                                                                            }}
+                                                                        </div>
+                                                                    </div>
+                                                                    <!--
+                                                                    <a
+                                                                        href="#"
+                                                                        class="btn btn-outline-primary"
+                                                                    >
+                                                                        <span
+                                                                            >Follow</span
+                                                                        >
+                                                                        <span
+                                                                            >Unfollow</span
+                                                                        >
+                                                                    </a>
+                                                                    !-->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="tab-pane fade"
+                                            id="nav-contact"
+                                            role="tabpanel"
+                                            aria-labelledby="nav-contact-tab"
+                                        >
+                                            <div
+                                                class="tab-pane fade active show"
+                                                v-for="follower in form.followers"
+                                                :key="follower.id"
                                             >
-                                            </a>
+                                                <div class="list-group">
+                                                    <div
+                                                        class="list-group-item d-flex align-items-center"
+                                                    >
+                                                        <img
+                                                            :src="
+                                                                follower.profilePic
+                                                            "
+                                                            alt=""
+                                                            width="50px"
+                                                            class="rounded-circle ml-n2"
+                                                        />
+                                                        <div
+                                                            class="flex-fill ps-3 pe-3"
+                                                        >
+                                                            <div>
+                                                                <a
+                                                                    href="#"
+                                                                    class="text-dark font-weight-600"
+                                                                >
+                                                                    {{
+                                                                        follower.name
+                                                                    }}
+                                                                </a>
+                                                            </div>
+                                                            <div
+                                                                class="text-muted fs-13px"
+                                                            >
+                                                                {{
+                                                                    follower.email
+                                                                }}
+                                                            </div>
+                                                        </div>
+                                                        <!--
+                                                                    <a
+                                                                        href="#"
+                                                                        class="btn btn-outline-primary"
+                                                                    >
+                                                                        <span
+                                                                            >Follow</span
+                                                                        >
+                                                                        <span
+                                                                            >Unfollow</span
+                                                                        >
+                                                                    </a>
+                                                                    !-->
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -343,8 +564,8 @@ export default {
         };
     },
     methods: {
-        async follow() {
-            const res = await axios.post("/api/follow/" + this.form.id);
+        async follow(id) {
+            const res = await axios.post("/api/follow/" + id);
             Reload.$emit("follow");
         },
         onFileSelected(event) {

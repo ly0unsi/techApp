@@ -128,7 +128,7 @@
                                                 :to="{
                                                     name: 'profile',
                                                     params: {
-                                                        username: user.name
+                                                        username: user.username
                                                     }
                                                 }"
                                             >
