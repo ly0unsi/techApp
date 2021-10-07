@@ -3649,6 +3649,86 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -3659,10 +3739,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     return {
       trend: [],
       user: {},
-      mostLiked: []
+      mostLiked: [],
+      pageOfPosts: [],
+      followingsPosts: []
     };
   },
   methods: {
+    onChangePage: function onChangePage(pageOfPosts) {
+      // update page of items
+      this.pageOfPosts = pageOfPosts;
+    },
     getUser: function getUser() {
       var _this = this;
 
@@ -3711,8 +3797,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 res = _context2.sent;
                 _this2.trend = res.data.trend;
                 _this2.mostLiked = res.data.mostLiked;
+                _this2.followingsPosts = res.data.followingsPosts;
 
-              case 5:
+              case 6:
               case "end":
                 return _context2.stop();
             }
@@ -4990,17 +5077,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -84495,7 +84571,142 @@ var render = function() {
     _vm._v(" "),
     _vm._m(2),
     _vm._v(" "),
-    _vm._m(3)
+    _c("div", { staticClass: "section" }, [
+      _c("div", { staticClass: "container" }, [
+        _vm._m(3),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "row g-5" },
+          _vm._l(_vm.pageOfPosts, function(post) {
+            return _c(
+              "div",
+              {
+                key: post.id,
+                staticClass: "col-lg-12",
+                attrs: {
+                  "data-aos": "zoom-in-down",
+                  "data-aos-duration": "600"
+                }
+              },
+              [
+                _c(
+                  "div",
+                  { staticClass: "post-entry d-md-flex small-horizontal mb-5" },
+                  [
+                    _c(
+                      "div",
+                      { staticClass: "me-md-4 thumbnail mb-3 mb-md-0" },
+                      [
+                        _c("img", {
+                          staticClass: "img-fluid",
+                          attrs: { src: post.photo, alt: "Image" }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "content" }, [
+                      _c("div", { staticClass: "post-meta mb-1" }, [
+                        _c("span", { staticClass: "date" }, [
+                          _vm._v(
+                            _vm._s(
+                              _vm.moment(post.created_at).format("MMM DD,YYYY")
+                            )
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("h2", { staticClass: "heading" }, [
+                        _c("a", { attrs: { href: "single.html" } }, [
+                          _vm._v(_vm._s(post.title))
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "\n                                " +
+                            _vm._s(post.desc) +
+                            "\n                            "
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          staticClass: "post-author d-flex align-items-center",
+                          attrs: { href: "#" }
+                        },
+                        [
+                          _c(
+                            "div",
+                            { staticClass: "author-pic" },
+                            [
+                              _c(
+                                "router-link",
+                                {
+                                  staticStyle: { padding: "0" },
+                                  attrs: {
+                                    to: {
+                                      name: "profile",
+                                      params: {
+                                        username: post.user.name
+                                      }
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("img", {
+                                    attrs: {
+                                      src: post.user.profilePic,
+                                      alt: "Image"
+                                    }
+                                  })
+                                ]
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "text" }, [
+                            _c("strong", [_vm._v(_vm._s(post.user.name))]),
+                            _vm._v(" "),
+                            _c("span", [_vm._v("Author, 26 published post")])
+                          ])
+                        ]
+                      )
+                    ])
+                  ]
+                )
+              ]
+            )
+          }),
+          0
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass:
+              "row align-items-center justify-content-center py-2\n        "
+          },
+          [
+            _c(
+              "div",
+              { staticClass: "col-lg-6 text-center" },
+              [
+                _c("jw-pagination", {
+                  attrs: { items: _vm.followingsPosts, pageSize: 6 },
+                  on: { changePage: _vm.onChangePage }
+                })
+              ],
+              1
+            )
+          ]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _vm._m(4)
   ])
 }
 var staticRenderFns = [
@@ -85060,6 +85271,16 @@ var staticRenderFns = [
             ])
           ])
         ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row justify-content-center mb-5" }, [
+      _c("div", { staticClass: "col-lg-7 text-center" }, [
+        _c("h2", { staticClass: "heading" }, [_vm._v("followings Posts")])
       ])
     ])
   },
@@ -86884,37 +87105,13 @@ var render = function() {
                                       _vm._l(
                                         _vm.post.likes.slice(0, 1),
                                         function(user) {
-                                          return _c(
-                                            "span",
-                                            { key: user.id },
-                                            [
-                                              _c(
-                                                "router-link",
-                                                {
-                                                  staticStyle: {
-                                                    padding: "0",
-                                                    color: "white"
-                                                  },
-                                                  attrs: {
-                                                    to: {
-                                                      name: "profile",
-                                                      params: {
-                                                        username: user.username
-                                                      }
-                                                    }
-                                                  }
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "\n                                                    " +
-                                                      _vm._s(user.username) +
-                                                      "\n                                                "
-                                                  )
-                                                ]
-                                              )
-                                            ],
-                                            1
-                                          )
+                                          return _c("span", { key: user.id }, [
+                                            _vm._v(
+                                              "\n                                                " +
+                                                _vm._s(user.username) +
+                                                "\n                                            "
+                                            )
+                                          ])
                                         }
                                       ),
                                       _vm._v(" "),
@@ -87461,7 +87658,7 @@ var render = function() {
                           : _vm._e()
                       ]),
                       _vm._v(" "),
-                      _c("div", { staticClass: "col-md-3" }, [
+                      _c("div", { staticClass: "col-md-4" }, [
                         _c("h4", [_vm._v(_vm._s(_vm.form.name))]),
                         _vm._v(" "),
                         _vm.user.id !== _vm.form.id

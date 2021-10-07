@@ -783,9 +783,9 @@ body {
 }
 .dropdown-item.active,
 .dropdown-item:active {
-    color: #fff;
+    color: #1e2125 !important;
+    background-color: #f8f9fa;
     text-decoration: none;
-    background-color: #cacaca;
 }
 .dropdown-item.disabled,
 .dropdown-item:disabled {
@@ -1770,8 +1770,8 @@ a {
     transform: translate(-50%, -50%);
 }
 .section {
-    padding-top: 4rem;
-    padding-bottom: 4rem;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
 }
 .section .heading {
     font-size: 40px;

@@ -886,6 +886,86 @@
                 </div>
             </div>
         </div>
+        <div class="section">
+            <div class="container">
+                <div class="row justify-content-center mb-5">
+                    <div class="col-lg-7 text-center">
+                        <h2 class="heading">followings Posts</h2>
+                    </div>
+                </div>
+                <div class="row g-5">
+                    <div
+                        class="col-lg-12"
+                        v-for="post in pageOfPosts"
+                        data-aos="zoom-in-down"
+                        data-aos-duration="600"
+                        :key="post.id"
+                    >
+                        <div class="post-entry d-md-flex small-horizontal mb-5">
+                            <div class="me-md-4 thumbnail mb-3 mb-md-0">
+                                <img
+                                    :src="post.photo"
+                                    alt="Image"
+                                    class="img-fluid"
+                                />
+                            </div>
+                            <div class="content">
+                                <div class="post-meta mb-1">
+                                    <span class="date">{{
+                                        moment(post.created_at).format(
+                                            "MMM DD,YYYY"
+                                        )
+                                    }}</span>
+                                </div>
+                                <h2 class="heading">
+                                    <a href="single.html">{{ post.title }}</a>
+                                </h2>
+                                <p>
+                                    {{ post.desc }}
+                                </p>
+                                <a
+                                    href="#"
+                                    class="post-author d-flex align-items-center"
+                                >
+                                    <div class="author-pic">
+                                        <router-link
+                                            style="padding:0"
+                                            :to="{
+                                                name: 'profile',
+                                                params: {
+                                                    username: post.user.name
+                                                }
+                                            }"
+                                        >
+                                            <img
+                                                :src="post.user.profilePic"
+                                                alt="Image"
+                                            />
+                                        </router-link>
+                                    </div>
+                                    <div class="text">
+                                        <strong>{{ post.user.name }}</strong>
+                                        <span>Author, 26 published post</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="row align-items-center justify-content-center py-2
+            "
+                >
+                    <div class="col-lg-6 text-center">
+                        <jw-pagination
+                            :items="followingsPosts"
+                            @changePage="onChangePage"
+                            :pageSize="6"
+                        ></jw-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="py-5 bg-light mx-md-3 sec-subscribe">
             <div class="container">
                 <div class="row">
@@ -926,10 +1006,16 @@ export default {
         return {
             trend: [],
             user: {},
-            mostLiked: []
+            mostLiked: [],
+            pageOfPosts: [],
+            followingsPosts: []
         };
     },
     methods: {
+        onChangePage(pageOfPosts) {
+            // update page of items
+            this.pageOfPosts = pageOfPosts;
+        },
         async getUser() {
             try {
                 const res = await axios.get("/api/user");
@@ -942,6 +1028,7 @@ export default {
             const res = await axios.get("/api/posts/");
             this.trend = res.data.trend;
             this.mostLiked = res.data.mostLiked;
+            this.followingsPosts = res.data.followingsPosts;
         },
         moment() {
             return moment();

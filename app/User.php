@@ -80,4 +80,8 @@ class User extends Authenticatable implements JWTSubject
     {
         return !!$this->followers()->where('follower_id', $user->id)->count();
     }
+    public function getUserIds()
+    {
+        return $this->followings()->pluck('followed_id');
+    }
 }

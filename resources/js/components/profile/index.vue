@@ -46,7 +46,7 @@
                                         <i class="fas fa-edit"></i>
                                     </label>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <h4>{{ form.name }}</h4>
 
                                     <button

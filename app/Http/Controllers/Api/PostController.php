@@ -76,9 +76,12 @@ class PostController extends Controller
     {
         $mostLiked = Post::with('user', 'category', 'likes')->withCount('likes')->orderBy('likes_count', 'DESC')->get();
         $trend = Post::with('user', 'category', 'likes')->latest()->get();
+        $userIds = auth()->user()->getUserIds();
+        $followingsPosts = Post::whereIn('user_id', $userIds)->with('user', 'category', 'likes')->latest()->get();
         return response()->json([
             'trend' => $trend,
-            'mostLiked' => $mostLiked
+            'mostLiked' => $mostLiked,
+            'followingsPosts' => $followingsPosts
         ]);
     }
     public function add(Request $request)

@@ -77,18 +77,7 @@
                                                     )"
                                                     :key="user.id"
                                                 >
-                                                    <router-link
-                                                        style="padding:0;color:white"
-                                                        :to="{
-                                                            name: 'profile',
-                                                            params: {
-                                                                username:
-                                                                    user.username
-                                                            }
-                                                        }"
-                                                    >
-                                                        {{ user.username }}
-                                                    </router-link>
+                                                    {{ user.username }}
                                                 </span>
                                                 <transition
                                                     name="custom-classes-transition"
