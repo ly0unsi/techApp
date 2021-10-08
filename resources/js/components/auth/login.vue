@@ -145,7 +145,6 @@ export default {
                 if (error) {
                     this.showSpinner = false;
                     this.errors = error;
-
                     Toast.fire({
                         icon: "warning",
                         title: "something went wrong"

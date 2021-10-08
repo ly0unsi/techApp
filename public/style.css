@@ -779,12 +779,23 @@ body {
 .dropdown-item:hover,
 .dropdown-item:focus {
     color: #1e2125 !important;
-    background-color: #f8f9fa;
+    background-color: whitesmoke;
 }
 .dropdown-item.active,
 .dropdown-item:active {
     color: #1e2125 !important;
-    background-color: #f8f9fa;
+    background-color: whitesmoke;
+    text-decoration: none;
+}
+.profile-dropdown-item:hover,
+.profile-dropdown-item:focus {
+    color: #1e2125 !important;
+    background-color: black;
+}
+.profile-dropdown-item.active,
+.profile-dropdown-item:active {
+    color: #1e2125 !important;
+    background-color: black;
     text-decoration: none;
 }
 .dropdown-item.disabled,
@@ -1850,8 +1861,8 @@ a {
 }
 .post-entry.xsmall-horizontal .thumbnail {
     -webkit-box-flex: 0;
-    -ms-flex: 0 0 150px;
-    flex: 0 0 150px;
+    -ms-flex: 0 0 212px;
+    flex: 0 0 212px;
 }
 .post-entry.xsmall-horizontal .heading {
     font-size: 20px;

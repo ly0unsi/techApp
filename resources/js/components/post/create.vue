@@ -307,6 +307,7 @@ export default {
                 this.showSpinner = true;
                 await axios.post("/api/createpost", this.form);
                 this.showSpinner = false;
+                Reload.$emit("postInserted");
                 this.closeModal();
                 Toast.fire({
                     icon: "success",

@@ -30,4 +30,9 @@ class masterController extends Controller
          */
         return response()->json(auth()->user());
     }
+    public function getNots()
+    {
+        $nots = auth()->user()->unreadNotifications;
+        return response()->json($nots);
+    }
 }

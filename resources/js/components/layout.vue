@@ -104,7 +104,9 @@
                                             ></a>
                                         </li>
                                     </div>
-                                    <div style="float:right">
+                                    <div
+                                        style="float:right align-items: center;display: inline-flex;"
+                                    >
                                         <li v-if="user.name" class="dropdown">
                                             <div
                                                 alt=""
@@ -118,7 +120,7 @@
                                                             border-radius: 50%;
                                                             border:1px solid #303030;
                                                             height: 30px;
-                                                            object-fit: cover;"
+                                                            object-fit: cover;cursor:pointer"
                                                     :src="user.profilePic"
                                                 />
                                             </div>
@@ -164,7 +166,53 @@
                                                 </div>
                                             </div>
                                         </li>
+                                        <li v-if="user.name" class="dropdown">
+                                            <div
+                                                alt=""
+                                                id="dropdownMenuButton"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true"
+                                                aria-expanded="false"
+                                                style="font-size: 22px"
+                                            >
+                                                <i
+                                                    class="far fa-bell text-dark ms-2"
+                                                ></i>
+                                                <span
+                                                    class="bg-dark text-light rounded-circle position-absolute"
+                                                    style="font-size: 11px;padding: 2px;width: 17px;height: 17px;text-align: center;right: -6px;cursor:pointer"
+                                                    >{{ nots.length }}</span
+                                                >
+                                            </div>
 
+                                            <div
+                                                class="dropdown-menu"
+                                                aria-labelledby="dropdownMenuButton"
+                                                style="left:-122px!important"
+                                            >
+                                                <div
+                                                    class="dropdown-item"
+                                                    v-if="user.name"
+                                                >
+                                                    <router-link
+                                                        style="padding:0"
+                                                        v-for="not in nots"
+                                                        :key="not.id"
+                                                        :to="{
+                                                            name: 'post',
+                                                            params: {
+                                                                slug:
+                                                                    not.data
+                                                                        .post_slug
+                                                            }
+                                                        }"
+                                                    >
+                                                        {{ not.data.user_name }}
+                                                        liked your post
+                                                    </router-link>
+                                                </div>
+                                            </div>
+                                        </li>
                                         <li v-if="!user.name">
                                             <router-link to="/login"
                                                 >Login</router-link
@@ -263,10 +311,15 @@ export default {
             show: false,
             showModal: false,
             searchTerm: "",
-            posts: []
+            posts: [],
+            nots: {}
         };
     },
     methods: {
+        async getNots() {
+            const res = await axios.get("/api/getnots/");
+            this.nots = res.data;
+        },
         onShowModal() {
             this.showModal = !this.showModal;
         },
@@ -336,6 +389,10 @@ export default {
         this.getCategories();
         this.getPosts();
         this.handleProgressBar();
+        Reload.$on("profileChanged", () => {
+            this.getUser();
+        });
+        this.getNots();
     }
 };
 </script>

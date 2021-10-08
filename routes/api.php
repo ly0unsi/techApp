@@ -31,6 +31,7 @@ Route::group([
     Route::get('me', 'AuthController@me');
 });
 Route::get('user', 'masterController@user');
+Route::get('getnots', 'masterController@getNots');
 
 Route::post('createCat', 'Api\CategoryController@createCat');
 Route::get('categories', 'Api\CategoryController@index');

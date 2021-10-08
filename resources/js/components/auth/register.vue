@@ -145,7 +145,7 @@ export default {
                 confirm_password: null
             },
             errors: {},
-            user: {},
+            auth: {},
             showSpinner: false
         };
     },
@@ -171,7 +171,6 @@ export default {
                     title: "Signed in successfully"
                 });
                 this.$router.push({ name: "home" });
-                setTimeout(this.$router.go(), 10000);
             } catch (error) {
                 this.errors = error.response.data.errors;
                 if (error) {
@@ -185,7 +184,7 @@ export default {
         }
     },
     created() {
-        getUser();
+        this.getUser();
     }
 };
 </script>

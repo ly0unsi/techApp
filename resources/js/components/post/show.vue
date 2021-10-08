@@ -71,13 +71,13 @@
                                         >
                                             <span v-if="post.likes.length > 0">
                                                 <span
-                                                    v-for="user in post.likes.slice(
+                                                    v-for="like in post.likes.slice(
                                                         0,
                                                         1
                                                     )"
-                                                    :key="user.id"
+                                                    :key="like.id"
                                                 >
-                                                    {{ user.username }}
+                                                    {{ like.user.name }}
                                                 </span>
                                                 <transition
                                                     name="custom-classes-transition"
@@ -91,8 +91,9 @@
                                                     >
                                                         and
                                                         {{
-                                                            post.likes.length -
-                                                                1
+                                                            post.likes.length &&
+                                                                post.likes
+                                                                    .length - 1
                                                         }}
                                                         other
                                                     </span>
@@ -107,21 +108,26 @@
                                         style="background:#000000bd"
                                     >
                                         <div
-                                            class="dropdown-item"
+                                            class="profile-dropdown-item p-1"
                                             style="cursor:pointer;color:white"
-                                            v-for="user in post.likes"
-                                            :key="user.id"
+                                            v-for="like in post.likes"
+                                            :key="like.id"
                                         >
                                             <router-link
-                                                style="padding:0;color:white"
+                                                style="padding:0px;color:white"
                                                 :to="{
                                                     name: 'profile',
                                                     params: {
-                                                        username: user.username
+                                                        username: like.user.name
                                                     }
                                                 }"
                                             >
-                                                {{ user.username }}
+                                                <img
+                                                    :src="like.user.profilePic"
+                                                    alt="Image"
+                                                    class="author-pic img-fluid rounded-circle mx-auto"
+                                                />
+                                                {{ like.user.name }}
                                             </router-link>
                                         </div>
                                     </div>
@@ -361,6 +367,61 @@
                         />
                     </div>
                 </form>
+            </div>
+        </div>
+        <div class="site-footer">
+            <div class="container">
+                <div class="row justify-content-center copyright">
+                    <div class="col-lg-7 text-center">
+                        <div class="widget">
+                            <ul class="social list-unstyled">
+                                <li>
+                                    <a href="#"
+                                        ><span class="icon-facebook"></span
+                                    ></a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        ><span class="icon-twitter"></span
+                                    ></a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        ><span class="icon-linkedin"></span
+                                    ></a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        ><span class="icon-youtube-play"></span
+                                    ></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="widget">
+                            <p>
+                                Copyright &copy; 2021 All rights reserved | This
+                                template is made with
+                                <i
+                                    class="icon-heart text-danger"
+                                    aria-hidden="true"
+                                ></i>
+                                by
+                                <a
+                                    href="https://colorlib.com/"
+                                    target="_blank"
+                                    rel="nofollow noopener"
+                                    >Colorlib</a
+                                >
+                            </p>
+                            <div class="d-block">
+                                <a href="#" class="m-2"
+                                    >Terms &amp; Conditions</a
+                                >/
+                                <a href="#" class="m-2">Privacy Policy</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

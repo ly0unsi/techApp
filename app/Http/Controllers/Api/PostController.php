@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Like;
+use App\Notifications\postLiked;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -74,22 +75,35 @@ class PostController extends Controller
     // all books
     public function index(Request $request)
     {
-        $mostLiked = Post::with('user', 'category', 'likes')->withCount('likes')->orderBy('likes_count', 'DESC')->get();
-        $trend = Post::with('user', 'category', 'likes')->latest()->get();
-        $userIds = auth()->user()->getUserIds();
-        $followingsPosts = Post::whereIn('user_id', $userIds)->with('user', 'category', 'likes')->latest()->get();
-        return response()->json([
-            'trend' => $trend,
-            'mostLiked' => $mostLiked,
-            'followingsPosts' => $followingsPosts
-        ]);
+        $mostLiked = Post::with('user', 'category', 'likes', 'user.posts')->withCount('likes')->orderBy('likes_count', 'DESC')->get();
+        $trend = Post::with('user', 'category', 'likes', 'user.posts')->latest()->get();
+        if (auth()->user()) {
+            $userIds = auth()->user()->getUserIds();
+            $followingsPosts = Post::whereIn('user_id', $userIds)->with('user', 'category', 'likes', 'user.posts')->latest()->get();
+        }
+
+        $catPosts = Category::with('posts', 'posts.user', 'posts.likes', 'posts.user.posts')->get();
+        if (auth()->user()) {
+            return response()->json([
+                'trend' => $trend,
+                'mostLiked' => $mostLiked,
+                'followingsPosts' => $followingsPosts,
+                'catPosts' => $catPosts
+            ]);
+        } else {
+            return response()->json([
+                'trend' => $trend,
+                'mostLiked' => $mostLiked,
+                'catPosts' => $catPosts
+            ]);
+        }
     }
     public function add(Request $request)
     {
         $request->validate([
             'slug' => 'required|max:255',
             'title' => 'required|max:255',
-            'desc' => 'required|max:255',
+            'desc' => 'required',
             'category_id' => 'required',
             'photo' => 'required',
             'content' => 'required',
@@ -99,7 +113,6 @@ class PostController extends Controller
         $sub = substr($request->photo, 0, $position);
         $ext = explode('/', $sub)[1];
         $name = $request->slug . "." . $ext;
-
         $img = Image::make($request->photo);
 
         $upload_path = 'images/posts/';
@@ -124,7 +137,7 @@ class PostController extends Controller
     }
     public function show($slug)
     {
-        $post = Post::with('user', 'category', 'likes')->where('slug', $slug)->first();
+        $post = Post::with('user', 'category', 'likes', 'likes.user')->where('slug', $slug)->first();
         $sameCatPosts = Post::with('user', 'category')->where('category_id', $post->category_id)->latest()->get();
         $isLiked = false;
         if (auth()->user()) {
@@ -163,11 +176,13 @@ class PostController extends Controller
         } else {
             $like = new Like();
 
-            $like->user_id = auth()->user()->id;
+            $like->user()->associate(auth()->user());
             $like->post_id = $postId;
             $like->username = auth()->user()->name;
 
             $like->save();
+
+            $post->user->notify(new postLiked($post, auth()->user()));
         }
     }
 }

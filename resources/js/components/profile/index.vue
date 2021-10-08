@@ -271,7 +271,7 @@
                                             role="tablist"
                                         >
                                             <button
-                                                class="nav-link active"
+                                                class="nav-link active text-secondary"
                                                 id="nav-posts-tab"
                                                 data-bs-toggle="tab"
                                                 data-bs-target="#nav-posts"
@@ -283,7 +283,7 @@
                                                 Posts
                                             </button>
                                             <button
-                                                class="nav-link"
+                                                class="nav-link text-secondary"
                                                 id="nav-followings-tab"
                                                 data-bs-toggle="tab"
                                                 data-bs-target="#nav-followings"
@@ -295,7 +295,7 @@
                                                 Followings
                                             </button>
                                             <button
-                                                class="nav-link"
+                                                class="nav-link text-secondary"
                                                 id="nav-contact-tab"
                                                 data-bs-toggle="tab"
                                                 data-bs-target="#nav-contact"
@@ -602,19 +602,23 @@ export default {
             try {
                 let username = this.$route.params.username;
                 this.showSpinner = true;
-                axios.patch("/api/editProfile/" + username, this.form);
+                const res = await axios.patch(
+                    "/api/editProfile/" + username,
+                    this.form
+                );
+                console.log(res.data);
                 this.showSpinner = false;
                 Toast.fire({
                     icon: "success",
                     title: "Profile updated in successfully"
                 });
+                Reload.$emit("profileChanged");
                 this.$router.push({
                     name: "profile",
                     params: { username: this.form.name }
                 });
-                Reload.$emit("profileChanged");
             } catch (error) {
-                this.errors = error.res.data;
+                this.errors = error.res.data.errors;
             }
         },
         moment() {
@@ -625,7 +629,7 @@ export default {
         this.getUser();
         this.getProfile();
         Reload.$on("profileChanged", () => {
-            this.getProfile();
+            this.getUser();
         });
         Reload.$on("follow", () => {
             this.getProfile();

@@ -135,7 +135,11 @@
                                             <strong style="color:whitesmoke">{{
                                                 post.user.name
                                             }}</strong>
-                                            <span>CEO and Founder</span>
+                                            <span
+                                                >Author,
+                                                {{ post.user.posts.length }}
+                                                published post</span
+                                            >
                                         </div>
                                     </a>
                                 </div>
@@ -174,6 +178,11 @@
         <div class="section">
             <div class="container">
                 <div class="row g-5">
+                    <div class="row justify-content-center mt-4">
+                        <div class="col-lg-7 text-center">
+                            <h2 class="heading">Most Liked Posts</h2>
+                        </div>
+                    </div>
                     <div
                         class="col-lg-4"
                         v-for="post in mostLiked.slice(0, 6)"
@@ -223,6 +232,19 @@
                                     </span>
 
                                     <i class="fas fa-heart text-dark"></i>
+                                    <span v-if="post.user_id === user.id">
+                                        &mdash;
+                                        <router-link
+                                            class="text-dark"
+                                            :to="{
+                                                name: 'editpost',
+                                                params: {
+                                                    postSlug: post.slug
+                                                }
+                                            }"
+                                            >Edit</router-link
+                                        >
+                                    </span>
                                 </div>
                                 <h2 class="heading mb-3">
                                     <router-link
@@ -262,7 +284,11 @@
                                     </div>
                                     <div class="text">
                                         <strong>{{ post.user.name }}</strong>
-                                        <span>CEO and Founder</span>
+                                        <span
+                                            >Author,
+                                            {{ post.user.posts.length }}
+                                            published post</span
+                                        >
                                     </div>
                                 </a>
                             </div>
@@ -346,7 +372,10 @@
                                                     <strong
                                                         >Sergy Campbell</strong
                                                     >
-                                                    <span>CEO and Founder</span>
+                                                    <span
+                                                        >Author, 25 published
+                                                        post</span
+                                                    >
                                                 </div>
                                             </a>
                                         </div>
@@ -410,7 +439,10 @@
                                                     <strong
                                                         >Sergy Campbell</strong
                                                     >
-                                                    <span>CEO and Founder</span>
+                                                    <span
+                                                        >Author, 25 published
+                                                        post</span
+                                                    >
                                                 </div>
                                             </a>
                                         </div>
@@ -474,7 +506,10 @@
                                                     <strong
                                                         >Sergy Campbell</strong
                                                     >
-                                                    <span>CEO and Founder</span>
+                                                    <span
+                                                        >Author, 25 published
+                                                        post</span
+                                                    >
                                                 </div>
                                             </a>
                                         </div>
@@ -538,7 +573,10 @@
                                                     <strong
                                                         >Sergy Campbell</strong
                                                     >
-                                                    <span>CEO and Founder</span>
+                                                    <span
+                                                        >Author, 25 published
+                                                        post</span
+                                                    >
                                                 </div>
                                             </a>
                                         </div>
@@ -553,94 +591,70 @@
         <div class="section">
             <div class="container">
                 <div class="row g-5">
-                    <div class="col-lg-6">
+                    <div
+                        class="col-lg-6"
+                        v-for="cat in categories.slice(0, 2)"
+                        :key="cat.id"
+                    >
                         <div class="row mb-4">
                             <div class="col-12">
-                                <h2 class="h4 fw-bold">Sports</h2>
+                                <h2 class="h4 fw-bold">{{ cat.name }}</h2>
                             </div>
                         </div>
                         <div class="row justify-content-center">
-                            <div class="col-lg-12">
+                            <div
+                                class="col-lg-12"
+                                v-for="post in cat.posts.slice(0, 3)"
+                                :key="post.id"
+                                data-aos="zoom-in-down"
+                                data-aos-duration="600"
+                            >
                                 <div
                                     class="post-entry d-md-flex xsmall-horizontal mb-5"
                                 >
                                     <div class="me-md-3 thumbnail mb-3 mb-md-0">
                                         <img
-                                            src="images/img_2.jpg"
+                                            :src="post.photo"
                                             alt="Image"
                                             class="img-fluid"
                                         />
                                     </div>
                                     <div class="content">
                                         <div class="post-meta mb-1">
-                                            <a href="#" class="category"
-                                                >Business</a
-                                            >,
-                                            <a href="#" class="category"
-                                                >Travel</a
-                                            >
+                                            <span class="date">{{
+                                                moment(post.created_at).format(
+                                                    "MMM DD,YYYY"
+                                                )
+                                            }}</span>
                                             &mdash;
-                                            <span class="date"
-                                                >July 2, 2020</span
+                                            <span class="text-dark">
+                                                {{ post.likes.length }}
+                                            </span>
+
+                                            <i
+                                                class="fas fa-heart text-dark"
+                                            ></i>
+                                            <span
+                                                v-if="post.user_id === user.id"
                                             >
-                                        </div>
-                                        <h2 class="heading">
-                                            <a href="single.html"
-                                                >Your most unhappy customers are
-                                                your greatest source of
-                                                learning.</a
-                                            >
-                                        </h2>
-                                        <a
-                                            href="#"
-                                            class="post-author d-flex align-items-center"
-                                        >
-                                            <div class="author-pic">
-                                                <img
-                                                    src="images/person_1.jpg"
-                                                    alt="Image"
-                                                />
-                                            </div>
-                                            <div class="text">
-                                                <strong>Sergy Campbell</strong>
-                                                <span
-                                                    >Author, 26 published
-                                                    post</span
+                                                &mdash;
+                                                <router-link
+                                                    class="text-dark"
+                                                    :to="{
+                                                        name: 'editpost',
+                                                        params: {
+                                                            postSlug: post.slug
+                                                        }
+                                                    }"
+                                                    >Edit</router-link
                                                 >
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div
-                                    class="post-entry d-md-flex xsmall-horizontal mb-5"
-                                >
-                                    <div class="me-md-3 thumbnail mb-3 mb-md-0">
-                                        <img
-                                            src="images/img_3.jpg"
-                                            alt="Image"
-                                            class="img-fluid"
-                                        />
-                                    </div>
-                                    <div class="content">
-                                        <div class="post-meta mb-1">
-                                            <a href="#" class="category"
-                                                >Business</a
-                                            >,
-                                            <a href="#" class="category"
-                                                >Travel</a
-                                            >
-                                            &mdash;
-                                            <span class="date"
-                                                >July 2, 2020</span
-                                            >
+                                            </span>
                                         </div>
                                         <h2 class="heading">
                                             <a href="single.html"
-                                                >Your most unhappy customers are
-                                                your greatest source of
-                                                learning.</a
+                                                >{{
+                                                    post.title.slice(0, 60)
+                                                }}..</a
                                             >
                                         </h2>
                                         <a
@@ -649,232 +663,18 @@
                                         >
                                             <div class="author-pic">
                                                 <img
-                                                    src="images/person_1.jpg"
+                                                    :src="post.user.profilePic"
                                                     alt="Image"
                                                 />
                                             </div>
                                             <div class="text">
-                                                <strong>Sergy Campbell</strong>
+                                                <strong>{{
+                                                    post.user.name
+                                                }}</strong>
                                                 <span
-                                                    >Author, 26 published
-                                                    post</span
-                                                >
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div
-                                    class="post-entry d-md-flex xsmall-horizontal mb-5"
-                                >
-                                    <div class="me-md-3 thumbnail mb-3 mb-md-0">
-                                        <img
-                                            src="images/img_4.jpg"
-                                            alt="Image"
-                                            class="img-fluid"
-                                        />
-                                    </div>
-                                    <div class="content">
-                                        <div class="post-meta mb-1">
-                                            <a href="#" class="category"
-                                                >Business</a
-                                            >,
-                                            <a href="#" class="category"
-                                                >Travel</a
-                                            >
-                                            &mdash;
-                                            <span class="date"
-                                                >July 2, 2020</span
-                                            >
-                                        </div>
-                                        <h2 class="heading">
-                                            <a href="single.html"
-                                                >Your most unhappy customers are
-                                                your greatest source of
-                                                learning.</a
-                                            >
-                                        </h2>
-                                        <a
-                                            href="#"
-                                            class="post-author d-flex align-items-center"
-                                        >
-                                            <div class="author-pic">
-                                                <img
-                                                    src="images/person_1.jpg"
-                                                    alt="Image"
-                                                />
-                                            </div>
-                                            <div class="text">
-                                                <strong>Sergy Campbell</strong>
-                                                <span
-                                                    >Author, 26 published
-                                                    post</span
-                                                >
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <h2 class="h4 fw-bold">Business</h2>
-                            </div>
-                        </div>
-                        <div class="row justify-content-center">
-                            <div class="col-lg-12">
-                                <div
-                                    class="post-entry d-md-flex xsmall-horizontal mb-5"
-                                >
-                                    <div class="me-md-3 thumbnail mb-3 mb-md-0">
-                                        <img
-                                            src="images/img_2.jpg"
-                                            alt="Image"
-                                            class="img-fluid"
-                                        />
-                                    </div>
-                                    <div class="content">
-                                        <div class="post-meta mb-1">
-                                            <a href="#" class="category"
-                                                >Business</a
-                                            >,
-                                            <a href="#" class="category"
-                                                >Travel</a
-                                            >
-                                            &mdash;
-                                            <span class="date"
-                                                >July 2, 2020</span
-                                            >
-                                        </div>
-                                        <h2 class="heading">
-                                            <a href="single.html"
-                                                >Your most unhappy customers are
-                                                your greatest source of
-                                                learning.</a
-                                            >
-                                        </h2>
-                                        <a
-                                            href="#"
-                                            class="post-author d-flex align-items-center"
-                                        >
-                                            <div class="author-pic">
-                                                <img
-                                                    src="images/person_1.jpg"
-                                                    alt="Image"
-                                                />
-                                            </div>
-                                            <div class="text">
-                                                <strong>Sergy Campbell</strong>
-                                                <span
-                                                    >Author, 26 published
-                                                    post</span
-                                                >
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div
-                                    class="post-entry d-md-flex xsmall-horizontal mb-5"
-                                >
-                                    <div class="me-md-3 thumbnail mb-3 mb-md-0">
-                                        <img
-                                            src="images/img_3.jpg"
-                                            alt="Image"
-                                            class="img-fluid"
-                                        />
-                                    </div>
-                                    <div class="content">
-                                        <div class="post-meta mb-1">
-                                            <a href="#" class="category"
-                                                >Business</a
-                                            >,
-                                            <a href="#" class="category"
-                                                >Travel</a
-                                            >
-                                            &mdash;
-                                            <span class="date"
-                                                >July 2, 2020</span
-                                            >
-                                        </div>
-                                        <h2 class="heading">
-                                            <a href="single.html"
-                                                >Your most unhappy customers are
-                                                your greatest source of
-                                                learning.</a
-                                            >
-                                        </h2>
-                                        <a
-                                            href="#"
-                                            class="post-author d-flex align-items-center"
-                                        >
-                                            <div class="author-pic">
-                                                <img
-                                                    src="images/person_1.jpg"
-                                                    alt="Image"
-                                                />
-                                            </div>
-                                            <div class="text">
-                                                <strong>Sergy Campbell</strong>
-                                                <span
-                                                    >Author, 26 published
-                                                    post</span
-                                                >
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div
-                                    class="post-entry d-md-flex xsmall-horizontal mb-5"
-                                >
-                                    <div class="me-md-3 thumbnail mb-3 mb-md-0">
-                                        <img
-                                            src="images/img_4.jpg"
-                                            alt="Image"
-                                            class="img-fluid"
-                                        />
-                                    </div>
-                                    <div class="content">
-                                        <div class="post-meta mb-1">
-                                            <a href="#" class="category"
-                                                >Business</a
-                                            >,
-                                            <a href="#" class="category"
-                                                >Travel</a
-                                            >
-                                            &mdash;
-                                            <span class="date"
-                                                >July 2, 2020</span
-                                            >
-                                        </div>
-                                        <h2 class="heading">
-                                            <a href="single.html"
-                                                >Your most unhappy customers are
-                                                your greatest source of
-                                                learning.</a
-                                            >
-                                        </h2>
-                                        <a
-                                            href="#"
-                                            class="post-author d-flex align-items-center"
-                                        >
-                                            <div class="author-pic">
-                                                <img
-                                                    src="images/person_1.jpg"
-                                                    alt="Image"
-                                                />
-                                            </div>
-                                            <div class="text">
-                                                <strong>Sergy Campbell</strong>
-                                                <span
-                                                    >Author, 26 published
-                                                    post</span
+                                                    >Author,
+                                                    {{ post.user.posts.length }}
+                                                    published post</span
                                                 >
                                             </div>
                                         </a>
@@ -886,7 +686,7 @@
                 </div>
             </div>
         </div>
-        <div class="section">
+        <div class="section" v-if="Object.keys(user).length > 0">
             <div class="container">
                 <div class="row justify-content-center mb-5">
                     <div class="col-lg-7 text-center">
@@ -916,6 +716,25 @@
                                             "MMM DD,YYYY"
                                         )
                                     }}</span>
+                                    &mdash;
+                                    <span class="text-dark">
+                                        {{ post.likes.length }}
+                                    </span>
+
+                                    <i class="fas fa-heart text-dark"></i>
+                                    <span v-if="post.user_id === user.id">
+                                        &mdash;
+                                        <router-link
+                                            class="text-dark"
+                                            :to="{
+                                                name: 'editpost',
+                                                params: {
+                                                    postSlug: post.slug
+                                                }
+                                            }"
+                                            >Edit</router-link
+                                        >
+                                    </span>
                                 </div>
                                 <h2 class="heading">
                                     <a href="single.html">{{ post.title }}</a>
@@ -993,6 +812,61 @@
                 </form>
             </div>
         </div>
+        <div class="site-footer">
+            <div class="container">
+                <div class="row justify-content-center copyright">
+                    <div class="col-lg-7 text-center">
+                        <div class="widget">
+                            <ul class="social list-unstyled">
+                                <li>
+                                    <a href="#"
+                                        ><span class="icon-facebook"></span
+                                    ></a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        ><span class="icon-twitter"></span
+                                    ></a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        ><span class="icon-linkedin"></span
+                                    ></a>
+                                </li>
+                                <li>
+                                    <a href="#"
+                                        ><span class="icon-youtube-play"></span
+                                    ></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="widget">
+                            <p>
+                                Copyright &copy; 2021 All rights reserved | This
+                                template is made with
+                                <i
+                                    class="icon-heart text-danger"
+                                    aria-hidden="true"
+                                ></i>
+                                by
+                                <a
+                                    href="https://colorlib.com/"
+                                    target="_blank"
+                                    rel="nofollow noopener"
+                                    >Colorlib</a
+                                >
+                            </p>
+                            <div class="d-block">
+                                <a href="#" class="m-2"
+                                    >Terms &amp; Conditions</a
+                                >/
+                                <a href="#" class="m-2">Privacy Policy</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -1008,7 +882,8 @@ export default {
             user: {},
             mostLiked: [],
             pageOfPosts: [],
-            followingsPosts: []
+            followingsPosts: [],
+            categories: []
         };
     },
     methods: {
@@ -1029,6 +904,7 @@ export default {
             this.trend = res.data.trend;
             this.mostLiked = res.data.mostLiked;
             this.followingsPosts = res.data.followingsPosts;
+            this.categories = res.data.catPosts;
         },
         moment() {
             return moment();
@@ -1037,6 +913,9 @@ export default {
     created() {
         this.getPosts();
         this.getUser();
+        Reload.$on("postInserted", () => {
+            this.getPosts();
+        });
     }
 };
 </script>

@@ -2313,7 +2313,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         confirm_password: null
       },
       errors: {},
-      user: {},
+      auth: {},
       showSpinner: false
     };
   },
@@ -2383,12 +2383,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   name: "home"
                 });
 
-                setTimeout(_this3.$router.go(), 10000);
-                _context2.next = 15;
+                _context2.next = 14;
                 break;
 
-              case 11:
-                _context2.prev = 11;
+              case 10:
+                _context2.prev = 10;
                 _context2.t0 = _context2["catch"](0);
                 _this3.errors = _context2.t0.response.data.errors;
 
@@ -2400,17 +2399,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   });
                 }
 
-              case 15:
+              case 14:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 11]]);
+        }, _callee2, null, [[0, 10]]);
       }))();
     }
   }
 }, "created", function created() {
-  getUser();
+  this.getUser();
 }));
 
 /***/ }),
@@ -2549,6 +2548,61 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3603,132 +3657,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -3741,7 +3669,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       user: {},
       mostLiked: [],
       pageOfPosts: [],
-      followingsPosts: []
+      followingsPosts: [],
+      categories: []
     };
   },
   methods: {
@@ -3798,8 +3727,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this2.trend = res.data.trend;
                 _this2.mostLiked = res.data.mostLiked;
                 _this2.followingsPosts = res.data.followingsPosts;
+                _this2.categories = res.data.catPosts;
 
-              case 6:
+              case 7:
               case "end":
                 return _context2.stop();
             }
@@ -3822,8 +3752,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     })
   },
   created: function created() {
+    var _this3 = this;
+
     this.getPosts();
     this.getUser();
+    Reload.$on("postInserted", function () {
+      _this3.getPosts();
+    });
   }
 });
 
@@ -4099,6 +4034,54 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -4115,10 +4098,35 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       show: false,
       showModal: false,
       searchTerm: "",
-      posts: []
+      posts: [],
+      nots: {}
     };
   },
   methods: {
+    getNots: function getNots() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return axios.get("/api/getnots/");
+
+              case 2:
+                res = _context.sent;
+                _this.nots = res.data;
+
+              case 4:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
     onShowModal: function onShowModal() {
       this.showModal = !this.showModal;
     },
@@ -4129,38 +4137,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.show = !this.show;
     },
     getUser: function getUser() {
-      var _this = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var res;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.prev = 0;
-                _context.next = 3;
-                return axios.get("/api/user");
-
-              case 3:
-                res = _context.sent;
-                _this.user = res.data;
-                _context.next = 10;
-                break;
-
-              case 7:
-                _context.prev = 7;
-                _context.t0 = _context["catch"](0);
-                console.log(_context.t0);
-
-              case 10:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, null, [[0, 7]]);
-      }))();
-    },
-    getCategories: function getCategories() {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -4169,22 +4145,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
-                return axios.get("/api/categories/");
+                _context2.prev = 0;
+                _context2.next = 3;
+                return axios.get("/api/user");
 
-              case 2:
+              case 3:
                 res = _context2.sent;
-                _this2.categories = res.data;
+                _this2.user = res.data;
+                _context2.next = 10;
+                break;
 
-              case 4:
+              case 7:
+                _context2.prev = 7;
+                _context2.t0 = _context2["catch"](0);
+                console.log(_context2.t0);
+
+              case 10:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2);
+        }, _callee2, null, [[0, 7]]);
       }))();
     },
-    getPosts: function getPosts() {
+    getCategories: function getCategories() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
@@ -4194,11 +4178,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return axios.get("/api/posts/");
+                return axios.get("/api/categories/");
 
               case 2:
                 res = _context3.sent;
-                _this3.posts = res.data.trend;
+                _this3.categories = res.data;
 
               case 4:
               case "end":
@@ -4208,11 +4192,35 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3);
       }))();
     },
+    getPosts: function getPosts() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return axios.get("/api/posts/");
+
+              case 2:
+                res = _context4.sent;
+                _this4.posts = res.data.trend;
+
+              case 4:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
+    },
     closeModal: function closeModal() {
       this.showModal = false;
     },
     handleProgressBar: function handleProgressBar() {
-      var _this4 = this;
+      var _this5 = this;
 
       //  [App.vue specific] When App.vue is first loaded start the progress bar
       this.$Progress.start(); //  hook the progress bar to start before we move router-view
@@ -4222,11 +4230,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         if (to.meta.progress !== undefined) {
           var meta = to.meta.progress; // parse meta tags
 
-          _this4.$Progress.parseMeta(meta);
+          _this5.$Progress.parseMeta(meta);
         } //  start the progress bar
 
 
-        _this4.$Progress.start(); //  continue to next page
+        _this5.$Progress.start(); //  continue to next page
 
 
         next();
@@ -4234,32 +4242,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       this.$router.afterEach(function (to, from) {
         //  finish the progress bar
-        _this4.$Progress.finish();
+        _this5.$Progress.finish();
       });
     }
   },
   computed: {
     searchedPosts: function searchedPosts() {
-      var _this5 = this;
+      var _this6 = this;
 
       return this.posts.filter(function (post) {
-        return post.title.match(_this5.searchTerm.toUpperCase());
+        return post.title.match(_this6.searchTerm.toUpperCase());
       });
     }
   },
   created: function created() {
-    var _this6 = this;
+    var _this7 = this;
 
     this.getUser();
     Reload.$on("logout", function () {
-      _this6.getUser();
+      _this7.getUser();
     });
     Reload.$on("login", function () {
-      _this6.getUser();
+      _this7.getUser();
     });
     this.getCategories();
     this.getPosts();
     this.handleProgressBar();
+    Reload.$on("profileChanged", function () {
+      _this7.getUser();
+    });
+    this.getNots();
   }
 });
 
@@ -4610,6 +4622,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 4:
                 _this2.showSpinner = false;
+                Reload.$emit("postInserted");
 
                 _this2.closeModal();
 
@@ -4619,11 +4632,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 });
                 _this2.form = {};
                 _this2.form.photo = null;
-                _context.next = 14;
+                _context.next = 15;
                 break;
 
-              case 11:
-                _context.prev = 11;
+              case 12:
+                _context.prev = 12;
                 _context.t0 = _context["catch"](0);
 
                 if (_context.t0.response !== undefined) {
@@ -4635,12 +4648,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   });
                 }
 
-              case 14:
+              case 15:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 11]]);
+        }, _callee, null, [[0, 12]]);
       }))();
     }
   }
@@ -5077,6 +5090,67 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -6275,39 +6349,48 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
-        var username;
+        var username, res;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                try {
-                  username = _this4.$route.params.username;
-                  _this4.showSpinner = true;
-                  axios.patch("/api/editProfile/" + username, _this4.form);
-                  _this4.showSpinner = false;
-                  Toast.fire({
-                    icon: "success",
-                    title: "Profile updated in successfully"
-                  });
+                _context4.prev = 0;
+                username = _this4.$route.params.username;
+                _this4.showSpinner = true;
+                _context4.next = 5;
+                return axios.patch("/api/editProfile/" + username, _this4.form);
 
-                  _this4.$router.push({
-                    name: "profile",
-                    params: {
-                      username: _this4.form.name
-                    }
-                  });
+              case 5:
+                res = _context4.sent;
+                console.log(res.data);
+                _this4.showSpinner = false;
+                Toast.fire({
+                  icon: "success",
+                  title: "Profile updated in successfully"
+                });
+                Reload.$emit("profileChanged");
 
-                  Reload.$emit("profileChanged");
-                } catch (error) {
-                  _this4.errors = error.res.data;
-                }
+                _this4.$router.push({
+                  name: "profile",
+                  params: {
+                    username: _this4.form.name
+                  }
+                });
 
-              case 1:
+                _context4.next = 16;
+                break;
+
+              case 13:
+                _context4.prev = 13;
+                _context4.t0 = _context4["catch"](0);
+                _this4.errors = _context4.t0.res.data.errors;
+
+              case 16:
               case "end":
                 return _context4.stop();
             }
           }
-        }, _callee4);
+        }, _callee4, null, [[0, 13]]);
       }))();
     },
     moment: function (_moment) {
@@ -6330,7 +6413,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     this.getUser();
     this.getProfile();
     Reload.$on("profileChanged", function () {
-      _this5.getProfile();
+      _this5.getUser();
     });
     Reload.$on("follow", function () {
       _this5.getProfile();
@@ -83669,10 +83752,89 @@ var render = function() {
           )
         ]
       )
-    ])
+    ]),
+    _vm._v(" "),
+    _vm._m(0)
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "site-footer" }, [
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "row justify-content-center copyright" }, [
+          _c("div", { staticClass: "col-lg-7 text-center" }, [
+            _c("div", { staticClass: "widget" }, [
+              _c("ul", { staticClass: "social list-unstyled" }, [
+                _c("li", [
+                  _c("a", { attrs: { href: "#" } }, [
+                    _c("span", { staticClass: "icon-facebook" })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("li", [
+                  _c("a", { attrs: { href: "#" } }, [
+                    _c("span", { staticClass: "icon-twitter" })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("li", [
+                  _c("a", { attrs: { href: "#" } }, [
+                    _c("span", { staticClass: "icon-linkedin" })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("li", [
+                  _c("a", { attrs: { href: "#" } }, [
+                    _c("span", { staticClass: "icon-youtube-play" })
+                  ])
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "widget" }, [
+              _c("p", [
+                _vm._v(
+                  "\n                            Copyright © 2021 All rights reserved | This\n                            template is made with\n                            "
+                ),
+                _c("i", {
+                  staticClass: "icon-heart text-danger",
+                  attrs: { "aria-hidden": "true" }
+                }),
+                _vm._v(
+                  "\n                            by\n                            "
+                ),
+                _c(
+                  "a",
+                  {
+                    attrs: {
+                      href: "https://colorlib.com/",
+                      target: "_blank",
+                      rel: "nofollow noopener"
+                    }
+                  },
+                  [_vm._v("Colorlib")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "d-block" }, [
+                _c("a", { staticClass: "m-2", attrs: { href: "#" } }, [
+                  _vm._v("Terms & Conditions")
+                ]),
+                _vm._v("/\n                            "),
+                _c("a", { staticClass: "m-2", attrs: { href: "#" } }, [
+                  _vm._v("Privacy Policy")
+                ])
+              ])
+            ])
+          ])
+        ])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -83962,7 +84124,13 @@ var render = function() {
                                     [_vm._v(_vm._s(post.user.name))]
                                   ),
                                   _vm._v(" "),
-                                  _c("span", [_vm._v("CEO and Founder")])
+                                  _c("span", [
+                                    _vm._v(
+                                      "Author,\n                                            " +
+                                        _vm._s(post.user.posts.length) +
+                                        "\n                                            published post"
+                                    )
+                                  ])
                                 ])
                               ]
                             )
@@ -83988,101 +84156,28 @@ var render = function() {
         _c(
           "div",
           { staticClass: "row g-5" },
-          _vm._l(_vm.mostLiked.slice(0, 6), function(post) {
-            return _c(
-              "div",
-              {
-                key: post.key,
-                staticClass: "col-lg-4",
-                attrs: {
-                  "data-aos": "zoom-in-down",
-                  "data-aos-duration": "600"
-                }
-              },
-              [
-                _c(
-                  "div",
-                  { staticClass: "post-entry d-block small-post-entry-v" },
-                  [
-                    _c(
-                      "div",
-                      { staticClass: "thumbnail" },
-                      [
-                        _c(
-                          "router-link",
-                          {
-                            attrs: {
-                              to: {
-                                name: "post",
-                                params: {
-                                  slug: post.slug
-                                }
-                              }
-                            }
-                          },
-                          [
-                            _c("img", {
-                              staticClass: "img-fluid",
-                              attrs: { src: post.photo, alt: "Image" }
-                            })
-                          ]
-                        )
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "content" }, [
+          [
+            _vm._m(1),
+            _vm._v(" "),
+            _vm._l(_vm.mostLiked.slice(0, 6), function(post) {
+              return _c(
+                "div",
+                {
+                  key: post.key,
+                  staticClass: "col-lg-4",
+                  attrs: {
+                    "data-aos": "zoom-in-down",
+                    "data-aos-duration": "600"
+                  }
+                },
+                [
+                  _c(
+                    "div",
+                    { staticClass: "post-entry d-block small-post-entry-v" },
+                    [
                       _c(
                         "div",
-                        { staticClass: "post-meta mb-1" },
-                        [
-                          _c(
-                            "router-link",
-                            {
-                              staticClass: "category text-dark",
-                              staticStyle: { color: "whitesmoke" },
-                              attrs: {
-                                to: {
-                                  name: "catposts",
-                                  params: {
-                                    catName: post.category.name
-                                  }
-                                }
-                              }
-                            },
-                            [_vm._v(_vm._s(post.category.name))]
-                          ),
-                          _vm._v(
-                            "\n                                —\n                                "
-                          ),
-                          _c("span", { staticClass: "date" }, [
-                            _vm._v(
-                              _vm._s(
-                                _vm
-                                  .moment(post.created_at)
-                                  .format("MMM DD,YYYY")
-                              )
-                            )
-                          ]),
-                          _vm._v(
-                            "\n                                —\n                                "
-                          ),
-                          _c("span", { staticClass: "text-dark" }, [
-                            _vm._v(
-                              "\n                                    " +
-                                _vm._s(post.likes.length) +
-                                "\n                                "
-                            )
-                          ]),
-                          _vm._v(" "),
-                          _c("i", { staticClass: "fas fa-heart text-dark" })
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "h2",
-                        { staticClass: "heading mb-3" },
+                        { staticClass: "thumbnail" },
                         [
                           _c(
                             "router-link",
@@ -84096,78 +84191,189 @@ var render = function() {
                                 }
                               }
                             },
-                            [_vm._v(_vm._s(post.title.slice(0, 68)) + "..")]
+                            [
+                              _c("img", {
+                                staticClass: "img-fluid",
+                                attrs: { src: post.photo, alt: "Image" }
+                              })
+                            ]
                           )
                         ],
                         1
                       ),
                       _vm._v(" "),
-                      _c("p", { staticStyle: { "text-align": "justify" } }, [
-                        _vm._v(
-                          "\n                                " +
-                            _vm._s(post.desc.slice(0, 100)) +
-                            "..\n                            "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass: "post-author d-flex align-items-center",
-                          attrs: { href: "#" }
-                        },
-                        [
-                          _c(
-                            "div",
-                            { staticClass: "author-pic" },
-                            [
-                              _c(
-                                "router-link",
-                                {
-                                  staticStyle: { padding: "0" },
-                                  attrs: {
-                                    to: {
-                                      name: "profile",
-                                      params: {
-                                        username: post.user.name
-                                      }
+                      _c("div", { staticClass: "content" }, [
+                        _c(
+                          "div",
+                          { staticClass: "post-meta mb-1" },
+                          [
+                            _c(
+                              "router-link",
+                              {
+                                staticClass: "category text-dark",
+                                staticStyle: { color: "whitesmoke" },
+                                attrs: {
+                                  to: {
+                                    name: "catposts",
+                                    params: {
+                                      catName: post.category.name
                                     }
                                   }
-                                },
-                                [
-                                  _c("img", {
-                                    attrs: {
-                                      src: post.user.profilePic,
-                                      alt: "Image"
-                                    }
-                                  })
-                                ]
+                                }
+                              },
+                              [_vm._v(_vm._s(post.category.name))]
+                            ),
+                            _vm._v(
+                              "\n                                —\n                                "
+                            ),
+                            _c("span", { staticClass: "date" }, [
+                              _vm._v(
+                                _vm._s(
+                                  _vm
+                                    .moment(post.created_at)
+                                    .format("MMM DD,YYYY")
+                                )
                               )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "text" }, [
-                            _c("strong", [_vm._v(_vm._s(post.user.name))]),
+                            ]),
+                            _vm._v(
+                              "\n                                —\n                                "
+                            ),
+                            _c("span", { staticClass: "text-dark" }, [
+                              _vm._v(
+                                "\n                                    " +
+                                  _vm._s(post.likes.length) +
+                                  "\n                                "
+                              )
+                            ]),
                             _vm._v(" "),
-                            _c("span", [_vm._v("CEO and Founder")])
-                          ])
-                        ]
-                      )
-                    ])
-                  ]
-                )
-              ]
-            )
-          }),
-          0
+                            _c("i", { staticClass: "fas fa-heart text-dark" }),
+                            _vm._v(" "),
+                            post.user_id === _vm.user.id
+                              ? _c(
+                                  "span",
+                                  [
+                                    _vm._v(
+                                      "\n                                    —\n                                    "
+                                    ),
+                                    _c(
+                                      "router-link",
+                                      {
+                                        staticClass: "text-dark",
+                                        attrs: {
+                                          to: {
+                                            name: "editpost",
+                                            params: {
+                                              postSlug: post.slug
+                                            }
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Edit")]
+                                    )
+                                  ],
+                                  1
+                                )
+                              : _vm._e()
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "h2",
+                          { staticClass: "heading mb-3" },
+                          [
+                            _c(
+                              "router-link",
+                              {
+                                attrs: {
+                                  to: {
+                                    name: "post",
+                                    params: {
+                                      slug: post.slug
+                                    }
+                                  }
+                                }
+                              },
+                              [_vm._v(_vm._s(post.title.slice(0, 68)) + "..")]
+                            )
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c("p", { staticStyle: { "text-align": "justify" } }, [
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(post.desc.slice(0, 100)) +
+                              "..\n                            "
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "a",
+                          {
+                            staticClass:
+                              "post-author d-flex align-items-center",
+                            attrs: { href: "#" }
+                          },
+                          [
+                            _c(
+                              "div",
+                              { staticClass: "author-pic" },
+                              [
+                                _c(
+                                  "router-link",
+                                  {
+                                    staticStyle: { padding: "0" },
+                                    attrs: {
+                                      to: {
+                                        name: "profile",
+                                        params: {
+                                          username: post.user.name
+                                        }
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _c("img", {
+                                      attrs: {
+                                        src: post.user.profilePic,
+                                        alt: "Image"
+                                      }
+                                    })
+                                  ]
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "text" }, [
+                              _c("strong", [_vm._v(_vm._s(post.user.name))]),
+                              _vm._v(" "),
+                              _c("span", [
+                                _vm._v(
+                                  "Author,\n                                        " +
+                                    _vm._s(post.user.posts.length) +
+                                    "\n                                        published post"
+                                )
+                              ])
+                            ])
+                          ]
+                        )
+                      ])
+                    ]
+                  )
+                ]
+              )
+            })
+          ],
+          2
         )
       ])
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "section mt-1" }, [
       _c("div", { staticClass: "container" }, [
-        _vm._m(1),
+        _vm._m(2),
         _vm._v(" "),
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "col-lg-12" }, [
@@ -84272,7 +84478,11 @@ var render = function() {
                                 _c("div", { staticClass: "text" }, [
                                   _c("strong", [_vm._v("Sergy Campbell")]),
                                   _vm._v(" "),
-                                  _c("span", [_vm._v("CEO and Founder")])
+                                  _c("span", [
+                                    _vm._v(
+                                      "Author, 25 published\n                                                    post"
+                                    )
+                                  ])
                                 ])
                               ]
                             )
@@ -84365,7 +84575,11 @@ var render = function() {
                                 _c("div", { staticClass: "text" }, [
                                   _c("strong", [_vm._v("Sergy Campbell")]),
                                   _vm._v(" "),
-                                  _c("span", [_vm._v("CEO and Founder")])
+                                  _c("span", [
+                                    _vm._v(
+                                      "Author, 25 published\n                                                    post"
+                                    )
+                                  ])
                                 ])
                               ]
                             )
@@ -84458,7 +84672,11 @@ var render = function() {
                                 _c("div", { staticClass: "text" }, [
                                   _c("strong", [_vm._v("Sergy Campbell")]),
                                   _vm._v(" "),
-                                  _c("span", [_vm._v("CEO and Founder")])
+                                  _c("span", [
+                                    _vm._v(
+                                      "Author, 25 published\n                                                    post"
+                                    )
+                                  ])
                                 ])
                               ]
                             )
@@ -84551,7 +84769,11 @@ var render = function() {
                                 _c("div", { staticClass: "text" }, [
                                   _c("strong", [_vm._v("Sergy Campbell")]),
                                   _vm._v(" "),
-                                  _c("span", [_vm._v("CEO and Founder")])
+                                  _c("span", [
+                                    _vm._v(
+                                      "Author, 25 published\n                                                    post"
+                                    )
+                                  ])
                                 ])
                               ]
                             )
@@ -84569,144 +84791,348 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _vm._m(2),
-    _vm._v(" "),
     _c("div", { staticClass: "section" }, [
       _c("div", { staticClass: "container" }, [
-        _vm._m(3),
-        _vm._v(" "),
         _c(
           "div",
           { staticClass: "row g-5" },
-          _vm._l(_vm.pageOfPosts, function(post) {
-            return _c(
-              "div",
-              {
-                key: post.id,
-                staticClass: "col-lg-12",
-                attrs: {
-                  "data-aos": "zoom-in-down",
-                  "data-aos-duration": "600"
-                }
-              },
-              [
-                _c(
-                  "div",
-                  { staticClass: "post-entry d-md-flex small-horizontal mb-5" },
-                  [
-                    _c(
-                      "div",
-                      { staticClass: "me-md-4 thumbnail mb-3 mb-md-0" },
-                      [
-                        _c("img", {
-                          staticClass: "img-fluid",
-                          attrs: { src: post.photo, alt: "Image" }
-                        })
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "content" }, [
-                      _c("div", { staticClass: "post-meta mb-1" }, [
-                        _c("span", { staticClass: "date" }, [
-                          _vm._v(
-                            _vm._s(
-                              _vm.moment(post.created_at).format("MMM DD,YYYY")
-                            )
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("h2", { staticClass: "heading" }, [
-                        _c("a", { attrs: { href: "single.html" } }, [
-                          _vm._v(_vm._s(post.title))
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("p", [
-                        _vm._v(
-                          "\n                                " +
-                            _vm._s(post.desc) +
-                            "\n                            "
-                        )
-                      ]),
-                      _vm._v(" "),
+          _vm._l(_vm.categories.slice(0, 2), function(cat) {
+            return _c("div", { key: cat.id, staticClass: "col-lg-6" }, [
+              _c("div", { staticClass: "row mb-4" }, [
+                _c("div", { staticClass: "col-12" }, [
+                  _c("h2", { staticClass: "h4 fw-bold" }, [
+                    _vm._v(_vm._s(cat.name))
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "row justify-content-center" },
+                _vm._l(cat.posts.slice(0, 3), function(post) {
+                  return _c(
+                    "div",
+                    {
+                      key: post.id,
+                      staticClass: "col-lg-12",
+                      attrs: {
+                        "data-aos": "zoom-in-down",
+                        "data-aos-duration": "600"
+                      }
+                    },
+                    [
                       _c(
-                        "a",
+                        "div",
                         {
-                          staticClass: "post-author d-flex align-items-center",
-                          attrs: { href: "#" }
+                          staticClass:
+                            "post-entry d-md-flex xsmall-horizontal mb-5"
                         },
                         [
                           _c(
                             "div",
-                            { staticClass: "author-pic" },
+                            { staticClass: "me-md-3 thumbnail mb-3 mb-md-0" },
                             [
-                              _c(
-                                "router-link",
-                                {
-                                  staticStyle: { padding: "0" },
-                                  attrs: {
-                                    to: {
-                                      name: "profile",
-                                      params: {
-                                        username: post.user.name
-                                      }
-                                    }
-                                  }
-                                },
-                                [
+                              _c("img", {
+                                staticClass: "img-fluid",
+                                attrs: { src: post.photo, alt: "Image" }
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "content" }, [
+                            _c("div", { staticClass: "post-meta mb-1" }, [
+                              _c("span", { staticClass: "date" }, [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm
+                                      .moment(post.created_at)
+                                      .format("MMM DD,YYYY")
+                                  )
+                                )
+                              ]),
+                              _vm._v(
+                                "\n                                        —\n                                        "
+                              ),
+                              _c("span", { staticClass: "text-dark" }, [
+                                _vm._v(
+                                  "\n                                            " +
+                                    _vm._s(post.likes.length) +
+                                    "\n                                        "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("i", {
+                                staticClass: "fas fa-heart text-dark"
+                              }),
+                              _vm._v(" "),
+                              post.user_id === _vm.user.id
+                                ? _c(
+                                    "span",
+                                    [
+                                      _vm._v(
+                                        "\n                                            —\n                                            "
+                                      ),
+                                      _c(
+                                        "router-link",
+                                        {
+                                          staticClass: "text-dark",
+                                          attrs: {
+                                            to: {
+                                              name: "editpost",
+                                              params: {
+                                                postSlug: post.slug
+                                              }
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("Edit")]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                : _vm._e()
+                            ]),
+                            _vm._v(" "),
+                            _c("h2", { staticClass: "heading" }, [
+                              _c("a", { attrs: { href: "single.html" } }, [
+                                _vm._v(_vm._s(post.title.slice(0, 60)) + "..")
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "a",
+                              {
+                                staticClass:
+                                  "post-author d-flex align-items-center",
+                                attrs: { href: "#" }
+                              },
+                              [
+                                _c("div", { staticClass: "author-pic" }, [
                                   _c("img", {
                                     attrs: {
                                       src: post.user.profilePic,
                                       alt: "Image"
                                     }
                                   })
-                                ]
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "text" }, [
-                            _c("strong", [_vm._v(_vm._s(post.user.name))]),
-                            _vm._v(" "),
-                            _c("span", [_vm._v("Author, 26 published post")])
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "text" }, [
+                                  _c("strong", [
+                                    _vm._v(_vm._s(post.user.name))
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("span", [
+                                    _vm._v(
+                                      "Author,\n                                                " +
+                                        _vm._s(post.user.posts.length) +
+                                        "\n                                                published post"
+                                    )
+                                  ])
+                                ])
+                              ]
+                            )
                           ])
                         ]
                       )
-                    ])
-                  ]
-                )
-              ]
-            )
+                    ]
+                  )
+                }),
+                0
+              )
+            ])
           }),
           0
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass:
-              "row align-items-center justify-content-center py-2\n        "
-          },
-          [
-            _c(
-              "div",
-              { staticClass: "col-lg-6 text-center" },
-              [
-                _c("jw-pagination", {
-                  attrs: { items: _vm.followingsPosts, pageSize: 6 },
-                  on: { changePage: _vm.onChangePage }
-                })
-              ],
-              1
-            )
-          ]
         )
       ])
     ]),
     _vm._v(" "),
-    _vm._m(4)
+    Object.keys(_vm.user).length > 0
+      ? _c("div", { staticClass: "section" }, [
+          _c("div", { staticClass: "container" }, [
+            _vm._m(3),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "row g-5" },
+              _vm._l(_vm.pageOfPosts, function(post) {
+                return _c(
+                  "div",
+                  {
+                    key: post.id,
+                    staticClass: "col-lg-12",
+                    attrs: {
+                      "data-aos": "zoom-in-down",
+                      "data-aos-duration": "600"
+                    }
+                  },
+                  [
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "post-entry d-md-flex small-horizontal mb-5"
+                      },
+                      [
+                        _c(
+                          "div",
+                          { staticClass: "me-md-4 thumbnail mb-3 mb-md-0" },
+                          [
+                            _c("img", {
+                              staticClass: "img-fluid",
+                              attrs: { src: post.photo, alt: "Image" }
+                            })
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "content" }, [
+                          _c("div", { staticClass: "post-meta mb-1" }, [
+                            _c("span", { staticClass: "date" }, [
+                              _vm._v(
+                                _vm._s(
+                                  _vm
+                                    .moment(post.created_at)
+                                    .format("MMM DD,YYYY")
+                                )
+                              )
+                            ]),
+                            _vm._v(
+                              "\n                                —\n                                "
+                            ),
+                            _c("span", { staticClass: "text-dark" }, [
+                              _vm._v(
+                                "\n                                    " +
+                                  _vm._s(post.likes.length) +
+                                  "\n                                "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("i", { staticClass: "fas fa-heart text-dark" }),
+                            _vm._v(" "),
+                            post.user_id === _vm.user.id
+                              ? _c(
+                                  "span",
+                                  [
+                                    _vm._v(
+                                      "\n                                    —\n                                    "
+                                    ),
+                                    _c(
+                                      "router-link",
+                                      {
+                                        staticClass: "text-dark",
+                                        attrs: {
+                                          to: {
+                                            name: "editpost",
+                                            params: {
+                                              postSlug: post.slug
+                                            }
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Edit")]
+                                    )
+                                  ],
+                                  1
+                                )
+                              : _vm._e()
+                          ]),
+                          _vm._v(" "),
+                          _c("h2", { staticClass: "heading" }, [
+                            _c("a", { attrs: { href: "single.html" } }, [
+                              _vm._v(_vm._s(post.title))
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("p", [
+                            _vm._v(
+                              "\n                                " +
+                                _vm._s(post.desc) +
+                                "\n                            "
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "post-author d-flex align-items-center",
+                              attrs: { href: "#" }
+                            },
+                            [
+                              _c(
+                                "div",
+                                { staticClass: "author-pic" },
+                                [
+                                  _c(
+                                    "router-link",
+                                    {
+                                      staticStyle: { padding: "0" },
+                                      attrs: {
+                                        to: {
+                                          name: "profile",
+                                          params: {
+                                            username: post.user.name
+                                          }
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("img", {
+                                        attrs: {
+                                          src: post.user.profilePic,
+                                          alt: "Image"
+                                        }
+                                      })
+                                    ]
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "text" }, [
+                                _c("strong", [_vm._v(_vm._s(post.user.name))]),
+                                _vm._v(" "),
+                                _c("span", [
+                                  _vm._v("Author, 26 published post")
+                                ])
+                              ])
+                            ]
+                          )
+                        ])
+                      ]
+                    )
+                  ]
+                )
+              }),
+              0
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass:
+                  "row align-items-center justify-content-center py-2\n        "
+              },
+              [
+                _c(
+                  "div",
+                  { staticClass: "col-lg-6 text-center" },
+                  [
+                    _c("jw-pagination", {
+                      attrs: { items: _vm.followingsPosts, pageSize: 6 },
+                      on: { changePage: _vm.onChangePage }
+                    })
+                  ],
+                  1
+                )
+              ]
+            )
+          ])
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm._m(4),
+    _vm._v(" "),
+    _vm._m(5)
   ])
 }
 var staticRenderFns = [
@@ -84764,9 +85190,9 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row justify-content-center mb-5" }, [
+    return _c("div", { staticClass: "row justify-content-center mt-4" }, [
       _c("div", { staticClass: "col-lg-7 text-center" }, [
-        _c("h2", { staticClass: "heading" }, [_vm._v("Most Popular Posts")])
+        _c("h2", { staticClass: "heading" }, [_vm._v("Most Liked Posts")])
       ])
     ])
   },
@@ -84774,503 +85200,9 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "section" }, [
-      _c("div", { staticClass: "container" }, [
-        _c("div", { staticClass: "row g-5" }, [
-          _c("div", { staticClass: "col-lg-6" }, [
-            _c("div", { staticClass: "row mb-4" }, [
-              _c("div", { staticClass: "col-12" }, [
-                _c("h2", { staticClass: "h4 fw-bold" }, [_vm._v("Sports")])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "row justify-content-center" }, [
-              _c("div", { staticClass: "col-lg-12" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "post-entry d-md-flex xsmall-horizontal mb-5"
-                  },
-                  [
-                    _c(
-                      "div",
-                      { staticClass: "me-md-3 thumbnail mb-3 mb-md-0" },
-                      [
-                        _c("img", {
-                          staticClass: "img-fluid",
-                          attrs: { src: "images/img_2.jpg", alt: "Image" }
-                        })
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "content" }, [
-                      _c("div", { staticClass: "post-meta mb-1" }, [
-                        _c(
-                          "a",
-                          { staticClass: "category", attrs: { href: "#" } },
-                          [_vm._v("Business")]
-                        ),
-                        _vm._v(",\n                                        "),
-                        _c(
-                          "a",
-                          { staticClass: "category", attrs: { href: "#" } },
-                          [_vm._v("Travel")]
-                        ),
-                        _vm._v(
-                          "\n                                        —\n                                        "
-                        ),
-                        _c("span", { staticClass: "date" }, [
-                          _vm._v("July 2, 2020")
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("h2", { staticClass: "heading" }, [
-                        _c("a", { attrs: { href: "single.html" } }, [
-                          _vm._v(
-                            "Your most unhappy customers are\n                                            your greatest source of\n                                            learning."
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass: "post-author d-flex align-items-center",
-                          attrs: { href: "#" }
-                        },
-                        [
-                          _c("div", { staticClass: "author-pic" }, [
-                            _c("img", {
-                              attrs: {
-                                src: "images/person_1.jpg",
-                                alt: "Image"
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "text" }, [
-                            _c("strong", [_vm._v("Sergy Campbell")]),
-                            _vm._v(" "),
-                            _c("span", [
-                              _vm._v(
-                                "Author, 26 published\n                                                post"
-                              )
-                            ])
-                          ])
-                        ]
-                      )
-                    ])
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-lg-12" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "post-entry d-md-flex xsmall-horizontal mb-5"
-                  },
-                  [
-                    _c(
-                      "div",
-                      { staticClass: "me-md-3 thumbnail mb-3 mb-md-0" },
-                      [
-                        _c("img", {
-                          staticClass: "img-fluid",
-                          attrs: { src: "images/img_3.jpg", alt: "Image" }
-                        })
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "content" }, [
-                      _c("div", { staticClass: "post-meta mb-1" }, [
-                        _c(
-                          "a",
-                          { staticClass: "category", attrs: { href: "#" } },
-                          [_vm._v("Business")]
-                        ),
-                        _vm._v(",\n                                        "),
-                        _c(
-                          "a",
-                          { staticClass: "category", attrs: { href: "#" } },
-                          [_vm._v("Travel")]
-                        ),
-                        _vm._v(
-                          "\n                                        —\n                                        "
-                        ),
-                        _c("span", { staticClass: "date" }, [
-                          _vm._v("July 2, 2020")
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("h2", { staticClass: "heading" }, [
-                        _c("a", { attrs: { href: "single.html" } }, [
-                          _vm._v(
-                            "Your most unhappy customers are\n                                            your greatest source of\n                                            learning."
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass: "post-author d-flex align-items-center",
-                          attrs: { href: "#" }
-                        },
-                        [
-                          _c("div", { staticClass: "author-pic" }, [
-                            _c("img", {
-                              attrs: {
-                                src: "images/person_1.jpg",
-                                alt: "Image"
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "text" }, [
-                            _c("strong", [_vm._v("Sergy Campbell")]),
-                            _vm._v(" "),
-                            _c("span", [
-                              _vm._v(
-                                "Author, 26 published\n                                                post"
-                              )
-                            ])
-                          ])
-                        ]
-                      )
-                    ])
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-lg-12" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "post-entry d-md-flex xsmall-horizontal mb-5"
-                  },
-                  [
-                    _c(
-                      "div",
-                      { staticClass: "me-md-3 thumbnail mb-3 mb-md-0" },
-                      [
-                        _c("img", {
-                          staticClass: "img-fluid",
-                          attrs: { src: "images/img_4.jpg", alt: "Image" }
-                        })
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "content" }, [
-                      _c("div", { staticClass: "post-meta mb-1" }, [
-                        _c(
-                          "a",
-                          { staticClass: "category", attrs: { href: "#" } },
-                          [_vm._v("Business")]
-                        ),
-                        _vm._v(",\n                                        "),
-                        _c(
-                          "a",
-                          { staticClass: "category", attrs: { href: "#" } },
-                          [_vm._v("Travel")]
-                        ),
-                        _vm._v(
-                          "\n                                        —\n                                        "
-                        ),
-                        _c("span", { staticClass: "date" }, [
-                          _vm._v("July 2, 2020")
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("h2", { staticClass: "heading" }, [
-                        _c("a", { attrs: { href: "single.html" } }, [
-                          _vm._v(
-                            "Your most unhappy customers are\n                                            your greatest source of\n                                            learning."
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass: "post-author d-flex align-items-center",
-                          attrs: { href: "#" }
-                        },
-                        [
-                          _c("div", { staticClass: "author-pic" }, [
-                            _c("img", {
-                              attrs: {
-                                src: "images/person_1.jpg",
-                                alt: "Image"
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "text" }, [
-                            _c("strong", [_vm._v("Sergy Campbell")]),
-                            _vm._v(" "),
-                            _c("span", [
-                              _vm._v(
-                                "Author, 26 published\n                                                post"
-                              )
-                            ])
-                          ])
-                        ]
-                      )
-                    ])
-                  ]
-                )
-              ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-lg-6" }, [
-            _c("div", { staticClass: "row mb-4" }, [
-              _c("div", { staticClass: "col-12" }, [
-                _c("h2", { staticClass: "h4 fw-bold" }, [_vm._v("Business")])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "row justify-content-center" }, [
-              _c("div", { staticClass: "col-lg-12" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "post-entry d-md-flex xsmall-horizontal mb-5"
-                  },
-                  [
-                    _c(
-                      "div",
-                      { staticClass: "me-md-3 thumbnail mb-3 mb-md-0" },
-                      [
-                        _c("img", {
-                          staticClass: "img-fluid",
-                          attrs: { src: "images/img_2.jpg", alt: "Image" }
-                        })
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "content" }, [
-                      _c("div", { staticClass: "post-meta mb-1" }, [
-                        _c(
-                          "a",
-                          { staticClass: "category", attrs: { href: "#" } },
-                          [_vm._v("Business")]
-                        ),
-                        _vm._v(",\n                                        "),
-                        _c(
-                          "a",
-                          { staticClass: "category", attrs: { href: "#" } },
-                          [_vm._v("Travel")]
-                        ),
-                        _vm._v(
-                          "\n                                        —\n                                        "
-                        ),
-                        _c("span", { staticClass: "date" }, [
-                          _vm._v("July 2, 2020")
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("h2", { staticClass: "heading" }, [
-                        _c("a", { attrs: { href: "single.html" } }, [
-                          _vm._v(
-                            "Your most unhappy customers are\n                                            your greatest source of\n                                            learning."
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass: "post-author d-flex align-items-center",
-                          attrs: { href: "#" }
-                        },
-                        [
-                          _c("div", { staticClass: "author-pic" }, [
-                            _c("img", {
-                              attrs: {
-                                src: "images/person_1.jpg",
-                                alt: "Image"
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "text" }, [
-                            _c("strong", [_vm._v("Sergy Campbell")]),
-                            _vm._v(" "),
-                            _c("span", [
-                              _vm._v(
-                                "Author, 26 published\n                                                post"
-                              )
-                            ])
-                          ])
-                        ]
-                      )
-                    ])
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-lg-12" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "post-entry d-md-flex xsmall-horizontal mb-5"
-                  },
-                  [
-                    _c(
-                      "div",
-                      { staticClass: "me-md-3 thumbnail mb-3 mb-md-0" },
-                      [
-                        _c("img", {
-                          staticClass: "img-fluid",
-                          attrs: { src: "images/img_3.jpg", alt: "Image" }
-                        })
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "content" }, [
-                      _c("div", { staticClass: "post-meta mb-1" }, [
-                        _c(
-                          "a",
-                          { staticClass: "category", attrs: { href: "#" } },
-                          [_vm._v("Business")]
-                        ),
-                        _vm._v(",\n                                        "),
-                        _c(
-                          "a",
-                          { staticClass: "category", attrs: { href: "#" } },
-                          [_vm._v("Travel")]
-                        ),
-                        _vm._v(
-                          "\n                                        —\n                                        "
-                        ),
-                        _c("span", { staticClass: "date" }, [
-                          _vm._v("July 2, 2020")
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("h2", { staticClass: "heading" }, [
-                        _c("a", { attrs: { href: "single.html" } }, [
-                          _vm._v(
-                            "Your most unhappy customers are\n                                            your greatest source of\n                                            learning."
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass: "post-author d-flex align-items-center",
-                          attrs: { href: "#" }
-                        },
-                        [
-                          _c("div", { staticClass: "author-pic" }, [
-                            _c("img", {
-                              attrs: {
-                                src: "images/person_1.jpg",
-                                alt: "Image"
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "text" }, [
-                            _c("strong", [_vm._v("Sergy Campbell")]),
-                            _vm._v(" "),
-                            _c("span", [
-                              _vm._v(
-                                "Author, 26 published\n                                                post"
-                              )
-                            ])
-                          ])
-                        ]
-                      )
-                    ])
-                  ]
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-lg-12" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass: "post-entry d-md-flex xsmall-horizontal mb-5"
-                  },
-                  [
-                    _c(
-                      "div",
-                      { staticClass: "me-md-3 thumbnail mb-3 mb-md-0" },
-                      [
-                        _c("img", {
-                          staticClass: "img-fluid",
-                          attrs: { src: "images/img_4.jpg", alt: "Image" }
-                        })
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "content" }, [
-                      _c("div", { staticClass: "post-meta mb-1" }, [
-                        _c(
-                          "a",
-                          { staticClass: "category", attrs: { href: "#" } },
-                          [_vm._v("Business")]
-                        ),
-                        _vm._v(",\n                                        "),
-                        _c(
-                          "a",
-                          { staticClass: "category", attrs: { href: "#" } },
-                          [_vm._v("Travel")]
-                        ),
-                        _vm._v(
-                          "\n                                        —\n                                        "
-                        ),
-                        _c("span", { staticClass: "date" }, [
-                          _vm._v("July 2, 2020")
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("h2", { staticClass: "heading" }, [
-                        _c("a", { attrs: { href: "single.html" } }, [
-                          _vm._v(
-                            "Your most unhappy customers are\n                                            your greatest source of\n                                            learning."
-                          )
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        {
-                          staticClass: "post-author d-flex align-items-center",
-                          attrs: { href: "#" }
-                        },
-                        [
-                          _c("div", { staticClass: "author-pic" }, [
-                            _c("img", {
-                              attrs: {
-                                src: "images/person_1.jpg",
-                                alt: "Image"
-                              }
-                            })
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "text" }, [
-                            _c("strong", [_vm._v("Sergy Campbell")]),
-                            _vm._v(" "),
-                            _c("span", [
-                              _vm._v(
-                                "Author, 26 published\n                                                post"
-                              )
-                            ])
-                          ])
-                        ]
-                      )
-                    ])
-                  ]
-                )
-              ])
-            ])
-          ])
-        ])
+    return _c("div", { staticClass: "row justify-content-center mb-5" }, [
+      _c("div", { staticClass: "col-lg-7 text-center" }, [
+        _c("h2", { staticClass: "heading" }, [_vm._v("Most Popular Posts")])
       ])
     ])
   },
@@ -85313,6 +85245,82 @@ var staticRenderFns = [
               staticClass: "btn btn-dark",
               attrs: { type: "submit", value: "Subscribe" }
             })
+          ])
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "site-footer" }, [
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "row justify-content-center copyright" }, [
+          _c("div", { staticClass: "col-lg-7 text-center" }, [
+            _c("div", { staticClass: "widget" }, [
+              _c("ul", { staticClass: "social list-unstyled" }, [
+                _c("li", [
+                  _c("a", { attrs: { href: "#" } }, [
+                    _c("span", { staticClass: "icon-facebook" })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("li", [
+                  _c("a", { attrs: { href: "#" } }, [
+                    _c("span", { staticClass: "icon-twitter" })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("li", [
+                  _c("a", { attrs: { href: "#" } }, [
+                    _c("span", { staticClass: "icon-linkedin" })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("li", [
+                  _c("a", { attrs: { href: "#" } }, [
+                    _c("span", { staticClass: "icon-youtube-play" })
+                  ])
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "widget" }, [
+              _c("p", [
+                _vm._v(
+                  "\n                            Copyright © 2021 All rights reserved | This\n                            template is made with\n                            "
+                ),
+                _c("i", {
+                  staticClass: "icon-heart text-danger",
+                  attrs: { "aria-hidden": "true" }
+                }),
+                _vm._v(
+                  "\n                            by\n                            "
+                ),
+                _c(
+                  "a",
+                  {
+                    attrs: {
+                      href: "https://colorlib.com/",
+                      target: "_blank",
+                      rel: "nofollow noopener"
+                    }
+                  },
+                  [_vm._v("Colorlib")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "d-block" }, [
+                _c("a", { staticClass: "m-2", attrs: { href: "#" } }, [
+                  _vm._v("Terms & Conditions")
+                ]),
+                _vm._v("/\n                            "),
+                _c("a", { staticClass: "m-2", attrs: { href: "#" } }, [
+                  _vm._v("Privacy Policy")
+                ])
+              ])
+            ])
           ])
         ])
       ])
@@ -85534,135 +85542,245 @@ var render = function() {
                         [
                           _vm._m(0),
                           _vm._v(" "),
-                          _c("div", { staticStyle: { float: "right" } }, [
-                            _vm.user.name
-                              ? _c("li", { staticClass: "dropdown" }, [
-                                  _c(
-                                    "div",
-                                    {
-                                      attrs: {
-                                        alt: "",
-                                        id: "dropdownMenuButton",
-                                        "data-toggle": "dropdown",
-                                        "aria-haspopup": "true",
-                                        "aria-expanded": "false"
-                                      }
-                                    },
-                                    [
-                                      _c("img", {
-                                        staticStyle: {
-                                          width: "30px",
-                                          "border-radius": "50%",
-                                          border: "1px solid #303030",
-                                          height: "30px",
-                                          "object-fit": "cover"
-                                        },
-                                        attrs: { src: _vm.user.profilePic }
-                                      })
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "div",
-                                    {
-                                      staticClass: "dropdown-menu",
-                                      attrs: {
-                                        "aria-labelledby": "dropdownMenuButton"
-                                      }
-                                    },
-                                    [
-                                      _vm.user.name
-                                        ? _c(
-                                            "div",
-                                            { staticClass: "dropdown-item" },
-                                            [
-                                              _c(
-                                                "router-link",
-                                                {
-                                                  staticStyle: { padding: "0" },
-                                                  attrs: {
-                                                    to: {
-                                                      name: "profile",
-                                                      params: {
-                                                        username: _vm.user.name
+                          _c(
+                            "div",
+                            {
+                              staticStyle: {
+                                float: "right align-items: center",
+                                display: "inline-flex"
+                              }
+                            },
+                            [
+                              _vm.user.name
+                                ? _c("li", { staticClass: "dropdown" }, [
+                                    _c(
+                                      "div",
+                                      {
+                                        attrs: {
+                                          alt: "",
+                                          id: "dropdownMenuButton",
+                                          "data-toggle": "dropdown",
+                                          "aria-haspopup": "true",
+                                          "aria-expanded": "false"
+                                        }
+                                      },
+                                      [
+                                        _c("img", {
+                                          staticStyle: {
+                                            width: "30px",
+                                            "border-radius": "50%",
+                                            border: "1px solid #303030",
+                                            height: "30px",
+                                            "object-fit": "cover",
+                                            cursor: "pointer"
+                                          },
+                                          attrs: { src: _vm.user.profilePic }
+                                        })
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass: "dropdown-menu",
+                                        attrs: {
+                                          "aria-labelledby":
+                                            "dropdownMenuButton"
+                                        }
+                                      },
+                                      [
+                                        _vm.user.name
+                                          ? _c(
+                                              "div",
+                                              { staticClass: "dropdown-item" },
+                                              [
+                                                _c(
+                                                  "router-link",
+                                                  {
+                                                    staticStyle: {
+                                                      padding: "0"
+                                                    },
+                                                    attrs: {
+                                                      to: {
+                                                        name: "profile",
+                                                        params: {
+                                                          username:
+                                                            _vm.user.name
+                                                        }
                                                       }
                                                     }
-                                                  }
-                                                },
-                                                [
-                                                  _vm._v(
-                                                    "\n                                                    " +
-                                                      _vm._s(_vm.user.name) +
-                                                      "\n                                                "
-                                                  )
-                                                ]
-                                              )
-                                            ],
-                                            1
-                                          )
-                                        : _vm._e(),
-                                      _vm._v(" "),
-                                      _vm.user.name
-                                        ? _c(
-                                            "div",
-                                            { staticClass: "dropdown-item" },
-                                            [
-                                              _c(
-                                                "span",
-                                                {
-                                                  staticStyle: {
-                                                    cursor: "pointer",
-                                                    color: "#303030"
                                                   },
-                                                  on: { click: _vm.onShowModal }
-                                                },
-                                                [_vm._v("Add a post")]
-                                              )
-                                            ]
-                                          )
-                                        : _vm._e(),
-                                      _vm._v(" "),
-                                      _c(
-                                        "div",
-                                        { staticClass: "dropdown-item" },
-                                        [
-                                          _c(
-                                            "router-link",
-                                            {
-                                              staticStyle: { padding: "0" },
-                                              attrs: {
-                                                user: _vm.user,
-                                                to: "/logout"
-                                              }
-                                            },
-                                            [
-                                              _vm._v(
-                                                "Logout\n                                                "
-                                              )
-                                            ]
-                                          )
-                                        ],
-                                        1
-                                      )
-                                    ]
-                                  )
-                                ])
-                              : _vm._e(),
-                            _vm._v(" "),
-                            !_vm.user.name
-                              ? _c(
-                                  "li",
-                                  [
-                                    _c(
-                                      "router-link",
-                                      { attrs: { to: "/login" } },
-                                      [_vm._v("Login")]
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                                    " +
+                                                        _vm._s(_vm.user.name) +
+                                                        "\n                                                "
+                                                    )
+                                                  ]
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        _vm.user.name
+                                          ? _c(
+                                              "div",
+                                              { staticClass: "dropdown-item" },
+                                              [
+                                                _c(
+                                                  "span",
+                                                  {
+                                                    staticStyle: {
+                                                      cursor: "pointer",
+                                                      color: "#303030"
+                                                    },
+                                                    on: {
+                                                      click: _vm.onShowModal
+                                                    }
+                                                  },
+                                                  [_vm._v("Add a post")]
+                                                )
+                                              ]
+                                            )
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        _c(
+                                          "div",
+                                          { staticClass: "dropdown-item" },
+                                          [
+                                            _c(
+                                              "router-link",
+                                              {
+                                                staticStyle: { padding: "0" },
+                                                attrs: {
+                                                  user: _vm.user,
+                                                  to: "/logout"
+                                                }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "Logout\n                                                "
+                                                )
+                                              ]
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ]
                                     )
-                                  ],
-                                  1
-                                )
-                              : _vm._e()
-                          ])
+                                  ])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.user.name
+                                ? _c("li", { staticClass: "dropdown" }, [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticStyle: { "font-size": "22px" },
+                                        attrs: {
+                                          alt: "",
+                                          id: "dropdownMenuButton",
+                                          "data-toggle": "dropdown",
+                                          "aria-haspopup": "true",
+                                          "aria-expanded": "false"
+                                        }
+                                      },
+                                      [
+                                        _c("i", {
+                                          staticClass:
+                                            "far fa-bell text-dark ms-2"
+                                        }),
+                                        _vm._v(" "),
+                                        _c(
+                                          "span",
+                                          {
+                                            staticClass:
+                                              "bg-dark text-light rounded-circle position-absolute",
+                                            staticStyle: {
+                                              "font-size": "11px",
+                                              padding: "2px",
+                                              width: "17px",
+                                              height: "17px",
+                                              "text-align": "center",
+                                              right: "-6px",
+                                              cursor: "pointer"
+                                            }
+                                          },
+                                          [_vm._v(_vm._s(_vm.nots.length))]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass: "dropdown-menu",
+                                        staticStyle: {
+                                          left: "-122px!important"
+                                        },
+                                        attrs: {
+                                          "aria-labelledby":
+                                            "dropdownMenuButton"
+                                        }
+                                      },
+                                      [
+                                        _vm.user.name
+                                          ? _c(
+                                              "div",
+                                              { staticClass: "dropdown-item" },
+                                              _vm._l(_vm.nots, function(not) {
+                                                return _c(
+                                                  "router-link",
+                                                  {
+                                                    key: not.id,
+                                                    staticStyle: {
+                                                      padding: "0"
+                                                    },
+                                                    attrs: {
+                                                      to: {
+                                                        name: "post",
+                                                        params: {
+                                                          slug:
+                                                            not.data.post_slug
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  [
+                                                    _vm._v(
+                                                      "\n                                                    " +
+                                                        _vm._s(
+                                                          not.data.user_name
+                                                        ) +
+                                                        "\n                                                    liked your post\n                                                "
+                                                    )
+                                                  ]
+                                                )
+                                              }),
+                                              1
+                                            )
+                                          : _vm._e()
+                                      ]
+                                    )
+                                  ])
+                                : _vm._e(),
+                              _vm._v(" "),
+                              !_vm.user.name
+                                ? _c(
+                                    "li",
+                                    [
+                                      _c(
+                                        "router-link",
+                                        { attrs: { to: "/login" } },
+                                        [_vm._v("Login")]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                : _vm._e()
+                            ]
+                          )
                         ]
                       ),
                       _vm._v(" "),
@@ -87104,11 +87222,11 @@ var render = function() {
                                     [
                                       _vm._l(
                                         _vm.post.likes.slice(0, 1),
-                                        function(user) {
-                                          return _c("span", { key: user.id }, [
+                                        function(like) {
+                                          return _c("span", { key: like.id }, [
                                             _vm._v(
                                               "\n                                                " +
-                                                _vm._s(user.username) +
+                                                _vm._s(like.user.name) +
                                                 "\n                                            "
                                             )
                                           ])
@@ -87130,7 +87248,9 @@ var render = function() {
                                                 _vm._v(
                                                   "\n                                                    and\n                                                    " +
                                                     _vm._s(
-                                                      _vm.post.likes.length - 1
+                                                      _vm.post.likes.length &&
+                                                        _vm.post.likes.length -
+                                                          1
                                                     ) +
                                                     "\n                                                    other\n                                                "
                                                 )
@@ -87155,32 +87275,43 @@ var render = function() {
                           staticStyle: { background: "#000000bd" },
                           attrs: { "aria-labelledby": "dropdownMenuButton" }
                         },
-                        _vm._l(_vm.post.likes, function(user) {
+                        _vm._l(_vm.post.likes, function(like) {
                           return _c(
                             "div",
                             {
-                              key: user.id,
-                              staticClass: "dropdown-item",
+                              key: like.id,
+                              staticClass: "profile-dropdown-item p-1",
                               staticStyle: { cursor: "pointer", color: "white" }
                             },
                             [
                               _c(
                                 "router-link",
                                 {
-                                  staticStyle: { padding: "0", color: "white" },
+                                  staticStyle: {
+                                    padding: "0px",
+                                    color: "white"
+                                  },
                                   attrs: {
                                     to: {
                                       name: "profile",
                                       params: {
-                                        username: user.username
+                                        username: like.user.name
                                       }
                                     }
                                   }
                                 },
                                 [
+                                  _c("img", {
+                                    staticClass:
+                                      "author-pic img-fluid rounded-circle mx-auto",
+                                    attrs: {
+                                      src: like.user.profilePic,
+                                      alt: "Image"
+                                    }
+                                  }),
                                   _vm._v(
                                     "\n                                            " +
-                                      _vm._s(user.username) +
+                                      _vm._s(like.user.name) +
                                       "\n                                        "
                                   )
                                 ]
@@ -87481,7 +87612,9 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _vm._m(2)
+    _vm._m(2),
+    _vm._v(" "),
+    _vm._m(3)
   ])
 }
 var staticRenderFns = [
@@ -87568,6 +87701,82 @@ var staticRenderFns = [
               staticClass: "btn btn-dark",
               attrs: { type: "submit", value: "Subscribe" }
             })
+          ])
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "site-footer" }, [
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "row justify-content-center copyright" }, [
+          _c("div", { staticClass: "col-lg-7 text-center" }, [
+            _c("div", { staticClass: "widget" }, [
+              _c("ul", { staticClass: "social list-unstyled" }, [
+                _c("li", [
+                  _c("a", { attrs: { href: "#" } }, [
+                    _c("span", { staticClass: "icon-facebook" })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("li", [
+                  _c("a", { attrs: { href: "#" } }, [
+                    _c("span", { staticClass: "icon-twitter" })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("li", [
+                  _c("a", { attrs: { href: "#" } }, [
+                    _c("span", { staticClass: "icon-linkedin" })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("li", [
+                  _c("a", { attrs: { href: "#" } }, [
+                    _c("span", { staticClass: "icon-youtube-play" })
+                  ])
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "widget" }, [
+              _c("p", [
+                _vm._v(
+                  "\n                            Copyright © 2021 All rights reserved | This\n                            template is made with\n                            "
+                ),
+                _c("i", {
+                  staticClass: "icon-heart text-danger",
+                  attrs: { "aria-hidden": "true" }
+                }),
+                _vm._v(
+                  "\n                            by\n                            "
+                ),
+                _c(
+                  "a",
+                  {
+                    attrs: {
+                      href: "https://colorlib.com/",
+                      target: "_blank",
+                      rel: "nofollow noopener"
+                    }
+                  },
+                  [_vm._v("Colorlib")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "d-block" }, [
+                _c("a", { staticClass: "m-2", attrs: { href: "#" } }, [
+                  _vm._v("Terms & Conditions")
+                ]),
+                _vm._v("/\n                            "),
+                _c("a", { staticClass: "m-2", attrs: { href: "#" } }, [
+                  _vm._v("Privacy Policy")
+                ])
+              ])
+            ])
           ])
         ])
       ])
@@ -88475,7 +88684,7 @@ var staticRenderFns = [
           _c(
             "button",
             {
-              staticClass: "nav-link active",
+              staticClass: "nav-link active text-secondary",
               attrs: {
                 id: "nav-posts-tab",
                 "data-bs-toggle": "tab",
@@ -88496,7 +88705,7 @@ var staticRenderFns = [
           _c(
             "button",
             {
-              staticClass: "nav-link",
+              staticClass: "nav-link text-secondary",
               attrs: {
                 id: "nav-followings-tab",
                 "data-bs-toggle": "tab",
@@ -88517,7 +88726,7 @@ var staticRenderFns = [
           _c(
             "button",
             {
-              staticClass: "nav-link",
+              staticClass: "nav-link text-secondary",
               attrs: {
                 id: "nav-contact-tab",
                 "data-bs-toggle": "tab",
