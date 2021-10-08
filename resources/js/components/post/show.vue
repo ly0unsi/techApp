@@ -441,6 +441,10 @@ export default {
     },
     computed: {},
     methods: {
+        async getNots() {
+            const res = await axios.get("/api/getnots/");
+            this.nots = res.data;
+        },
         async getUser() {
             try {
                 const res = await axios.get("/api/user");

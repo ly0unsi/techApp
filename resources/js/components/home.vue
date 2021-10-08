@@ -887,6 +887,10 @@ export default {
         };
     },
     methods: {
+        async getNots() {
+            const res = await axios.get("/api/getnots/");
+            this.nots = res.data;
+        },
         onChangePage(pageOfPosts) {
             // update page of items
             this.pageOfPosts = pageOfPosts;

@@ -47,7 +47,8 @@ class postLiked extends Notification
     {
         return [
             'post_slug' => $this->post->slug,
-            'user_name' => $this->user->name
+            'user_name' => $this->user->name,
+            'user_pic' => $this->user->profilePic
         ];
     }
 }

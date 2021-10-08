@@ -3674,11 +3674,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   methods: {
-    onChangePage: function onChangePage(pageOfPosts) {
-      // update page of items
-      this.pageOfPosts = pageOfPosts;
-    },
-    getUser: function getUser() {
+    getNots: function getNots() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
@@ -3687,30 +3683,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.prev = 0;
-                _context.next = 3;
-                return axios.get("/api/user");
+                _context.next = 2;
+                return axios.get("/api/getnots/");
 
-              case 3:
+              case 2:
                 res = _context.sent;
-                _this.user = res.data;
-                _context.next = 10;
-                break;
+                _this.nots = res.data;
 
-              case 7:
-                _context.prev = 7;
-                _context.t0 = _context["catch"](0);
-                console.log(_context.t0);
-
-              case 10:
+              case 4:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 7]]);
+        }, _callee);
       }))();
     },
-    getPosts: function getPosts() {
+    onChangePage: function onChangePage(pageOfPosts) {
+      // update page of items
+      this.pageOfPosts = pageOfPosts;
+    },
+    getUser: function getUser() {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -3719,22 +3711,54 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
-                return axios.get("/api/posts/");
+                _context2.prev = 0;
+                _context2.next = 3;
+                return axios.get("/api/user");
 
-              case 2:
+              case 3:
                 res = _context2.sent;
-                _this2.trend = res.data.trend;
-                _this2.mostLiked = res.data.mostLiked;
-                _this2.followingsPosts = res.data.followingsPosts;
-                _this2.categories = res.data.catPosts;
+                _this2.user = res.data;
+                _context2.next = 10;
+                break;
 
               case 7:
+                _context2.prev = 7;
+                _context2.t0 = _context2["catch"](0);
+                console.log(_context2.t0);
+
+              case 10:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2);
+        }, _callee2, null, [[0, 7]]);
+      }))();
+    },
+    getPosts: function getPosts() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return axios.get("/api/posts/");
+
+              case 2:
+                res = _context3.sent;
+                _this3.trend = res.data.trend;
+                _this3.mostLiked = res.data.mostLiked;
+                _this3.followingsPosts = res.data.followingsPosts;
+                _this3.categories = res.data.catPosts;
+
+              case 7:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
       }))();
     },
     moment: function (_moment) {
@@ -3752,12 +3776,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     })
   },
   created: function created() {
-    var _this3 = this;
+    var _this4 = this;
 
     this.getPosts();
     this.getUser();
     Reload.$on("postInserted", function () {
-      _this3.getPosts();
+      _this4.getPosts();
     });
   }
 });
@@ -4082,6 +4106,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -4103,28 +4147,48 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   methods: {
-    getNots: function getNots() {
-      var _this = this;
-
+    markAsRead: function markAsRead(id) {
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
-        var res;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios.get("/api/getnots/");
+                return axios.post("/api/markasread/" + id);
 
               case 2:
-                res = _context.sent;
-                _this.nots = res.data;
+                Reload.$emit("profileChanged");
 
-              case 4:
+              case 3:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
+      }))();
+    },
+    getNots: function getNots() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios.get("/api/getnots/");
+
+              case 2:
+                res = _context2.sent;
+                _this.nots = res.data;
+
+              case 4:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
       }))();
     },
     onShowModal: function onShowModal() {
@@ -4139,61 +4203,37 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     getUser: function getUser() {
       var _this2 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var res;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.prev = 0;
-                _context2.next = 3;
-                return axios.get("/api/user");
-
-              case 3:
-                res = _context2.sent;
-                _this2.user = res.data;
-                _context2.next = 10;
-                break;
-
-              case 7:
-                _context2.prev = 7;
-                _context2.t0 = _context2["catch"](0);
-                console.log(_context2.t0);
-
-              case 10:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, null, [[0, 7]]);
-      }))();
-    },
-    getCategories: function getCategories() {
-      var _this3 = this;
-
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
         var res;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _context3.next = 2;
-                return axios.get("/api/categories/");
+                _context3.prev = 0;
+                _context3.next = 3;
+                return axios.get("/api/user");
 
-              case 2:
+              case 3:
                 res = _context3.sent;
-                _this3.categories = res.data;
+                _this2.user = res.data;
+                _context3.next = 10;
+                break;
 
-              case 4:
+              case 7:
+                _context3.prev = 7;
+                _context3.t0 = _context3["catch"](0);
+                console.log(_context3.t0);
+
+              case 10:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3);
+        }, _callee3, null, [[0, 7]]);
       }))();
     },
-    getPosts: function getPosts() {
-      var _this4 = this;
+    getCategories: function getCategories() {
+      var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
         var res;
@@ -4202,11 +4242,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context4.prev = _context4.next) {
               case 0:
                 _context4.next = 2;
-                return axios.get("/api/posts/");
+                return axios.get("/api/categories/");
 
               case 2:
                 res = _context4.sent;
-                _this4.posts = res.data.trend;
+                _this3.categories = res.data;
 
               case 4:
               case "end":
@@ -4214,6 +4254,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             }
           }
         }, _callee4);
+      }))();
+    },
+    getPosts: function getPosts() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.next = 2;
+                return axios.get("/api/posts/");
+
+              case 2:
+                res = _context5.sent;
+                _this4.posts = res.data.trend;
+
+              case 4:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
       }))();
     },
     closeModal: function closeModal() {
@@ -4261,15 +4325,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     this.getUser();
     Reload.$on("logout", function () {
       _this7.getUser();
+
+      _this7.getNots();
     });
     Reload.$on("login", function () {
       _this7.getUser();
+
+      _this7.getNots();
     });
     this.getCategories();
     this.getPosts();
     this.handleProgressBar();
     Reload.$on("profileChanged", function () {
       _this7.getUser();
+
+      _this7.getNots();
     });
     this.getNots();
   }
@@ -5532,7 +5602,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   computed: {},
   methods: {
-    getUser: function getUser() {
+    getNots: function getNots() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
@@ -5541,86 +5611,110 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.prev = 0;
-                _context.next = 3;
-                return axios.get("/api/user");
+                _context.next = 2;
+                return axios.get("/api/getnots/");
 
-              case 3:
+              case 2:
                 res = _context.sent;
-                _this.user = res.data;
-                _context.next = 10;
-                break;
+                _this.nots = res.data;
 
-              case 7:
-                _context.prev = 7;
-                _context.t0 = _context["catch"](0);
-                console.log(_context.t0);
-
-              case 10:
+              case 4:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 7]]);
+        }, _callee);
       }))();
     },
-    likePost: function likePost(postId) {
+    getUser: function getUser() {
+      var _this2 = this;
+
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
         var res;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
-                return axios.post("/api/like/" + postId);
+                _context2.prev = 0;
+                _context2.next = 3;
+                return axios.get("/api/user");
 
-              case 2:
+              case 3:
                 res = _context2.sent;
-                Reload.$emit("like");
+                _this2.user = res.data;
+                _context2.next = 10;
+                break;
 
-              case 4:
+              case 7:
+                _context2.prev = 7;
+                _context2.t0 = _context2["catch"](0);
+                console.log(_context2.t0);
+
+              case 10:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2);
+        }, _callee2, null, [[0, 7]]);
       }))();
     },
-    getPost: function getPost() {
-      var _this2 = this;
-
+    likePost: function likePost(postId) {
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
-        var slug, res;
+        var res;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _context3.prev = 0;
-                slug = _this2.$route.params.slug;
-                _context3.next = 4;
-                return axios.get("/api/post/" + slug);
+                _context3.next = 2;
+                return axios.post("/api/like/" + postId);
+
+              case 2:
+                res = _context3.sent;
+                Reload.$emit("like");
 
               case 4:
-                res = _context3.sent;
-                _this2.post = res.data.post;
-                _this2.sameCat = res.data.sameCat;
-                _this2.isLiked = res.data.isLiked;
-                _this2.nextPost = res.data.nextPost;
-                _this2.prevPost = res.data.prevPost;
-                _context3.next = 15;
-                break;
-
-              case 12:
-                _context3.prev = 12;
-                _context3.t0 = _context3["catch"](0);
-                console.log(_context3.t0);
-
-              case 15:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 12]]);
+        }, _callee3);
+      }))();
+    },
+    getPost: function getPost() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        var slug, res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.prev = 0;
+                slug = _this3.$route.params.slug;
+                _context4.next = 4;
+                return axios.get("/api/post/" + slug);
+
+              case 4:
+                res = _context4.sent;
+                _this3.post = res.data.post;
+                _this3.sameCat = res.data.sameCat;
+                _this3.isLiked = res.data.isLiked;
+                _this3.nextPost = res.data.nextPost;
+                _this3.prevPost = res.data.prevPost;
+                _context4.next = 15;
+                break;
+
+              case 12:
+                _context4.prev = 12;
+                _context4.t0 = _context4["catch"](0);
+                console.log(_context4.t0);
+
+              case 15:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, null, [[0, 12]]);
       }))();
     },
     moment: function (_moment) {
@@ -5638,11 +5732,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     })
   },
   created: function created() {
-    var _this3 = this;
+    var _this4 = this;
 
     this.getPost();
     Reload.$on("like", function () {
-      _this3.getPost();
+      _this4.getPost();
     });
     this.getUser();
   },
@@ -85692,48 +85786,59 @@ var render = function() {
                                             "far fa-bell text-dark ms-2"
                                         }),
                                         _vm._v(" "),
-                                        _c(
-                                          "span",
-                                          {
-                                            staticClass:
-                                              "bg-dark text-light rounded-circle position-absolute",
-                                            staticStyle: {
-                                              "font-size": "11px",
-                                              padding: "2px",
-                                              width: "17px",
-                                              height: "17px",
-                                              "text-align": "center",
-                                              right: "-6px",
-                                              cursor: "pointer"
-                                            }
-                                          },
-                                          [_vm._v(_vm._s(_vm.nots.length))]
-                                        )
+                                        Object.keys(_vm.nots).length !== 0
+                                          ? _c(
+                                              "span",
+                                              {
+                                                staticClass:
+                                                  "bg-dark text-light rounded-circle position-absolute",
+                                                staticStyle: {
+                                                  "font-size": "11px",
+                                                  padding: "2px",
+                                                  width: "17px",
+                                                  height: "17px",
+                                                  "text-align": "center",
+                                                  right: "-6px",
+                                                  cursor: "pointer"
+                                                }
+                                              },
+                                              [_vm._v(_vm._s(_vm.nots.length))]
+                                            )
+                                          : _vm._e()
                                       ]
                                     ),
                                     _vm._v(" "),
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass: "dropdown-menu",
-                                        staticStyle: {
-                                          left: "-122px!important"
-                                        },
-                                        attrs: {
-                                          "aria-labelledby":
-                                            "dropdownMenuButton"
-                                        }
-                                      },
-                                      [
-                                        _vm.user.name
-                                          ? _c(
+                                    Object.keys(_vm.nots).length !== 0
+                                      ? _c(
+                                          "div",
+                                          {
+                                            staticClass:
+                                              "dropdown-menu nots-dropdown",
+                                            attrs: {
+                                              "aria-labelledby":
+                                                "dropdownMenuButton"
+                                            }
+                                          },
+                                          _vm._l(_vm.nots, function(not) {
+                                            return _c(
                                               "div",
-                                              { staticClass: "dropdown-item" },
-                                              _vm._l(_vm.nots, function(not) {
-                                                return _c(
+                                              {
+                                                key: not.id,
+                                                staticClass:
+                                                  "dropdown-item bg-dark text-light",
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.markAsRead(
+                                                      not.id
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c(
                                                   "router-link",
                                                   {
-                                                    key: not.id,
+                                                    staticClass: "text-light",
                                                     staticStyle: {
                                                       padding: "0"
                                                     },
@@ -85748,6 +85853,20 @@ var render = function() {
                                                     }
                                                   },
                                                   [
+                                                    _c("img", {
+                                                      staticStyle: {
+                                                        width: "30px",
+                                                        "border-radius": "50%",
+                                                        border:
+                                                          "1px solid #303030",
+                                                        height: "30px",
+                                                        "object-fit": "cover"
+                                                      },
+                                                      attrs: {
+                                                        src: not.data.user_pic,
+                                                        alt: ""
+                                                      }
+                                                    }),
                                                     _vm._v(
                                                       "\n                                                    " +
                                                         _vm._s(
@@ -85757,12 +85876,13 @@ var render = function() {
                                                     )
                                                   ]
                                                 )
-                                              }),
+                                              ],
                                               1
                                             )
-                                          : _vm._e()
-                                      ]
-                                    )
+                                          }),
+                                          0
+                                        )
+                                      : _vm._e()
                                   ])
                                 : _vm._e(),
                               _vm._v(" "),

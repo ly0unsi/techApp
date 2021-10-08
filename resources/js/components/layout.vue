@@ -181,23 +181,31 @@
                                                 <span
                                                     class="bg-dark text-light rounded-circle position-absolute"
                                                     style="font-size: 11px;padding: 2px;width: 17px;height: 17px;text-align: center;right: -6px;cursor:pointer"
+                                                    v-if="
+                                                        Object.keys(nots)
+                                                            .length !== 0
+                                                    "
                                                     >{{ nots.length }}</span
                                                 >
                                             </div>
 
                                             <div
-                                                class="dropdown-menu"
+                                                class="dropdown-menu nots-dropdown"
                                                 aria-labelledby="dropdownMenuButton"
-                                                style="left:-122px!important"
+                                                v-if="
+                                                    Object.keys(nots).length !==
+                                                        0
+                                                "
                                             >
                                                 <div
-                                                    class="dropdown-item"
-                                                    v-if="user.name"
+                                                    class="dropdown-item bg-dark text-light"
+                                                    v-for="not in nots"
+                                                    :key="not.id"
+                                                    @click="markAsRead(not.id)"
                                                 >
                                                     <router-link
                                                         style="padding:0"
-                                                        v-for="not in nots"
-                                                        :key="not.id"
+                                                        class="text-light"
                                                         :to="{
                                                             name: 'post',
                                                             params: {
@@ -207,6 +215,18 @@
                                                             }
                                                         }"
                                                     >
+                                                        <img
+                                                            style="width: 30px;
+                                                                    border-radius: 50%;
+                                                                    border:1px solid #303030;
+                                                                    height: 30px;
+                                                                    object-fit: cover;"
+                                                            :src="
+                                                                not.data
+                                                                    .user_pic
+                                                            "
+                                                            alt=""
+                                                        />
                                                         {{ not.data.user_name }}
                                                         liked your post
                                                     </router-link>
@@ -316,6 +336,10 @@ export default {
         };
     },
     methods: {
+        async markAsRead(id) {
+            await axios.post("/api/markasread/" + id);
+            Reload.$emit("profileChanged");
+        },
         async getNots() {
             const res = await axios.get("/api/getnots/");
             this.nots = res.data;
@@ -382,15 +406,18 @@ export default {
         this.getUser();
         Reload.$on("logout", () => {
             this.getUser();
+            this.getNots();
         });
         Reload.$on("login", () => {
             this.getUser();
+            this.getNots();
         });
         this.getCategories();
         this.getPosts();
         this.handleProgressBar();
         Reload.$on("profileChanged", () => {
             this.getUser();
+            this.getNots();
         });
         this.getNots();
     }

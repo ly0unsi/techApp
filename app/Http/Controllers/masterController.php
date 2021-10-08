@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 
+use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Auth;
 
 class masterController extends Controller
@@ -34,5 +35,10 @@ class masterController extends Controller
     {
         $nots = auth()->user()->unreadNotifications;
         return response()->json($nots);
+    }
+    public function markAsRead($notId)
+    {
+        $not = DatabaseNotification::find($notId);
+        $not->markAsRead();
     }
 }

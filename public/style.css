@@ -776,6 +776,11 @@ body {
     background-color: transparent;
     border: 0;
 }
+.nots-dropdown {
+    left: -85px !important;
+    border: none;
+    border-radius: 10px;
+}
 .dropdown-item:hover,
 .dropdown-item:focus {
     color: #1e2125 !important;
