@@ -766,12 +766,13 @@ body {
 .dropdown-item {
     display: block;
     width: 100%;
-    padding: 0.25rem 1rem;
+    padding: 5px 7px;
     clear: both;
     font-weight: 400;
     color: #212529;
     text-align: inherit;
     text-decoration: none;
+    border-radius: 6px;
     white-space: nowrap;
     background-color: transparent;
     border: 0;
@@ -779,7 +780,7 @@ body {
 .nots-dropdown {
     left: -85px !important;
     border: none;
-    border-radius: 10px;
+    border-radius: 10px !important;
 }
 .dropdown-item:hover,
 .dropdown-item:focus {

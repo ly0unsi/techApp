@@ -54,6 +54,7 @@ module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
     var requestData = config.data;
     var requestHeaders = config.headers;
+    var responseType = config.responseType;
 
     if (utils.isFormData(requestData)) {
       delete requestHeaders['Content-Type']; // Let the browser set it
@@ -74,23 +75,14 @@ module.exports = function xhrAdapter(config) {
     // Set the request timeout in MS
     request.timeout = config.timeout;
 
-    // Listen for ready state
-    request.onreadystatechange = function handleLoad() {
-      if (!request || request.readyState !== 4) {
+    function onloadend() {
+      if (!request) {
         return;
       }
-
-      // The request errored out and we didn't get a response, this will be
-      // handled by onerror instead
-      // With one exception: request that using file: protocol, most browsers
-      // will return status as 0 even though it's a successful request
-      if (request.status === 0 && !(request.responseURL && request.responseURL.indexOf('file:') === 0)) {
-        return;
-      }
-
       // Prepare the response
       var responseHeaders = 'getAllResponseHeaders' in request ? parseHeaders(request.getAllResponseHeaders()) : null;
-      var responseData = !config.responseType || config.responseType === 'text' ? request.responseText : request.response;
+      var responseData = !responseType || responseType === 'text' ||  responseType === 'json' ?
+        request.responseText : request.response;
       var response = {
         data: responseData,
         status: request.status,
@@ -104,7 +96,30 @@ module.exports = function xhrAdapter(config) {
 
       // Clean up request
       request = null;
-    };
+    }
+
+    if ('onloadend' in request) {
+      // Use onloadend if available
+      request.onloadend = onloadend;
+    } else {
+      // Listen for ready state to emulate onloadend
+      request.onreadystatechange = function handleLoad() {
+        if (!request || request.readyState !== 4) {
+          return;
+        }
+
+        // The request errored out and we didn't get a response, this will be
+        // handled by onerror instead
+        // With one exception: request that using file: protocol, most browsers
+        // will return status as 0 even though it's a successful request
+        if (request.status === 0 && !(request.responseURL && request.responseURL.indexOf('file:') === 0)) {
+          return;
+        }
+        // readystate handler is calling before onerror or ontimeout handlers,
+        // so we should call onloadend on the next 'tick'
+        setTimeout(onloadend);
+      };
+    }
 
     // Handle browser request cancellation (as opposed to a manual cancellation)
     request.onabort = function handleAbort() {
@@ -134,7 +149,10 @@ module.exports = function xhrAdapter(config) {
       if (config.timeoutErrorMessage) {
         timeoutErrorMessage = config.timeoutErrorMessage;
       }
-      reject(createError(timeoutErrorMessage, config, 'ECONNABORTED',
+      reject(createError(
+        timeoutErrorMessage,
+        config,
+        config.transitional && config.transitional.clarifyTimeoutError ? 'ETIMEDOUT' : 'ECONNABORTED',
         request));
 
       // Clean up request
@@ -174,16 +192,8 @@ module.exports = function xhrAdapter(config) {
     }
 
     // Add responseType to request if needed
-    if (config.responseType) {
-      try {
-        request.responseType = config.responseType;
-      } catch (e) {
-        // Expected DOMException thrown by browsers not compatible XMLHttpRequest Level 2.
-        // But, this can be suppressed for 'json' type as it can be parsed by default 'transformResponse' function.
-        if (config.responseType !== 'json') {
-          throw e;
-        }
-      }
+    if (responseType && responseType !== 'json') {
+      request.responseType = config.responseType;
     }
 
     // Handle progress if needed
@@ -417,7 +427,9 @@ var buildURL = __webpack_require__(/*! ../helpers/buildURL */ "./node_modules/ax
 var InterceptorManager = __webpack_require__(/*! ./InterceptorManager */ "./node_modules/axios/lib/core/InterceptorManager.js");
 var dispatchRequest = __webpack_require__(/*! ./dispatchRequest */ "./node_modules/axios/lib/core/dispatchRequest.js");
 var mergeConfig = __webpack_require__(/*! ./mergeConfig */ "./node_modules/axios/lib/core/mergeConfig.js");
+var validator = __webpack_require__(/*! ../helpers/validator */ "./node_modules/axios/lib/helpers/validator.js");
 
+var validators = validator.validators;
 /**
  * Create a new instance of Axios
  *
@@ -457,20 +469,71 @@ Axios.prototype.request = function request(config) {
     config.method = 'get';
   }
 
-  // Hook up interceptors middleware
-  var chain = [dispatchRequest, undefined];
-  var promise = Promise.resolve(config);
+  var transitional = config.transitional;
 
+  if (transitional !== undefined) {
+    validator.assertOptions(transitional, {
+      silentJSONParsing: validators.transitional(validators.boolean, '1.0.0'),
+      forcedJSONParsing: validators.transitional(validators.boolean, '1.0.0'),
+      clarifyTimeoutError: validators.transitional(validators.boolean, '1.0.0')
+    }, false);
+  }
+
+  // filter out skipped interceptors
+  var requestInterceptorChain = [];
+  var synchronousRequestInterceptors = true;
   this.interceptors.request.forEach(function unshiftRequestInterceptors(interceptor) {
-    chain.unshift(interceptor.fulfilled, interceptor.rejected);
+    if (typeof interceptor.runWhen === 'function' && interceptor.runWhen(config) === false) {
+      return;
+    }
+
+    synchronousRequestInterceptors = synchronousRequestInterceptors && interceptor.synchronous;
+
+    requestInterceptorChain.unshift(interceptor.fulfilled, interceptor.rejected);
   });
 
+  var responseInterceptorChain = [];
   this.interceptors.response.forEach(function pushResponseInterceptors(interceptor) {
-    chain.push(interceptor.fulfilled, interceptor.rejected);
+    responseInterceptorChain.push(interceptor.fulfilled, interceptor.rejected);
   });
 
-  while (chain.length) {
-    promise = promise.then(chain.shift(), chain.shift());
+  var promise;
+
+  if (!synchronousRequestInterceptors) {
+    var chain = [dispatchRequest, undefined];
+
+    Array.prototype.unshift.apply(chain, requestInterceptorChain);
+    chain = chain.concat(responseInterceptorChain);
+
+    promise = Promise.resolve(config);
+    while (chain.length) {
+      promise = promise.then(chain.shift(), chain.shift());
+    }
+
+    return promise;
+  }
+
+
+  var newConfig = config;
+  while (requestInterceptorChain.length) {
+    var onFulfilled = requestInterceptorChain.shift();
+    var onRejected = requestInterceptorChain.shift();
+    try {
+      newConfig = onFulfilled(newConfig);
+    } catch (error) {
+      onRejected(error);
+      break;
+    }
+  }
+
+  try {
+    promise = dispatchRequest(newConfig);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+
+  while (responseInterceptorChain.length) {
+    promise = promise.then(responseInterceptorChain.shift(), responseInterceptorChain.shift());
   }
 
   return promise;
@@ -532,10 +595,12 @@ function InterceptorManager() {
  *
  * @return {Number} An ID used to remove interceptor later
  */
-InterceptorManager.prototype.use = function use(fulfilled, rejected) {
+InterceptorManager.prototype.use = function use(fulfilled, rejected, options) {
   this.handlers.push({
     fulfilled: fulfilled,
-    rejected: rejected
+    rejected: rejected,
+    synchronous: options ? options.synchronous : false,
+    runWhen: options ? options.runWhen : null
   });
   return this.handlers.length - 1;
 };
@@ -668,7 +733,8 @@ module.exports = function dispatchRequest(config) {
   config.headers = config.headers || {};
 
   // Transform request data
-  config.data = transformData(
+  config.data = transformData.call(
+    config,
     config.data,
     config.headers,
     config.transformRequest
@@ -694,7 +760,8 @@ module.exports = function dispatchRequest(config) {
     throwIfCancellationRequested(config);
 
     // Transform response data
-    response.data = transformData(
+    response.data = transformData.call(
+      config,
       response.data,
       response.headers,
       config.transformResponse
@@ -707,7 +774,8 @@ module.exports = function dispatchRequest(config) {
 
       // Transform response data
       if (reason && reason.response) {
-        reason.response.data = transformData(
+        reason.response.data = transformData.call(
+          config,
           reason.response.data,
           reason.response.headers,
           config.transformResponse
@@ -919,6 +987,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/utils.js");
+var defaults = __webpack_require__(/*! ./../defaults */ "./node_modules/axios/lib/defaults.js");
 
 /**
  * Transform the data for a request or a response
@@ -929,9 +998,10 @@ var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/util
  * @returns {*} The resulting transformed data
  */
 module.exports = function transformData(data, headers, fns) {
+  var context = this || defaults;
   /*eslint no-param-reassign:0*/
   utils.forEach(fns, function transform(fn) {
-    data = fn(data, headers);
+    data = fn.call(context, data, headers);
   });
 
   return data;
@@ -952,6 +1022,7 @@ module.exports = function transformData(data, headers, fns) {
 
 var utils = __webpack_require__(/*! ./utils */ "./node_modules/axios/lib/utils.js");
 var normalizeHeaderName = __webpack_require__(/*! ./helpers/normalizeHeaderName */ "./node_modules/axios/lib/helpers/normalizeHeaderName.js");
+var enhanceError = __webpack_require__(/*! ./core/enhanceError */ "./node_modules/axios/lib/core/enhanceError.js");
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -975,12 +1046,35 @@ function getDefaultAdapter() {
   return adapter;
 }
 
+function stringifySafely(rawValue, parser, encoder) {
+  if (utils.isString(rawValue)) {
+    try {
+      (parser || JSON.parse)(rawValue);
+      return utils.trim(rawValue);
+    } catch (e) {
+      if (e.name !== 'SyntaxError') {
+        throw e;
+      }
+    }
+  }
+
+  return (encoder || JSON.stringify)(rawValue);
+}
+
 var defaults = {
+
+  transitional: {
+    silentJSONParsing: true,
+    forcedJSONParsing: true,
+    clarifyTimeoutError: false
+  },
+
   adapter: getDefaultAdapter(),
 
   transformRequest: [function transformRequest(data, headers) {
     normalizeHeaderName(headers, 'Accept');
     normalizeHeaderName(headers, 'Content-Type');
+
     if (utils.isFormData(data) ||
       utils.isArrayBuffer(data) ||
       utils.isBuffer(data) ||
@@ -997,20 +1091,32 @@ var defaults = {
       setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
       return data.toString();
     }
-    if (utils.isObject(data)) {
-      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
-      return JSON.stringify(data);
+    if (utils.isObject(data) || (headers && headers['Content-Type'] === 'application/json')) {
+      setContentTypeIfUnset(headers, 'application/json');
+      return stringifySafely(data);
     }
     return data;
   }],
 
   transformResponse: [function transformResponse(data) {
-    /*eslint no-param-reassign:0*/
-    if (typeof data === 'string') {
+    var transitional = this.transitional;
+    var silentJSONParsing = transitional && transitional.silentJSONParsing;
+    var forcedJSONParsing = transitional && transitional.forcedJSONParsing;
+    var strictJSONParsing = !silentJSONParsing && this.responseType === 'json';
+
+    if (strictJSONParsing || (forcedJSONParsing && utils.isString(data) && data.length)) {
       try {
-        data = JSON.parse(data);
-      } catch (e) { /* Ignore */ }
+        return JSON.parse(data);
+      } catch (e) {
+        if (strictJSONParsing) {
+          if (e.name === 'SyntaxError') {
+            throw enhanceError(e, this, 'E_JSON_PARSE');
+          }
+          throw e;
+        }
+      }
     }
+
     return data;
   }],
 
@@ -1493,6 +1599,122 @@ module.exports = function spread(callback) {
 
 /***/ }),
 
+/***/ "./node_modules/axios/lib/helpers/validator.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/axios/lib/helpers/validator.js ***!
+  \*****************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var pkg = __webpack_require__(/*! ./../../package.json */ "./node_modules/axios/package.json");
+
+var validators = {};
+
+// eslint-disable-next-line func-names
+['object', 'boolean', 'number', 'function', 'string', 'symbol'].forEach(function(type, i) {
+  validators[type] = function validator(thing) {
+    return typeof thing === type || 'a' + (i < 1 ? 'n ' : ' ') + type;
+  };
+});
+
+var deprecatedWarnings = {};
+var currentVerArr = pkg.version.split('.');
+
+/**
+ * Compare package versions
+ * @param {string} version
+ * @param {string?} thanVersion
+ * @returns {boolean}
+ */
+function isOlderVersion(version, thanVersion) {
+  var pkgVersionArr = thanVersion ? thanVersion.split('.') : currentVerArr;
+  var destVer = version.split('.');
+  for (var i = 0; i < 3; i++) {
+    if (pkgVersionArr[i] > destVer[i]) {
+      return true;
+    } else if (pkgVersionArr[i] < destVer[i]) {
+      return false;
+    }
+  }
+  return false;
+}
+
+/**
+ * Transitional option validator
+ * @param {function|boolean?} validator
+ * @param {string?} version
+ * @param {string} message
+ * @returns {function}
+ */
+validators.transitional = function transitional(validator, version, message) {
+  var isDeprecated = version && isOlderVersion(version);
+
+  function formatMessage(opt, desc) {
+    return '[Axios v' + pkg.version + '] Transitional option \'' + opt + '\'' + desc + (message ? '. ' + message : '');
+  }
+
+  // eslint-disable-next-line func-names
+  return function(value, opt, opts) {
+    if (validator === false) {
+      throw new Error(formatMessage(opt, ' has been removed in ' + version));
+    }
+
+    if (isDeprecated && !deprecatedWarnings[opt]) {
+      deprecatedWarnings[opt] = true;
+      // eslint-disable-next-line no-console
+      console.warn(
+        formatMessage(
+          opt,
+          ' has been deprecated since v' + version + ' and will be removed in the near future'
+        )
+      );
+    }
+
+    return validator ? validator(value, opt, opts) : true;
+  };
+};
+
+/**
+ * Assert object's properties type
+ * @param {object} options
+ * @param {object} schema
+ * @param {boolean?} allowUnknown
+ */
+
+function assertOptions(options, schema, allowUnknown) {
+  if (typeof options !== 'object') {
+    throw new TypeError('options must be an object');
+  }
+  var keys = Object.keys(options);
+  var i = keys.length;
+  while (i-- > 0) {
+    var opt = keys[i];
+    var validator = schema[opt];
+    if (validator) {
+      var value = options[opt];
+      var result = value === undefined || validator(value, opt, options);
+      if (result !== true) {
+        throw new TypeError('option ' + opt + ' must be ' + result);
+      }
+      continue;
+    }
+    if (allowUnknown !== true) {
+      throw Error('Unknown option ' + opt);
+    }
+  }
+}
+
+module.exports = {
+  isOlderVersion: isOlderVersion,
+  assertOptions: assertOptions,
+  validators: validators
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/axios/lib/utils.js":
 /*!*****************************************!*\
   !*** ./node_modules/axios/lib/utils.js ***!
@@ -1503,8 +1725,6 @@ module.exports = function spread(callback) {
 
 
 var bind = __webpack_require__(/*! ./helpers/bind */ "./node_modules/axios/lib/helpers/bind.js");
-
-/*global toString:true*/
 
 // utils is a library of generic helper functions non-specific to axios
 
@@ -1689,7 +1909,7 @@ function isURLSearchParams(val) {
  * @returns {String} The String freed of excess whitespace
  */
 function trim(str) {
-  return str.replace(/^\s*/, '').replace(/\s*$/, '');
+  return str.trim ? str.trim() : str.replace(/^\s+|\s+$/g, '');
 }
 
 /**
@@ -2078,11 +2298,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _this3.$router.back();
 
-                _context3.next = 13;
+                User.responseAfterLogin(res);
+                _context3.next = 14;
                 break;
 
-              case 10:
-                _context3.prev = 10;
+              case 11:
+                _context3.prev = 11;
                 _context3.t0 = _context3["catch"](0);
 
                 if (_context3.t0) {
@@ -2094,12 +2315,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   });
                 }
 
-              case 13:
+              case 14:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 10]]);
+        }, _callee3, null, [[0, 11]]);
       }))();
     }
   },
@@ -3546,117 +3767,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -3802,6 +3912,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _post_create_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./post/create.vue */ "./resources/js/components/post/create.vue");
+var _components$mounted$d;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -4125,9 +4239,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_components$mounted$d = {
   components: {
     create: _post_create_vue__WEBPACK_IMPORTED_MODULE_1__.default
   },
@@ -4143,7 +4256,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       showModal: false,
       searchTerm: "",
       posts: [],
-      nots: {}
+      nots: {},
+      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute("content")
     };
   },
   methods: {
@@ -4167,30 +4281,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
-    getNots: function getNots() {
-      var _this = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var res;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return axios.get("/api/getnots/");
-
-              case 2:
-                res = _context2.sent;
-                _this.nots = res.data;
-
-              case 4:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
-    },
     onShowModal: function onShowModal() {
       this.showModal = !this.showModal;
     },
@@ -4201,6 +4291,38 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.show = !this.show;
     },
     getUser: function getUser() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                _context2.next = 3;
+                return axios.get("/api/user");
+
+              case 3:
+                res = _context2.sent;
+                _this.user = res.data;
+                _context2.next = 10;
+                break;
+
+              case 7:
+                _context2.prev = 7;
+                _context2.t0 = _context2["catch"](0);
+                console.log(_context2.t0);
+
+              case 10:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, null, [[0, 7]]);
+      }))();
+    },
+    getNots: function getNots() {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
@@ -4209,27 +4331,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _context3.prev = 0;
+                if (!(Object.keys(_this2.user).length > 0)) {
+                  _context3.next = 5;
+                  break;
+                }
+
                 _context3.next = 3;
-                return axios.get("/api/user");
+                return axios.get("/api/getnots/");
 
               case 3:
                 res = _context3.sent;
-                _this2.user = res.data;
-                _context3.next = 10;
-                break;
+                _this2.nots = res.data;
 
-              case 7:
-                _context3.prev = 7;
-                _context3.t0 = _context3["catch"](0);
-                console.log(_context3.t0);
-
-              case 10:
+              case 5:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[0, 7]]);
+        }, _callee3);
       }))();
     },
     getCategories: function getCategories() {
@@ -4309,41 +4428,46 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         _this5.$Progress.finish();
       });
     }
-  },
-  computed: {
-    searchedPosts: function searchedPosts() {
-      var _this6 = this;
+  }
+}, _defineProperty(_components$mounted$d, "mounted", function mounted() {
+  var _this6 = this;
 
-      return this.posts.filter(function (post) {
-        return post.title.match(_this6.searchTerm.toUpperCase());
-      });
-    }
-  },
-  created: function created() {
+  this.getNots();
+  setInterval(function () {
+    _this6.getNots();
+  }, 3000);
+}), _defineProperty(_components$mounted$d, "computed", {
+  searchedPosts: function searchedPosts() {
     var _this7 = this;
 
-    this.getUser();
-    Reload.$on("logout", function () {
-      _this7.getUser();
-
-      _this7.getNots();
+    return this.posts.filter(function (post) {
+      return post.title.match(_this7.searchTerm.toUpperCase());
     });
-    Reload.$on("login", function () {
-      _this7.getUser();
-
-      _this7.getNots();
-    });
-    this.getCategories();
-    this.getPosts();
-    this.handleProgressBar();
-    Reload.$on("profileChanged", function () {
-      _this7.getUser();
-
-      _this7.getNots();
-    });
-    this.getNots();
   }
-});
+}), _defineProperty(_components$mounted$d, "created", function created() {
+  var _this8 = this;
+
+  this.getUser();
+  Reload.$on("logout", function () {
+    _this8.getUser();
+
+    _this8.getNots();
+  });
+  Reload.$on("login", function () {
+    _this8.getUser();
+
+    _this8.getNots();
+  });
+  this.getCategories();
+  this.getPosts();
+  this.handleProgressBar();
+  Reload.$on("profileChanged", function () {
+    _this8.getUser();
+
+    _this8.getNots();
+  });
+  this.getNots();
+}), _components$mounted$d);
 
 /***/ }),
 
@@ -6319,6 +6443,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -6327,7 +6464,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         name: null,
         email: null,
         profilePic: null,
-        id: null
+        id: null,
+        bio: null
       },
       errors: {},
       showSpinner: false,
@@ -6545,31 +6683,19 @@ var AppStorage = /*#__PURE__*/function () {
       localStorage.setItem('token', token);
     }
   }, {
-    key: "storeUser",
-    value: function storeUser(user) {
-      localStorage.setItem('user', user);
-    }
-  }, {
     key: "store",
-    value: function store(token, user) {
+    value: function store(token) {
       this.storeToken(token);
-      this.storeUser(user);
     }
   }, {
     key: "clear",
     value: function clear() {
       localStorage.removeItem('token');
-      localStorage.removeItem('user');
     }
   }, {
     key: "getToken",
     value: function getToken() {
-      localStorage.getItem(token);
-    }
-  }, {
-    key: "getUser",
-    value: function getUser() {
-      localStorage.getItem(user);
+      localStorage.getItem('token');
     }
   }]);
 
@@ -6765,10 +6891,9 @@ var User = /*#__PURE__*/function () {
     key: "responseAfterLogin",
     value: function responseAfterLogin(res) {
       var access_token = res.data.access_token;
-      var username = res.data.name;
 
       if (_Token__WEBPACK_IMPORTED_MODULE_0__.default.isValid(access_token)) {
-        _AppStorage__WEBPACK_IMPORTED_MODULE_1__.default.store(access_token, username);
+        _AppStorage__WEBPACK_IMPORTED_MODULE_1__.default.store(access_token);
       }
     }
   }, {
@@ -6975,11 +7100,24 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  */
 // import Echo from 'laravel-echo';
 // window.Pusher = require('pusher-js');
+// function getCookie(name) {
+//     const value = `; ${document.cookie}`;
+//     const parts = value.split(`; ${name}=`);
+//     if (parts.length === 2) return parts.pop().split(';').shift();
+// }
+// import AppStorage from './Helpers/AppStorage';
+// window.AppStorage = AppStorage;
 // window.Echo = new Echo({
 //     broadcaster: 'pusher',
 //     key: process.env.MIX_PUSHER_APP_KEY,
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//     forceTLS: true
+//     forceTLS: true,
+//     enabledTransports: ['ws', 'wss'],
+//     auth: {
+//         headers: {
+//             Authorization: 'Bearer ' + AppStorage.getToken()
+//         },
+//     },
 // });
 
 /***/ }),
@@ -84465,92 +84603,229 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "section mt-1" }, [
-      _c("div", { staticClass: "container" }, [
-        _vm._m(2),
-        _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-lg-12" }, [
+    _c("div", { staticClass: "section pt-1 pb-0" }, [
+      _c("div", { staticClass: "col-lg-12" }, [
+        _c(
+          "div",
+          {
+            staticClass: "carousel slide",
+            attrs: { id: "carouselExampleIndicators2", "data-ride": "carousel" }
+          },
+          [
+            _c(
+              "ol",
+              { staticClass: "carousel-indicators" },
+              _vm._l(_vm.trend.slice(0, 4), function(post, index) {
+                return _c("li", {
+                  key: post.id,
+                  class: { active: index === 0 },
+                  attrs: {
+                    "data-target": "#carouselExampleIndicators2",
+                    "data-slide-to": index
+                  }
+                })
+              }),
+              0
+            ),
+            _vm._v(" "),
             _c(
               "div",
-              { staticClass: "posts-slide-wrap" },
-              [
-                _c(
-                  "tiny-slider",
+              {
+                staticClass: "carousel-inner py-5",
+                staticStyle: { background: "white", color: "black!important" }
+              },
+              _vm._l(_vm.trend.slice(0, 4), function(post, index) {
+                return _c(
+                  "div",
                   {
-                    attrs: {
-                      "mouse-drag": true,
-                      loop: true,
-                      items: "1",
-                      gutter: "20",
-                      mode: "gallery",
-                      arrowKeys: true
-                    }
+                    key: post.id,
+                    staticClass: "carousel-item position-relative",
+                    class: { active: index === 0 }
                   },
                   [
-                    _c("div", [
-                      _c("div", { staticClass: "post-entry d-lg-flex" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "post-entry d-lg-flex container text-secondary"
+                      },
+                      [
+                        _c("router-link", {
+                          attrs: {
+                            to: {
+                              name: "post",
+                              params: { slug: post.slug }
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
                         _c(
                           "div",
-                          { staticClass: "me-lg-5 thumbnail mb-4 mb-lg-0" },
+                          {
+                            staticClass:
+                              "me-lg-5 thumbnail mb-4 mb-lg-0 text-secondary"
+                          },
                           [
-                            _c("a", { attrs: { href: "single.html" } }, [
-                              _c("img", {
-                                staticClass: "img-fluid",
+                            _c(
+                              "router-link",
+                              {
                                 attrs: {
-                                  src: "images/post_lg_1.jpg",
-                                  alt: "Image"
+                                  to: {
+                                    name: "post",
+                                    params: {
+                                      slug: post.slug
+                                    }
+                                  }
                                 }
-                              })
-                            ])
-                          ]
+                              },
+                              [
+                                _c("img", {
+                                  staticClass: "img-fluid",
+                                  staticStyle: {
+                                    width: "569px",
+                                    height: "500px",
+                                    "object-fit": "cover"
+                                  },
+                                  attrs: { src: post.photo, alt: "Image" }
+                                })
+                              ]
+                            )
+                          ],
+                          1
                         ),
                         _vm._v(" "),
                         _c(
                           "div",
-                          { staticClass: "content align-self-center" },
+                          { staticClass: "content align-self-center " },
                           [
-                            _c("div", { staticClass: "post-meta mb-3" }, [
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "category",
-                                  attrs: { href: "#" }
-                                },
-                                [_vm._v("Business")]
-                              ),
-                              _vm._v(
-                                ",\n                                            "
-                              ),
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "category",
-                                  attrs: { href: "#" }
-                                },
-                                [_vm._v("Travel")]
-                              ),
-                              _vm._v(
-                                "\n                                            —\n                                            "
-                              ),
-                              _c("span", { staticClass: "date" }, [
-                                _vm._v("July 2, 2020")
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("h2", { staticClass: "heading" }, [
-                              _c("a", { attrs: { href: "single.html" } }, [
+                            _c(
+                              "div",
+                              { staticClass: "post-meta mb-3" },
+                              [
+                                _c(
+                                  "router-link",
+                                  {
+                                    staticClass: "category text-secondary",
+                                    staticStyle: { color: "whitesmoke" },
+                                    attrs: {
+                                      to: {
+                                        name: "catposts",
+                                        params: {
+                                          catName: post.category.name
+                                        }
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      "\n                                        " +
+                                        _vm._s(post.category.name) +
+                                        "\n                                    "
+                                    )
+                                  ]
+                                ),
                                 _vm._v(
-                                  "Your most unhappy customers\n                                                are your greatest source of\n                                                learning."
-                                )
-                              ])
-                            ]),
+                                  "\n                                    —\n                                    "
+                                ),
+                                _c(
+                                  "span",
+                                  {
+                                    staticClass: "date text-secondary",
+                                    staticStyle: { color: "whitesmoke" }
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm
+                                          .moment(post.created_at)
+                                          .format("MMM DD,YYYY")
+                                      )
+                                    )
+                                  ]
+                                ),
+                                _vm._v(
+                                  "\n                                    —\n                                    " +
+                                    _vm._s(post.likes.length) +
+                                    "\n                                    "
+                                ),
+                                _c("i", {
+                                  staticClass: "fas fa-heart text-secondary"
+                                }),
+                                _vm._v(" "),
+                                post.user_id === _vm.user.id
+                                  ? _c(
+                                      "span",
+                                      [
+                                        _vm._v(
+                                          "\n                                        —\n                                        "
+                                        ),
+                                        _c(
+                                          "router-link",
+                                          {
+                                            staticClass: "text-secondary",
+                                            attrs: {
+                                              to: {
+                                                name: "editpost",
+                                                params: {
+                                                  postSlug: post.slug
+                                                }
+                                              }
+                                            }
+                                          },
+                                          [_vm._v("Edit")]
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  : _vm._e()
+                              ],
+                              1
+                            ),
                             _vm._v(" "),
-                            _c("p", [
-                              _vm._v(
-                                "\n                                            Far far away, behind the word\n                                            mountains, far from the\n                                            countries Vokalia and\n                                            Consonantia, there live the\n                                            blind texts. Separated they live\n                                            in Bookmarksgrove right at the\n                                            coast of the Semantics, a large\n                                            language ocean.\n                                        "
-                              )
-                            ]),
+                            _c(
+                              "h2",
+                              { staticClass: "heading text-light" },
+                              [
+                                _c(
+                                  "router-link",
+                                  {
+                                    staticClass: "text-dark",
+                                    attrs: {
+                                      to: {
+                                        name: "post",
+                                        params: {
+                                          slug: post.slug
+                                        }
+                                      }
+                                    }
+                                  },
+                                  [
+                                    _vm._v(
+                                      _vm._s(post.title) +
+                                        "\n                                    "
+                                    )
+                                  ]
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "p",
+                              {
+                                staticStyle: {
+                                  color: "black",
+                                  "text-align": "justify"
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                    " +
+                                    _vm._s(post.desc) +
+                                    "\n                                "
+                                )
+                              ]
+                            ),
                             _vm._v(" "),
                             _c(
                               "a",
@@ -84560,328 +84835,76 @@ var render = function() {
                                 attrs: { href: "#" }
                               },
                               [
-                                _c("div", { staticClass: "author-pic" }, [
-                                  _c("img", {
-                                    attrs: {
-                                      src: "images/person_1.jpg",
-                                      alt: "Image"
-                                    }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "text" }, [
-                                  _c("strong", [_vm._v("Sergy Campbell")]),
-                                  _vm._v(" "),
-                                  _c("span", [
-                                    _vm._v(
-                                      "Author, 25 published\n                                                    post"
+                                _c(
+                                  "div",
+                                  { staticClass: "author-pic text-secondary" },
+                                  [
+                                    _c(
+                                      "router-link",
+                                      {
+                                        staticClass: "text-secondary",
+                                        staticStyle: { padding: "0" },
+                                        attrs: {
+                                          to: {
+                                            name: "profile",
+                                            params: {
+                                              username: post.user.name
+                                            }
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c("img", {
+                                          attrs: {
+                                            src: post.user.profilePic,
+                                            alt: "Image"
+                                          }
+                                        })
+                                      ]
                                     )
-                                  ])
-                                ])
-                              ]
-                            )
-                          ]
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", [
-                      _c("div", { staticClass: "post-entry d-lg-flex" }, [
-                        _c(
-                          "div",
-                          { staticClass: "me-lg-5 thumbnail mb-4 mb-lg-0" },
-                          [
-                            _c("a", { attrs: { href: "single.html" } }, [
-                              _c("img", {
-                                staticClass: "img-fluid",
-                                attrs: {
-                                  src: "images/post_lg_2.jpg",
-                                  alt: "Image"
-                                }
-                              })
-                            ])
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "content align-self-center" },
-                          [
-                            _c("div", { staticClass: "post-meta mb-3" }, [
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "category",
-                                  attrs: { href: "#" }
-                                },
-                                [_vm._v("Business")]
-                              ),
-                              _vm._v(
-                                ",\n                                            "
-                              ),
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "category",
-                                  attrs: { href: "#" }
-                                },
-                                [_vm._v("Travel")]
-                              ),
-                              _vm._v(
-                                "\n                                            —\n                                            "
-                              ),
-                              _c("span", { staticClass: "date" }, [
-                                _vm._v("July 2, 2020")
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("h2", { staticClass: "heading" }, [
-                              _c("a", { attrs: { href: "single.html" } }, [
-                                _vm._v(
-                                  "Your most unhappy customers\n                                                are your greatest source of\n                                                learning."
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  { staticClass: "text text-secondary" },
+                                  [
+                                    _c(
+                                      "strong",
+                                      { staticClass: "text-secondary" },
+                                      [_vm._v(_vm._s(post.user.name))]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      { staticClass: "text-secondary" },
+                                      [
+                                        _vm._v(
+                                          "Author,\n                                            " +
+                                            _vm._s(post.user.posts.length) +
+                                            "\n                                            published post"
+                                        )
+                                      ]
+                                    )
+                                  ]
                                 )
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("p", [
-                              _vm._v(
-                                "\n                                            Far far away, behind the word\n                                            mountains, far from the\n                                            countries Vokalia and\n                                            Consonantia, there live the\n                                            blind texts. Separated they live\n                                            in Bookmarksgrove right at the\n                                            coast of the Semantics, a large\n                                            language ocean.\n                                        "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                staticClass:
-                                  "post-author d-flex align-items-center",
-                                attrs: { href: "#" }
-                              },
-                              [
-                                _c("div", { staticClass: "author-pic" }, [
-                                  _c("img", {
-                                    attrs: {
-                                      src: "images/person_1.jpg",
-                                      alt: "Image"
-                                    }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "text" }, [
-                                  _c("strong", [_vm._v("Sergy Campbell")]),
-                                  _vm._v(" "),
-                                  _c("span", [
-                                    _vm._v(
-                                      "Author, 25 published\n                                                    post"
-                                    )
-                                  ])
-                                ])
                               ]
                             )
                           ]
                         )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", [
-                      _c("div", { staticClass: "post-entry d-lg-flex" }, [
-                        _c(
-                          "div",
-                          { staticClass: "me-lg-5 thumbnail mb-4 mb-lg-0" },
-                          [
-                            _c("a", { attrs: { href: "single.html" } }, [
-                              _c("img", {
-                                staticClass: "img-fluid",
-                                attrs: {
-                                  src: "images/post_lg_3.jpg",
-                                  alt: "Image"
-                                }
-                              })
-                            ])
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "content align-self-center" },
-                          [
-                            _c("div", { staticClass: "post-meta mb-3" }, [
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "category",
-                                  attrs: { href: "#" }
-                                },
-                                [_vm._v("Business")]
-                              ),
-                              _vm._v(
-                                ",\n                                            "
-                              ),
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "category",
-                                  attrs: { href: "#" }
-                                },
-                                [_vm._v("Travel")]
-                              ),
-                              _vm._v(
-                                "\n                                            —\n                                            "
-                              ),
-                              _c("span", { staticClass: "date" }, [
-                                _vm._v("July 2, 2020")
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("h2", { staticClass: "heading" }, [
-                              _c("a", { attrs: { href: "single.html" } }, [
-                                _vm._v(
-                                  "Your most unhappy customers\n                                                are your greatest source of\n                                                learning."
-                                )
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("p", [
-                              _vm._v(
-                                "\n                                            Far far away, behind the word\n                                            mountains, far from the\n                                            countries Vokalia and\n                                            Consonantia, there live the\n                                            blind texts. Separated they live\n                                            in Bookmarksgrove right at the\n                                            coast of the Semantics, a large\n                                            language ocean.\n                                        "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                staticClass:
-                                  "post-author d-flex align-items-center",
-                                attrs: { href: "#" }
-                              },
-                              [
-                                _c("div", { staticClass: "author-pic" }, [
-                                  _c("img", {
-                                    attrs: {
-                                      src: "images/person_1.jpg",
-                                      alt: "Image"
-                                    }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "text" }, [
-                                  _c("strong", [_vm._v("Sergy Campbell")]),
-                                  _vm._v(" "),
-                                  _c("span", [
-                                    _vm._v(
-                                      "Author, 25 published\n                                                    post"
-                                    )
-                                  ])
-                                ])
-                              ]
-                            )
-                          ]
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", [
-                      _c("div", { staticClass: "post-entry d-lg-flex" }, [
-                        _c(
-                          "div",
-                          { staticClass: "me-lg-5 thumbnail mb-4 mb-lg-0" },
-                          [
-                            _c("a", { attrs: { href: "single.html" } }, [
-                              _c("img", {
-                                staticClass: "img-fluid",
-                                attrs: {
-                                  src: "images/post_lg_4.jpg",
-                                  alt: "Image"
-                                }
-                              })
-                            ])
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "content align-self-center" },
-                          [
-                            _c("div", { staticClass: "post-meta mb-3" }, [
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "category",
-                                  attrs: { href: "#" }
-                                },
-                                [_vm._v("Business")]
-                              ),
-                              _vm._v(
-                                ",\n                                            "
-                              ),
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "category",
-                                  attrs: { href: "#" }
-                                },
-                                [_vm._v("Travel")]
-                              ),
-                              _vm._v(
-                                "\n                                            —\n                                            "
-                              ),
-                              _c("span", { staticClass: "date" }, [
-                                _vm._v("July 2, 2020")
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("h2", { staticClass: "heading" }, [
-                              _c("a", { attrs: { href: "single.html" } }, [
-                                _vm._v(
-                                  "Your most unhappy customers\n                                                are your greatest source of\n                                                learning."
-                                )
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c("p", [
-                              _vm._v(
-                                "\n                                            Far far away, behind the word\n                                            mountains, far from the\n                                            countries Vokalia and\n                                            Consonantia, there live the\n                                            blind texts. Separated they live\n                                            in Bookmarksgrove right at the\n                                            coast of the Semantics, a large\n                                            language ocean.\n                                        "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "a",
-                              {
-                                staticClass:
-                                  "post-author d-flex align-items-center",
-                                attrs: { href: "#" }
-                              },
-                              [
-                                _c("div", { staticClass: "author-pic" }, [
-                                  _c("img", {
-                                    attrs: {
-                                      src: "images/person_1.jpg",
-                                      alt: "Image"
-                                    }
-                                  })
-                                ]),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "text" }, [
-                                  _c("strong", [_vm._v("Sergy Campbell")]),
-                                  _vm._v(" "),
-                                  _c("span", [
-                                    _vm._v(
-                                      "Author, 25 published\n                                                    post"
-                                    )
-                                  ])
-                                ])
-                              ]
-                            )
-                          ]
-                        )
-                      ])
-                    ])
+                      ],
+                      1
+                    )
                   ]
                 )
-              ],
-              1
-            )
-          ])
-        ])
+              }),
+              0
+            ),
+            _vm._v(" "),
+            _vm._m(2)
+          ]
+        )
       ])
     ]),
     _vm._v(" "),
@@ -85294,10 +85317,50 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row justify-content-center mb-5" }, [
-      _c("div", { staticClass: "col-lg-7 text-center" }, [
-        _c("h2", { staticClass: "heading" }, [_vm._v("Most Popular Posts")])
-      ])
+    return _c("div", { staticClass: "coarousel_control" }, [
+      _c(
+        "a",
+        {
+          staticStyle: { bottom: "-478px !important", left: "1248px" },
+          attrs: {
+            href: "#carouselExampleIndicators2",
+            role: "button",
+            "data-slide": "prev"
+          }
+        },
+        [
+          _c(
+            "span",
+            {
+              staticStyle: { width: "17px", color: "black" },
+              attrs: { "aria-hidden": "true" }
+            },
+            [_vm._v("Prev |\n                        ")]
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "a",
+        {
+          staticStyle: { bottom: "-478px !important" },
+          attrs: {
+            href: "#carouselExampleIndicators2",
+            role: "button",
+            "data-slide": "next"
+          }
+        },
+        [
+          _c(
+            "span",
+            {
+              staticStyle: { width: "17px", color: "black" },
+              attrs: { "aria-hidden": "true" }
+            },
+            [_vm._v("Next")]
+          )
+        ]
+      )
     ])
   },
   function() {
@@ -85306,7 +85369,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "row justify-content-center mb-5" }, [
       _c("div", { staticClass: "col-lg-7 text-center" }, [
-        _c("h2", { staticClass: "heading" }, [_vm._v("followings Posts")])
+        _c("h2", { staticClass: "heading" }, [_vm._v("Friends' Posts")])
       ])
     ])
   },
@@ -85588,18 +85651,14 @@ var render = function() {
                                                       }
                                                     }
                                                   },
-                                                  [_vm._v(_vm._s(post.title))]
-                                                ),
-                                                _vm._v(
-                                                  "\n\n                                            | by\n                                            "
-                                                ),
-                                                _c("b", [
-                                                  _vm._v(
-                                                    "\n                                                " +
-                                                      _vm._s(post.user.name) +
-                                                      "\n                                            "
-                                                  )
-                                                ])
+                                                  [
+                                                    _vm._v(
+                                                      _vm._s(
+                                                        post.title.slice(0, 40)
+                                                      ) + "..."
+                                                    )
+                                                  ]
+                                                )
                                               ],
                                               1
                                             )
@@ -85771,7 +85830,10 @@ var render = function() {
                                     _c(
                                       "div",
                                       {
-                                        staticStyle: { "font-size": "22px" },
+                                        staticStyle: {
+                                          "font-size": "22px",
+                                          cursor: "pointer"
+                                        },
                                         attrs: {
                                           alt: "",
                                           id: "dropdownMenuButton",
@@ -85798,8 +85860,7 @@ var render = function() {
                                                   width: "17px",
                                                   height: "17px",
                                                   "text-align": "center",
-                                                  right: "-6px",
-                                                  cursor: "pointer"
+                                                  right: "-6px"
                                                 }
                                               },
                                               [_vm._v(_vm._s(_vm.nots.length))]
@@ -85855,11 +85916,11 @@ var render = function() {
                                                   [
                                                     _c("img", {
                                                       staticStyle: {
-                                                        width: "30px",
+                                                        width: "24px",
                                                         "border-radius": "50%",
                                                         border:
                                                           "1px solid #303030",
-                                                        height: "30px",
+                                                        height: "24px",
                                                         "object-fit": "cover"
                                                       },
                                                       attrs: {
@@ -85867,13 +85928,21 @@ var render = function() {
                                                         alt: ""
                                                       }
                                                     }),
+                                                    _vm._v(" "),
+                                                    _c("i", {
+                                                      staticClass:
+                                                        "fas fa-heart"
+                                                    }),
                                                     _vm._v(
                                                       "\n                                                    " +
                                                         _vm._s(
                                                           not.data.user_name
                                                         ) +
-                                                        "\n                                                    liked your post\n                                                "
-                                                    )
+                                                        "\n\n                                                    "
+                                                    ),
+                                                    _c("b", [
+                                                      _vm._v("liked your post")
+                                                    ])
                                                   ]
                                                 )
                                               ],
@@ -87471,7 +87540,7 @@ var render = function() {
                   _vm._v(
                     "\n                            —\n                            "
                   ),
-                  _c("span", { staticStyle: { "font-size": "17px" } }, [
+                  _c("span", { staticStyle: { "font-size": "14px" } }, [
                     _vm._v(
                       _vm._s(
                         _vm.moment(_vm.post.created_at).format("MMM DD,YYYY")
@@ -87564,7 +87633,7 @@ var render = function() {
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "pb-0 section" }, [
-      _c("div", { staticClass: "col-lg-9", staticStyle: { margin: "auto" } }, [
+      _c("div", { staticClass: "container", staticStyle: { margin: "auto" } }, [
         _vm._m(1),
         _vm._v(" "),
         _c(
@@ -88052,6 +88121,32 @@ var render = function() {
                       ])
                     ]
                   ),
+                  _vm._v(" "),
+                  _vm.user.id === _vm.form.id
+                    ? _c(
+                        "div",
+                        [
+                          _c("VueEditor", {
+                            attrs: { placeholder: "Enter ur bio" },
+                            model: {
+                              value: _vm.form.bio,
+                              callback: function($$v) {
+                                _vm.$set(_vm.form, "bio", $$v)
+                              },
+                              expression: "form.bio"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    : _c("div", {
+                        staticClass: "container",
+                        staticStyle: {
+                          "text-align": "justify",
+                          "margin-top": "10px"
+                        },
+                        domProps: { innerHTML: _vm._s(_vm.form.bio) }
+                      }),
                   _vm._v(" "),
                   _c("hr", { staticClass: "my-4" }),
                   _vm._v(" "),
@@ -105207,6 +105302,17 @@ Vue.compile = compileToFunctions;
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Vue);
 
+
+/***/ }),
+
+/***/ "./node_modules/axios/package.json":
+/*!*****************************************!*\
+  !*** ./node_modules/axios/package.json ***!
+  \*****************************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = JSON.parse('{"_from":"axios@0.21.4","_id":"axios@0.21.4","_inBundle":false,"_integrity":"sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==","_location":"/axios","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"axios@0.21.4","name":"axios","escapedName":"axios","rawSpec":"0.21.4","saveSpec":null,"fetchSpec":"0.21.4"},"_requiredBy":["#DEV:/","#USER"],"_resolved":"https://registry.npmjs.org/axios/-/axios-0.21.4.tgz","_shasum":"c67b90dc0568e5c1cf2b0b858c43ba28e2eda575","_spec":"axios@0.21.4","_where":"D:\\\\Abdllah\\\\laravelProjects\\\\TechApp","author":{"name":"Matt Zabriskie"},"browser":{"./lib/adapters/http.js":"./lib/adapters/xhr.js"},"bugs":{"url":"https://github.com/axios/axios/issues"},"bundleDependencies":false,"bundlesize":[{"path":"./dist/axios.min.js","threshold":"5kB"}],"dependencies":{"follow-redirects":"^1.14.0"},"deprecated":false,"description":"Promise based HTTP client for the browser and node.js","devDependencies":{"coveralls":"^3.0.0","es6-promise":"^4.2.4","grunt":"^1.3.0","grunt-banner":"^0.6.0","grunt-cli":"^1.2.0","grunt-contrib-clean":"^1.1.0","grunt-contrib-watch":"^1.0.0","grunt-eslint":"^23.0.0","grunt-karma":"^4.0.0","grunt-mocha-test":"^0.13.3","grunt-ts":"^6.0.0-beta.19","grunt-webpack":"^4.0.2","istanbul-instrumenter-loader":"^1.0.0","jasmine-core":"^2.4.1","karma":"^6.3.2","karma-chrome-launcher":"^3.1.0","karma-firefox-launcher":"^2.1.0","karma-jasmine":"^1.1.1","karma-jasmine-ajax":"^0.1.13","karma-safari-launcher":"^1.0.0","karma-sauce-launcher":"^4.3.6","karma-sinon":"^1.0.5","karma-sourcemap-loader":"^0.3.8","karma-webpack":"^4.0.2","load-grunt-tasks":"^3.5.2","minimist":"^1.2.0","mocha":"^8.2.1","sinon":"^4.5.0","terser-webpack-plugin":"^4.2.3","typescript":"^4.0.5","url-search-params":"^0.10.0","webpack":"^4.44.2","webpack-dev-server":"^3.11.0"},"homepage":"https://axios-http.com","jsdelivr":"dist/axios.min.js","keywords":["xhr","http","ajax","promise","node"],"license":"MIT","main":"index.js","name":"axios","repository":{"type":"git","url":"git+https://github.com/axios/axios.git"},"scripts":{"build":"NODE_ENV=production grunt build","coveralls":"cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js","examples":"node ./examples/server.js","fix":"eslint --fix lib/**/*.js","postversion":"git push && git push --tags","preversion":"npm test","start":"node ./sandbox/server.js","test":"grunt test","version":"npm run build && grunt version && git add -A dist && git add CHANGELOG.md bower.json package.json"},"typings":"./index.d.ts","unpkg":"dist/axios.min.js","version":"0.21.4"}');
 
 /***/ })
 

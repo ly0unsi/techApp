@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -51,4 +52,11 @@ class postLiked extends Notification
             'user_pic' => $this->user->profilePic
         ];
     }
+    // public function toBroadsast($notifiable)
+    // {
+    //     return new BroadcastMessage([
+    //         'post_slug' => $this->post->slug,
+
+    //     ]);
+    // }
 }

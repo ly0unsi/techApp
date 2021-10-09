@@ -89,6 +89,19 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div v-if="user.id === form.id">
+                                <VueEditor
+                                    v-model="form.bio"
+                                    placeholder="Enter ur bio"
+                                />
+                            </div>
+                            <div
+                                v-else
+                                class="container"
+                                style="text-align:justify;margin-top:10px"
+                                v-html="form.bio"
+                            ></div>
                             <hr class="my-4" />
                             <ul class="list-group list-group-flush">
                                 <li
@@ -555,7 +568,8 @@ export default {
                 name: null,
                 email: null,
                 profilePic: null,
-                id: null
+                id: null,
+                bio: null
             },
             errors: {},
             showSpinner: false,

@@ -59,14 +59,9 @@
                                                         }
                                                     }"
                                                     >{{
-                                                        post.title
-                                                    }}</router-link
+                                                        post.title.slice(0, 40)
+                                                    }}...</router-link
                                                 >
-
-                                                | by
-                                                <b>
-                                                    {{ post.user.name }}
-                                                </b>
                                             </span>
                                         </div>
                                     </div>
@@ -173,14 +168,14 @@
                                                 data-toggle="dropdown"
                                                 aria-haspopup="true"
                                                 aria-expanded="false"
-                                                style="font-size: 22px"
+                                                style="font-size: 22px;cursor:pointer"
                                             >
                                                 <i
                                                     class="far fa-bell text-dark ms-2"
                                                 ></i>
                                                 <span
                                                     class="bg-dark text-light rounded-circle position-absolute"
-                                                    style="font-size: 11px;padding: 2px;width: 17px;height: 17px;text-align: center;right: -6px;cursor:pointer"
+                                                    style="font-size: 11px;padding: 2px;width: 17px;height: 17px;text-align: center;right: -6px;"
                                                     v-if="
                                                         Object.keys(nots)
                                                             .length !== 0
@@ -216,10 +211,10 @@
                                                         }"
                                                     >
                                                         <img
-                                                            style="width: 30px;
+                                                            style="width: 24px;
                                                                     border-radius: 50%;
                                                                     border:1px solid #303030;
-                                                                    height: 30px;
+                                                                    height: 24px;
                                                                     object-fit: cover;"
                                                             :src="
                                                                 not.data
@@ -227,8 +222,12 @@
                                                             "
                                                             alt=""
                                                         />
+                                                        <i
+                                                            class="fas fa-heart"
+                                                        ></i>
                                                         {{ not.data.user_name }}
-                                                        liked your post
+
+                                                        <b>liked your post</b>
                                                     </router-link>
                                                 </div>
                                             </div>
@@ -332,7 +331,10 @@ export default {
             showModal: false,
             searchTerm: "",
             posts: [],
-            nots: {}
+            nots: {},
+            csrf: document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content")
         };
     },
     methods: {
@@ -340,10 +342,7 @@ export default {
             await axios.post("/api/markasread/" + id);
             Reload.$emit("profileChanged");
         },
-        async getNots() {
-            const res = await axios.get("/api/getnots/");
-            this.nots = res.data;
-        },
+
         onShowModal() {
             this.showModal = !this.showModal;
         },
@@ -359,6 +358,12 @@ export default {
                 this.user = res.data;
             } catch (err) {
                 console.log(err);
+            }
+        },
+        async getNots() {
+            if (Object.keys(this.user).length > 0) {
+                const res = await axios.get("/api/getnots/");
+                this.nots = res.data;
             }
         },
         async getCategories() {
@@ -394,6 +399,12 @@ export default {
                 this.$Progress.finish();
             });
         }
+    },
+    mounted() {
+        this.getNots();
+        setInterval(() => {
+            this.getNots();
+        }, 3000);
     },
     computed: {
         searchedPosts() {

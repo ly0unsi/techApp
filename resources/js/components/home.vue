@@ -297,293 +297,182 @@
                 </div>
             </div>
         </div>
-        <div class="section mt-1">
-            <div class="container">
-                <div class="row justify-content-center mb-5">
-                    <div class="col-lg-7 text-center">
-                        <h2 class="heading">Most Popular Posts</h2>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="posts-slide-wrap">
-                            <tiny-slider
-                                :mouse-drag="true"
-                                :loop="true"
-                                items="1"
-                                gutter="20"
-                                mode="gallery"
-                                :arrowKeys="true"
+        <div class="section pt-1 pb-0">
+            <div class="col-lg-12">
+                <div
+                    id="carouselExampleIndicators2"
+                    class="carousel slide"
+                    data-ride="carousel"
+                >
+                    <ol class="carousel-indicators">
+                        <li
+                            v-bind:class="{ active: index === 0 }"
+                            :key="post.id"
+                            v-for="(post, index) in trend.slice(0, 4)"
+                            data-target="#carouselExampleIndicators2"
+                            :data-slide-to="index"
+                        ></li>
+                    </ol>
+                    <div
+                        class="carousel-inner py-5"
+                        style="background:white;color:black!important"
+                    >
+                        <div
+                            v-bind:class="{ active: index === 0 }"
+                            class="carousel-item position-relative"
+                            :key="post.id"
+                            v-for="(post, index) in trend.slice(0, 4)"
+                        >
+                            <div
+                                class="post-entry d-lg-flex container text-secondary"
                             >
-                                <div>
-                                    <div class="post-entry d-lg-flex">
-                                        <div
-                                            class="me-lg-5 thumbnail mb-4 mb-lg-0"
-                                        >
-                                            <a href="single.html">
-                                                <img
-                                                    src="images/post_lg_1.jpg"
-                                                    alt="Image"
-                                                    class="img-fluid"
-                                                />
-                                            </a>
-                                        </div>
-                                        <div class="content align-self-center">
-                                            <div class="post-meta mb-3">
-                                                <a href="#" class="category"
-                                                    >Business</a
-                                                >,
-                                                <a href="#" class="category"
-                                                    >Travel</a
-                                                >
-                                                &mdash;
-                                                <span class="date"
-                                                    >July 2, 2020</span
-                                                >
-                                            </div>
-                                            <h2 class="heading">
-                                                <a href="single.html"
-                                                    >Your most unhappy customers
-                                                    are your greatest source of
-                                                    learning.</a
-                                                >
-                                            </h2>
-                                            <p>
-                                                Far far away, behind the word
-                                                mountains, far from the
-                                                countries Vokalia and
-                                                Consonantia, there live the
-                                                blind texts. Separated they live
-                                                in Bookmarksgrove right at the
-                                                coast of the Semantics, a large
-                                                language ocean.
-                                            </p>
-                                            <a
-                                                href="#"
-                                                class="post-author d-flex align-items-center"
-                                            >
-                                                <div class="author-pic">
-                                                    <img
-                                                        src="images/person_1.jpg"
-                                                        alt="Image"
-                                                    />
-                                                </div>
-                                                <div class="text">
-                                                    <strong
-                                                        >Sergy Campbell</strong
-                                                    >
-                                                    <span
-                                                        >Author, 25 published
-                                                        post</span
-                                                    >
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+                                <router-link
+                                    :to="{
+                                        name: 'post',
+                                        params: { slug: post.slug }
+                                    }"
+                                ></router-link>
 
-                                <div>
-                                    <div class="post-entry d-lg-flex">
-                                        <div
-                                            class="me-lg-5 thumbnail mb-4 mb-lg-0"
-                                        >
-                                            <a href="single.html">
-                                                <img
-                                                    src="images/post_lg_2.jpg"
-                                                    alt="Image"
-                                                    class="img-fluid"
-                                                />
-                                            </a>
-                                        </div>
-                                        <div class="content align-self-center">
-                                            <div class="post-meta mb-3">
-                                                <a href="#" class="category"
-                                                    >Business</a
-                                                >,
-                                                <a href="#" class="category"
-                                                    >Travel</a
-                                                >
-                                                &mdash;
-                                                <span class="date"
-                                                    >July 2, 2020</span
-                                                >
-                                            </div>
-                                            <h2 class="heading">
-                                                <a href="single.html"
-                                                    >Your most unhappy customers
-                                                    are your greatest source of
-                                                    learning.</a
-                                                >
-                                            </h2>
-                                            <p>
-                                                Far far away, behind the word
-                                                mountains, far from the
-                                                countries Vokalia and
-                                                Consonantia, there live the
-                                                blind texts. Separated they live
-                                                in Bookmarksgrove right at the
-                                                coast of the Semantics, a large
-                                                language ocean.
-                                            </p>
-                                            <a
-                                                href="#"
-                                                class="post-author d-flex align-items-center"
-                                            >
-                                                <div class="author-pic">
-                                                    <img
-                                                        src="images/person_1.jpg"
-                                                        alt="Image"
-                                                    />
-                                                </div>
-                                                <div class="text">
-                                                    <strong
-                                                        >Sergy Campbell</strong
-                                                    >
-                                                    <span
-                                                        >Author, 25 published
-                                                        post</span
-                                                    >
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
+                                <div
+                                    class="me-lg-5 thumbnail mb-4 mb-lg-0 text-secondary"
+                                >
+                                    <router-link
+                                        :to="{
+                                            name: 'post',
+                                            params: {
+                                                slug: post.slug
+                                            }
+                                        }"
+                                    >
+                                        <img
+                                            style="width: 569px;
+                                                        height: 500px;object-fit: cover;"
+                                            :src="post.photo"
+                                            alt="Image"
+                                            class="img-fluid"
+                                        />
+                                    </router-link>
                                 </div>
+                                <div class="content align-self-center ">
+                                    <div class="post-meta mb-3">
+                                        <router-link
+                                            class="category text-secondary"
+                                            style="color:whitesmoke"
+                                            :to="{
+                                                name: 'catposts',
+                                                params: {
+                                                    catName: post.category.name
+                                                }
+                                            }"
+                                        >
+                                            {{ post.category.name }}
+                                        </router-link>
+                                        &mdash;
+                                        <span
+                                            class="date text-secondary"
+                                            style="color:whitesmoke"
+                                            >{{
+                                                moment(post.created_at).format(
+                                                    "MMM DD,YYYY"
+                                                )
+                                            }}</span
+                                        >
+                                        &mdash;
+                                        {{ post.likes.length }}
+                                        <i
+                                            class="fas fa-heart text-secondary"
+                                        ></i>
 
-                                <div>
-                                    <div class="post-entry d-lg-flex">
-                                        <div
-                                            class="me-lg-5 thumbnail mb-4 mb-lg-0"
-                                        >
-                                            <a href="single.html">
-                                                <img
-                                                    src="images/post_lg_3.jpg"
-                                                    alt="Image"
-                                                    class="img-fluid"
-                                                />
-                                            </a>
-                                        </div>
-                                        <div class="content align-self-center">
-                                            <div class="post-meta mb-3">
-                                                <a href="#" class="category"
-                                                    >Business</a
-                                                >,
-                                                <a href="#" class="category"
-                                                    >Travel</a
-                                                >
-                                                &mdash;
-                                                <span class="date"
-                                                    >July 2, 2020</span
-                                                >
-                                            </div>
-                                            <h2 class="heading">
-                                                <a href="single.html"
-                                                    >Your most unhappy customers
-                                                    are your greatest source of
-                                                    learning.</a
-                                                >
-                                            </h2>
-                                            <p>
-                                                Far far away, behind the word
-                                                mountains, far from the
-                                                countries Vokalia and
-                                                Consonantia, there live the
-                                                blind texts. Separated they live
-                                                in Bookmarksgrove right at the
-                                                coast of the Semantics, a large
-                                                language ocean.
-                                            </p>
-                                            <a
-                                                href="#"
-                                                class="post-author d-flex align-items-center"
+                                        <span v-if="post.user_id === user.id">
+                                            &mdash;
+                                            <router-link
+                                                class="text-secondary"
+                                                :to="{
+                                                    name: 'editpost',
+                                                    params: {
+                                                        postSlug: post.slug
+                                                    }
+                                                }"
+                                                >Edit</router-link
                                             >
-                                                <div class="author-pic">
-                                                    <img
-                                                        src="images/person_1.jpg"
-                                                        alt="Image"
-                                                    />
-                                                </div>
-                                                <div class="text">
-                                                    <strong
-                                                        >Sergy Campbell</strong
-                                                    >
-                                                    <span
-                                                        >Author, 25 published
-                                                        post</span
-                                                    >
-                                                </div>
-                                            </a>
-                                        </div>
+                                        </span>
                                     </div>
-                                </div>
-
-                                <div>
-                                    <div class="post-entry d-lg-flex">
-                                        <div
-                                            class="me-lg-5 thumbnail mb-4 mb-lg-0"
-                                        >
-                                            <a href="single.html">
-                                                <img
-                                                    src="images/post_lg_4.jpg"
-                                                    alt="Image"
-                                                    class="img-fluid"
-                                                />
-                                            </a>
-                                        </div>
-                                        <div class="content align-self-center">
-                                            <div class="post-meta mb-3">
-                                                <a href="#" class="category"
-                                                    >Business</a
-                                                >,
-                                                <a href="#" class="category"
-                                                    >Travel</a
-                                                >
-                                                &mdash;
-                                                <span class="date"
-                                                    >July 2, 2020</span
-                                                >
-                                            </div>
-                                            <h2 class="heading">
-                                                <a href="single.html"
-                                                    >Your most unhappy customers
-                                                    are your greatest source of
-                                                    learning.</a
-                                                >
-                                            </h2>
-                                            <p>
-                                                Far far away, behind the word
-                                                mountains, far from the
-                                                countries Vokalia and
-                                                Consonantia, there live the
-                                                blind texts. Separated they live
-                                                in Bookmarksgrove right at the
-                                                coast of the Semantics, a large
-                                                language ocean.
-                                            </p>
-                                            <a
-                                                href="#"
-                                                class="post-author d-flex align-items-center"
+                                    <h2 class="heading text-light">
+                                        <router-link
+                                            class="text-dark"
+                                            :to="{
+                                                name: 'post',
+                                                params: {
+                                                    slug: post.slug
+                                                }
+                                            }"
+                                            >{{ post.title }}
+                                        </router-link>
+                                    </h2>
+                                    <p style="color:black;text-align:justify">
+                                        {{ post.desc }}
+                                    </p>
+                                    <a
+                                        href="#"
+                                        class="post-author d-flex align-items-center"
+                                    >
+                                        <div class="author-pic text-secondary">
+                                            <router-link
+                                                class="text-secondary"
+                                                style="padding:0"
+                                                :to="{
+                                                    name: 'profile',
+                                                    params: {
+                                                        username: post.user.name
+                                                    }
+                                                }"
                                             >
-                                                <div class="author-pic">
-                                                    <img
-                                                        src="images/person_1.jpg"
-                                                        alt="Image"
-                                                    />
-                                                </div>
-                                                <div class="text">
-                                                    <strong
-                                                        >Sergy Campbell</strong
-                                                    >
-                                                    <span
-                                                        >Author, 25 published
-                                                        post</span
-                                                    >
-                                                </div>
-                                            </a>
+                                                <img
+                                                    :src="post.user.profilePic"
+                                                    alt="Image"
+                                                />
+                                            </router-link>
                                         </div>
-                                    </div>
+                                        <div class="text text-secondary">
+                                            <strong class="text-secondary">{{
+                                                post.user.name
+                                            }}</strong>
+                                            <span class="text-secondary"
+                                                >Author,
+                                                {{ post.user.posts.length }}
+                                                published post</span
+                                            >
+                                        </div>
+                                    </a>
                                 </div>
-                            </tiny-slider>
+                            </div>
                         </div>
+                    </div>
+                    <div class="coarousel_control">
+                        <a
+                            style="bottom: -478px !important;left:1248px"
+                            href="#carouselExampleIndicators2"
+                            role="button"
+                            data-slide="prev"
+                        >
+                            <span
+                                aria-hidden="true"
+                                style="width:17px;color:black"
+                                >Prev |
+                            </span>
+                        </a>
+                        <a
+                            style="bottom: -478px !important;"
+                            href="#carouselExampleIndicators2"
+                            role="button"
+                            data-slide="next"
+                        >
+                            <span
+                                aria-hidden="true"
+                                style="width:17px;color:black"
+                                >Next</span
+                            >
+                        </a>
                     </div>
                 </div>
             </div>
@@ -690,7 +579,7 @@
             <div class="container">
                 <div class="row justify-content-center mb-5">
                     <div class="col-lg-7 text-center">
-                        <h2 class="heading">followings Posts</h2>
+                        <h2 class="heading">Friends' Posts</h2>
                     </div>
                 </div>
                 <div class="row g-5">

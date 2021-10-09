@@ -150,7 +150,7 @@
                                     />
                                 </router-link>
                                 &mdash;
-                                <span style="font-size:17px">{{
+                                <span style="font-size:14px">{{
                                     moment(post.created_at).format(
                                         "MMM DD,YYYY"
                                     )
@@ -246,7 +246,7 @@
             </div>
         </div>
         <div class="pb-0 section">
-            <div class="col-lg-9" style="margin:auto">
+            <div class="container" style="margin:auto">
                 <div class="row">
                     <div class="col-lg-12">
                         <h2 class="heading">Related</h2>

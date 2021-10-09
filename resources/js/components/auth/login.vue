@@ -141,6 +141,7 @@ export default {
                 Reload.$emit("login");
                 this.showSpinner = false;
                 this.$router.back();
+                User.responseAfterLogin(res);
             } catch (error) {
                 if (error) {
                     this.showSpinner = false;

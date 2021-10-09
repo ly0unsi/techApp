@@ -61,11 +61,7 @@ class UserController extends Controller
         $profile->name = request()->name;
         $profile->email = request()->email;
         $profile->profilePic = '/' . $image_url;
-        $profile->update();
-
-        $profile->name = request()->name;
-        $profile->email = request()->email;
-        $profile->profilePic = $profile->profilePic;
+        $profile->bio = request()->bio;
         $profile->update();
     }
 }
