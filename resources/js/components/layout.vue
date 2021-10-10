@@ -169,6 +169,7 @@
                                                 aria-haspopup="true"
                                                 aria-expanded="false"
                                                 style="font-size: 22px;cursor:pointer"
+                                                @click="markAsRead(user.id)"
                                             >
                                                 <i
                                                     class="far fa-bell text-dark ms-2"
@@ -176,11 +177,8 @@
                                                 <span
                                                     class="bg-dark text-light rounded-circle position-absolute"
                                                     style="font-size: 11px;padding: 2px;width: 17px;height: 17px;text-align: center;right: -6px;"
-                                                    v-if="
-                                                        Object.keys(nots)
-                                                            .length !== 0
-                                                    "
-                                                    >{{ nots.length }}</span
+                                                    v-if="unreadNots !== 0"
+                                                    >{{ unreadNots }}</span
                                                 >
                                             </div>
 
@@ -193,12 +191,18 @@
                                                 "
                                             >
                                                 <div
-                                                    class="dropdown-item bg-dark text-light"
-                                                    v-for="not in nots"
+                                                    class="dropdown-item text-light"
+                                                    v-for="not in nots.slice(
+                                                        0,
+                                                        4
+                                                    )"
                                                     :key="not.id"
-                                                    @click="markAsRead(not.id)"
                                                 >
                                                     <router-link
+                                                        v-if="
+                                                            not.type ==
+                                                                'App\\Notifications\\postLiked'
+                                                        "
                                                         style="padding:0"
                                                         class="text-light"
                                                         :to="{
@@ -225,10 +229,50 @@
                                                         <i
                                                             class="fas fa-heart"
                                                         ></i>
+
                                                         {{ not.data.user_name }}
 
                                                         <b>liked your post</b>
                                                     </router-link>
+
+                                                    <div
+                                                        v-else
+                                                        style="cursor:pointer"
+                                                    >
+                                                        <img
+                                                            style="width: 24px;
+                                                                    border-radius: 50%;
+                                                                    border:1px solid #303030;
+                                                                    height: 24px;
+                                                                    object-fit: cover;"
+                                                            :src="
+                                                                not.data
+                                                                    .user_pic
+                                                            "
+                                                            alt=""
+                                                        />
+                                                        <i
+                                                            class="fas fa-user-plus"
+                                                        ></i>
+                                                        {{ not.data.user_name }}
+                                                        <b
+                                                            >started following
+                                                            you</b
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div
+                                                class="dropdown-menu nots-dropdown"
+                                                aria-labelledby="dropdownMenuButton"
+                                                v-else
+                                            >
+                                                <div
+                                                    class="dropdown-item text-light"
+                                                >
+                                                    No notifications at the
+                                                    moment
                                                 </div>
                                             </div>
                                         </li>
@@ -332,6 +376,7 @@ export default {
             searchTerm: "",
             posts: [],
             nots: {},
+            unreadNots: null,
             csrf: document
                 .querySelector('meta[name="csrf-token"]')
                 .getAttribute("content")
@@ -363,7 +408,8 @@ export default {
         async getNots() {
             if (Object.keys(this.user).length > 0) {
                 const res = await axios.get("/api/getnots/");
-                this.nots = res.data;
+                this.nots = res.data.nots;
+                this.unreadNots = res.data.unreadNots;
             }
         },
         async getCategories() {

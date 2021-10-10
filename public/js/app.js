@@ -4239,6 +4239,50 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_components$mounted$d = {
   components: {
@@ -4257,6 +4301,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       searchTerm: "",
       posts: [],
       nots: {},
+      unreadNots: null,
       csrf: document.querySelector('meta[name="csrf-token"]').getAttribute("content")
     };
   },
@@ -4332,7 +4377,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context3.prev = _context3.next) {
               case 0:
                 if (!(Object.keys(_this2.user).length > 0)) {
-                  _context3.next = 5;
+                  _context3.next = 6;
                   break;
                 }
 
@@ -4341,9 +4386,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 3:
                 res = _context3.sent;
-                _this2.nots = res.data;
+                _this2.nots = res.data.nots;
+                _this2.unreadNots = res.data.unreadNots;
 
-              case 5:
+              case 6:
               case "end":
                 return _context3.stop();
             }
@@ -85865,6 +85911,11 @@ var render = function() {
                                           "data-toggle": "dropdown",
                                           "aria-haspopup": "true",
                                           "aria-expanded": "false"
+                                        },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.markAsRead(_vm.user.id)
+                                          }
                                         }
                                       },
                                       [
@@ -85873,7 +85924,7 @@ var render = function() {
                                             "far fa-bell text-dark ms-2"
                                         }),
                                         _vm._v(" "),
-                                        Object.keys(_vm.nots).length !== 0
+                                        _vm.unreadNots !== 0
                                           ? _c(
                                               "span",
                                               {
@@ -85888,7 +85939,7 @@ var render = function() {
                                                   right: "-6px"
                                                 }
                                               },
-                                              [_vm._v(_vm._s(_vm.nots.length))]
+                                              [_vm._v(_vm._s(_vm.unreadNots))]
                                             )
                                           : _vm._e()
                                       ]
@@ -85905,78 +85956,150 @@ var render = function() {
                                                 "dropdownMenuButton"
                                             }
                                           },
-                                          _vm._l(_vm.nots, function(not) {
+                                          _vm._l(_vm.nots.slice(0, 4), function(
+                                            not
+                                          ) {
                                             return _c(
                                               "div",
                                               {
                                                 key: not.id,
                                                 staticClass:
-                                                  "dropdown-item bg-dark text-light",
-                                                on: {
-                                                  click: function($event) {
-                                                    return _vm.markAsRead(
-                                                      not.id
-                                                    )
-                                                  }
-                                                }
+                                                  "dropdown-item text-light"
                                               },
                                               [
-                                                _c(
-                                                  "router-link",
-                                                  {
-                                                    staticClass: "text-light",
-                                                    staticStyle: {
-                                                      padding: "0"
-                                                    },
-                                                    attrs: {
-                                                      to: {
-                                                        name: "post",
-                                                        params: {
-                                                          slug:
-                                                            not.data.post_slug
+                                                not.type ==
+                                                "App\\Notifications\\postLiked"
+                                                  ? _c(
+                                                      "router-link",
+                                                      {
+                                                        staticClass:
+                                                          "text-light",
+                                                        staticStyle: {
+                                                          padding: "0"
+                                                        },
+                                                        attrs: {
+                                                          to: {
+                                                            name: "post",
+                                                            params: {
+                                                              slug:
+                                                                not.data
+                                                                  .post_slug
+                                                            }
+                                                          }
                                                         }
-                                                      }
-                                                    }
-                                                  },
-                                                  [
-                                                    _c("img", {
-                                                      staticStyle: {
-                                                        width: "24px",
-                                                        "border-radius": "50%",
-                                                        border:
-                                                          "1px solid #303030",
-                                                        height: "24px",
-                                                        "object-fit": "cover"
                                                       },
-                                                      attrs: {
-                                                        src: not.data.user_pic,
-                                                        alt: ""
-                                                      }
-                                                    }),
-                                                    _vm._v(" "),
-                                                    _c("i", {
-                                                      staticClass:
-                                                        "fas fa-heart"
-                                                    }),
-                                                    _vm._v(
-                                                      "\n                                                    " +
-                                                        _vm._s(
-                                                          not.data.user_name
-                                                        ) +
-                                                        "\n\n                                                    "
-                                                    ),
-                                                    _c("b", [
-                                                      _vm._v("liked your post")
-                                                    ])
-                                                  ]
-                                                )
+                                                      [
+                                                        _c("img", {
+                                                          staticStyle: {
+                                                            width: "24px",
+                                                            "border-radius":
+                                                              "50%",
+                                                            border:
+                                                              "1px solid #303030",
+                                                            height: "24px",
+                                                            "object-fit":
+                                                              "cover"
+                                                          },
+                                                          attrs: {
+                                                            src:
+                                                              not.data.user_pic,
+                                                            alt: ""
+                                                          }
+                                                        }),
+                                                        _vm._v(" "),
+                                                        _c("i", {
+                                                          staticClass:
+                                                            "fas fa-heart"
+                                                        }),
+                                                        _vm._v(
+                                                          "\n\n                                                    " +
+                                                            _vm._s(
+                                                              not.data.user_name
+                                                            ) +
+                                                            "\n\n                                                    "
+                                                        ),
+                                                        _c("b", [
+                                                          _vm._v(
+                                                            "liked your post"
+                                                          )
+                                                        ])
+                                                      ]
+                                                    )
+                                                  : _c(
+                                                      "div",
+                                                      {
+                                                        staticStyle: {
+                                                          cursor: "pointer"
+                                                        }
+                                                      },
+                                                      [
+                                                        _c("img", {
+                                                          staticStyle: {
+                                                            width: "24px",
+                                                            "border-radius":
+                                                              "50%",
+                                                            border:
+                                                              "1px solid #303030",
+                                                            height: "24px",
+                                                            "object-fit":
+                                                              "cover"
+                                                          },
+                                                          attrs: {
+                                                            src:
+                                                              not.data.user_pic,
+                                                            alt: ""
+                                                          }
+                                                        }),
+                                                        _vm._v(" "),
+                                                        _c("i", {
+                                                          staticClass:
+                                                            "fas fa-user-plus"
+                                                        }),
+                                                        _vm._v(
+                                                          "\n                                                    " +
+                                                            _vm._s(
+                                                              not.data.user_name
+                                                            ) +
+                                                            "\n                                                    "
+                                                        ),
+                                                        _c("b", [
+                                                          _vm._v(
+                                                            "started following\n                                                        you"
+                                                          )
+                                                        ])
+                                                      ]
+                                                    )
                                               ],
                                               1
                                             )
                                           }),
                                           0
                                         )
-                                      : _vm._e()
+                                      : _c(
+                                          "div",
+                                          {
+                                            staticClass:
+                                              "dropdown-menu nots-dropdown",
+                                            attrs: {
+                                              "aria-labelledby":
+                                                "dropdownMenuButton"
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "div",
+                                              {
+                                                staticClass:
+                                                  "dropdown-item text-light"
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                                                No notifications at the\n                                                moment\n                                            "
+                                                )
+                                              ]
+                                            )
+                                          ]
+                                        )
                                   ])
                                 : _vm._e(),
                               _vm._v(" "),

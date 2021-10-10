@@ -765,11 +765,13 @@ body {
 }
 .dropdown-item {
     display: block;
+    font-size: 14px;
     width: 100%;
     padding: 5px 7px;
     clear: both;
     font-weight: 400;
     color: #212529;
+    background: var(--bs-dark);
     text-align: inherit;
     text-decoration: none;
     border-radius: 6px;
@@ -784,9 +786,15 @@ body {
     left: -85px !important;
     border: none;
     border-radius: 10px !important;
+    background-color: var(--bs-dark);
 }
 .dropdown-item:hover,
 .dropdown-item:focus {
+    color: #1e2125 !important;
+    background-color: whitesmoke;
+}
+.dropdown-item > a:hover,
+.dropdown-item > a:focus {
     color: #1e2125 !important;
     background-color: whitesmoke;
 }

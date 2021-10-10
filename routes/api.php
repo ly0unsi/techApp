@@ -32,7 +32,7 @@ Route::group([
 });
 Route::get('user', 'masterController@user');
 Route::get('getnots', 'masterController@getNots');
-Route::post('markasread/{notId}', 'masterController@markAsRead');
+Route::post('markasread/{userId}', 'masterController@markAsRead');
 
 Route::post('createCat', 'Api\CategoryController@createCat');
 Route::get('categories', 'Api\CategoryController@index');

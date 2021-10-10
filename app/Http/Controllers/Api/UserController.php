@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use App\Notifications\userFollowed;
 use App\User;
 use Intervention\Image\Facades\Image;
 use Illuminate\Http\Request;
@@ -23,12 +24,14 @@ class UserController extends Controller
             $count = $profile->followers()->count();
         } else {
             $profile->followers()->attach(auth()->user()->id);
+            $profile->notify(new userFollowed(auth()->user()));
             $count = $profile->followers()->count();
         }
     }
     public function index($username)
     {
-        $profile = User::where('name', $username)->with('posts')->first();
+        $profile = User::where('name', $username)->with('posts', 'posts.category')->first();
+
         $followers = $profile->followers()->withCount([
             'followers as following' => function ($q) {
                 return $q->where('follower_id', auth()->user()->id);
