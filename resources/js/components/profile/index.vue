@@ -75,13 +75,13 @@
                                     </div>
                                     <div class="col border-right text-center">
                                         <span class="text-dark fw-bold">{{
-                                            form.followers.length
+                                            followers.length
                                         }}</span>
                                         <span class="text-dark">Followers</span>
                                     </div>
                                     <div class="col text-center">
                                         <span class="text-dark fw-bold">{{
-                                            form.followings.length
+                                            followings.length
                                         }}</span>
                                         <span class="text-dark"
                                             >Followings</span
@@ -430,7 +430,7 @@
                                                     >
                                                         <div
                                                             class="tab-pane fade active show"
-                                                            v-for="following in form.followings"
+                                                            v-for="following in followings"
                                                             :key="following.id"
                                                         >
                                                             <div
@@ -468,19 +468,30 @@
                                                                             }}
                                                                         </div>
                                                                     </div>
-                                                                    <!--
+
                                                                     <a
-                                                                        href="#"
-                                                                        class="btn btn-outline-primary"
+                                                                        @click.prevent="
+                                                                            follow(
+                                                                                following.id
+                                                                            )
+                                                                        "
+                                                                        v-if="
+                                                                            user.id !==
+                                                                                following.id
+                                                                        "
+                                                                        class="btn btn-sm btn-outline-dark"
                                                                     >
                                                                         <span
+                                                                            v-if="
+                                                                                !following.following
+                                                                            "
                                                                             >Follow</span
                                                                         >
                                                                         <span
+                                                                            v-else
                                                                             >Unfollow</span
                                                                         >
                                                                     </a>
-                                                                    !-->
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -496,7 +507,7 @@
                                         >
                                             <div
                                                 class="tab-pane fade active show"
-                                                v-for="follower in form.followers"
+                                                v-for="follower in followers"
                                                 :key="follower.id"
                                             >
                                                 <div class="list-group">
@@ -532,19 +543,29 @@
                                                                 }}
                                                             </div>
                                                         </div>
-                                                        <!--
-                                                                    <a
-                                                                        href="#"
-                                                                        class="btn btn-outline-primary"
-                                                                    >
-                                                                        <span
-                                                                            >Follow</span
-                                                                        >
-                                                                        <span
-                                                                            >Unfollow</span
-                                                                        >
-                                                                    </a>
-                                                                    !-->
+
+                                                        <a
+                                                            @click.prevent="
+                                                                follow(
+                                                                    follower.id
+                                                                )
+                                                            "
+                                                            class="btn btn-sm btn-outline-dark"
+                                                            v-if="
+                                                                user.id !==
+                                                                    follower.id
+                                                            "
+                                                        >
+                                                            <span
+                                                                v-if="
+                                                                    !follower.following
+                                                                "
+                                                                >Follow
+                                                            </span>
+                                                            <span v-else
+                                                                >Unfollow</span
+                                                            >
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -574,7 +595,9 @@ export default {
             errors: {},
             showSpinner: false,
             profilePosts: {},
-            isFollowing: false
+            isFollowing: false,
+            followers: {},
+            followings: {}
         };
     },
     methods: {
@@ -611,6 +634,8 @@ export default {
             this.form = res.data.profile;
             this.profilePosts = res.data.profilePosts;
             this.isFollowing = res.data.isFollowing;
+            this.followers = res.data.followers;
+            this.followings = res.data.followings;
         },
         async editProfile() {
             try {

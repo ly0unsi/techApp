@@ -75,7 +75,7 @@ class PostController extends Controller
     // all books
     public function index(Request $request)
     {
-        $mostLiked = Post::with('user', 'category', 'likes', 'user.posts')->withCount('likes')->orderBy('likes_count', 'DESC')->get();
+        $mostLiked = Post::with('user', 'category', 'likes', 'user.followers', 'user.posts')->withCount('likes')->orderBy('likes_count', 'DESC')->get();
         $trend = Post::with('user', 'category', 'likes', 'user.posts')->latest()->get();
         if (auth()->user()) {
             $userIds = auth()->user()->getUserIds();
@@ -181,8 +181,9 @@ class PostController extends Controller
             $like->username = auth()->user()->name;
 
             $like->save();
-
-            $post->user->notify(new postLiked($post, auth()->user()));
+            if ($post->user->id !== auth()->user()->id) {
+                $post->user->notify(new postLiked($post, auth()->user()));
+            }
         }
     }
 }

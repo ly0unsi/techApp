@@ -28,7 +28,17 @@ class UserController extends Controller
     }
     public function index($username)
     {
-        $profile = User::where('name', $username)->with('posts', 'followers', 'followings')->first();
+        $profile = User::where('name', $username)->with('posts')->first();
+        $followers = $profile->followers()->withCount([
+            'followers as following' => function ($q) {
+                return $q->where('follower_id', auth()->user()->id);
+            }
+        ])->withCasts(['following' => 'boolean'])->get();
+        $followings = $profile->followings()->withCount([
+            'followers as following' => function ($q) {
+                return $q->where('follower_id', auth()->user()->id);
+            }
+        ])->withCasts(['following' => 'boolean'])->get();
         $profilePosts = Post::where('user_id', $profile->id)->with('category')->latest()->get();
         $isFollowing = false;
         if ($profile->isFollowedBy(auth()->user())) {
@@ -37,7 +47,9 @@ class UserController extends Controller
         return response()->json([
             'profile' => $profile,
             'profilePosts' => $profilePosts,
-            'isFollowing' => $isFollowing
+            'isFollowing' => $isFollowing,
+            'followings' => $followings,
+            'followers' => $followers
         ]);
     }
     public function edit($username)

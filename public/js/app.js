@@ -6456,6 +6456,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -6470,7 +6491,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       errors: {},
       showSpinner: false,
       profilePosts: {},
-      isFollowing: false
+      isFollowing: false,
+      followers: {},
+      followings: {}
     };
   },
   methods: {
@@ -6568,8 +6591,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this3.form = res.data.profile;
                 _this3.profilePosts = res.data.profilePosts;
                 _this3.isFollowing = res.data.isFollowing;
+                _this3.followers = res.data.followers;
+                _this3.followings = res.data.followings;
 
-              case 7:
+              case 9:
               case "end":
                 return _context3.stop();
             }
@@ -88100,7 +88125,7 @@ var render = function() {
                           { staticClass: "col border-right text-center" },
                           [
                             _c("span", { staticClass: "text-dark fw-bold" }, [
-                              _vm._v(_vm._s(_vm.form.followers.length))
+                              _vm._v(_vm._s(_vm.followers.length))
                             ]),
                             _vm._v(" "),
                             _c("span", { staticClass: "text-dark" }, [
@@ -88111,7 +88136,7 @@ var render = function() {
                         _vm._v(" "),
                         _c("div", { staticClass: "col text-center" }, [
                           _c("span", { staticClass: "text-dark fw-bold" }, [
-                            _vm._v(_vm._s(_vm.form.followings.length))
+                            _vm._v(_vm._s(_vm.followings.length))
                           ]),
                           _vm._v(" "),
                           _c("span", { staticClass: "text-dark" }, [
@@ -88560,9 +88585,7 @@ var render = function() {
                                   _c(
                                     "div",
                                     { staticClass: "tab-content p-0" },
-                                    _vm._l(_vm.form.followings, function(
-                                      following
-                                    ) {
+                                    _vm._l(_vm.followings, function(following) {
                                       return _c(
                                         "div",
                                         {
@@ -88636,7 +88659,38 @@ var render = function() {
                                                         ]
                                                       )
                                                     ]
-                                                  )
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _vm.user.id !== following.id
+                                                    ? _c(
+                                                        "a",
+                                                        {
+                                                          staticClass:
+                                                            "btn btn-sm btn-outline-dark",
+                                                          on: {
+                                                            click: function(
+                                                              $event
+                                                            ) {
+                                                              $event.preventDefault()
+                                                              return _vm.follow(
+                                                                following.id
+                                                              )
+                                                            }
+                                                          }
+                                                        },
+                                                        [
+                                                          !following.following
+                                                            ? _c("span", [
+                                                                _vm._v("Follow")
+                                                              ])
+                                                            : _c("span", [
+                                                                _vm._v(
+                                                                  "Unfollow"
+                                                                )
+                                                              ])
+                                                        ]
+                                                      )
+                                                    : _vm._e()
                                                 ]
                                               )
                                             ]
@@ -88661,7 +88715,7 @@ var render = function() {
                                 "aria-labelledby": "nav-contact-tab"
                               }
                             },
-                            _vm._l(_vm.form.followers, function(follower) {
+                            _vm._l(_vm.followers, function(follower) {
                               return _c(
                                 "div",
                                 {
@@ -88725,7 +88779,36 @@ var render = function() {
                                               ]
                                             )
                                           ]
-                                        )
+                                        ),
+                                        _vm._v(" "),
+                                        _vm.user.id !== follower.id
+                                          ? _c(
+                                              "a",
+                                              {
+                                                staticClass:
+                                                  "btn btn-sm btn-outline-dark",
+                                                on: {
+                                                  click: function($event) {
+                                                    $event.preventDefault()
+                                                    return _vm.follow(
+                                                      follower.id
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                !follower.following
+                                                  ? _c("span", [
+                                                      _vm._v(
+                                                        "Follow\n                                                        "
+                                                      )
+                                                    ])
+                                                  : _c("span", [
+                                                      _vm._v("Unfollow")
+                                                    ])
+                                              ]
+                                            )
+                                          : _vm._e()
                                       ]
                                     )
                                   ])
