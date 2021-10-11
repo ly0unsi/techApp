@@ -3770,6 +3770,41 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -4320,7 +4355,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 
 var API = "http://api.openweathermap.org/data/2.5/weather?units=metric";
-var KEY = "&appid=" + "758914209cbe91dd9b71d02c93cc4f54";
+var KEY = "&appid=" + "758914209cbe91dd9b71d02c93cc4f54"; // var config = {
+//     method: "get",
+//     url: "https://v3.football.api-sports.io/leagues",
+//     params: {
+//         name: "Botola Pro",
+//         season: "2021"
+//     },
+//     headers: {
+//         "x-rapidapi-key": "9f06cf75f48f32d5c71dfabf598f59b6",
+//         "x-rapidapi-host": "v3.football.api-sports.io"
+//     }
+// };
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_components$mounted$d = {
   components: {
     create: _post_create_vue__WEBPACK_IMPORTED_MODULE_1__.default
@@ -4608,7 +4655,13 @@ var KEY = "&appid=" + "758914209cbe91dd9b71d02c93cc4f54";
     _this9.getNots();
   });
   this.getNots();
-  this.geolocation();
+  this.geolocation(); // axios(config)
+  //     .then(function(response) {
+  //         console.log(JSON.stringify(response.data));
+  //     })
+  //     .catch(function(error) {
+  //         console.log(error);
+  //     });
 }), _components$mounted$d);
 
 /***/ }),
@@ -84557,134 +84610,32 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "section" }, [
       _c("div", { staticClass: "container" }, [
-        _c(
-          "div",
-          { staticClass: "row g-5" },
-          [
+        _c("div", { staticClass: "row g-5" }, [
+          _c("div", { staticClass: "col-lg-8" }, [
             _vm._m(1),
             _vm._v(" "),
-            _vm._l(_vm.mostLiked.slice(0, 6), function(post) {
-              return _c(
-                "div",
-                {
-                  key: post.key,
-                  staticClass: "col-lg-4",
-                  attrs: {
-                    "data-aos": "zoom-in-down",
-                    "data-aos-duration": "600"
-                  }
-                },
-                [
-                  _c(
-                    "div",
-                    { staticClass: "post-entry d-block small-post-entry-v" },
-                    [
-                      _c(
-                        "div",
-                        { staticClass: "thumbnail" },
-                        [
-                          _c(
-                            "router-link",
-                            {
-                              attrs: {
-                                to: {
-                                  name: "post",
-                                  params: {
-                                    slug: post.slug
-                                  }
-                                }
-                              }
-                            },
-                            [
-                              _c("img", {
-                                staticClass: "img-fluid",
-                                attrs: { src: post.photo, alt: "Image" }
-                              })
-                            ]
-                          )
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "content" }, [
+            _c(
+              "div",
+              { staticClass: "row" },
+              _vm._l(_vm.mostLiked.slice(0, 4), function(post) {
+                return _c(
+                  "div",
+                  {
+                    key: post.key,
+                    staticClass: "col-lg-6 mt-lg-2",
+                    attrs: {
+                      "data-aos": "zoom-in-down",
+                      "data-aos-duration": "600"
+                    }
+                  },
+                  [
+                    _c(
+                      "div",
+                      { staticClass: "post-entry d-block small-post-entry-v" },
+                      [
                         _c(
                           "div",
-                          { staticClass: "post-meta mb-1" },
-                          [
-                            _c(
-                              "router-link",
-                              {
-                                staticClass: "category text-dark",
-                                staticStyle: { color: "whitesmoke" },
-                                attrs: {
-                                  to: {
-                                    name: "catposts",
-                                    params: {
-                                      catName: post.category.name
-                                    }
-                                  }
-                                }
-                              },
-                              [_vm._v(_vm._s(post.category.name))]
-                            ),
-                            _vm._v(
-                              "\n                                —\n                                "
-                            ),
-                            _c("span", { staticClass: "date" }, [
-                              _vm._v(
-                                _vm._s(
-                                  _vm
-                                    .moment(post.created_at)
-                                    .format("MMM DD,YYYY")
-                                )
-                              )
-                            ]),
-                            _vm._v(
-                              "\n                                —\n                                "
-                            ),
-                            _c("span", { staticClass: "text-dark" }, [
-                              _vm._v(
-                                "\n                                    " +
-                                  _vm._s(post.likes.length) +
-                                  "\n                                "
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c("i", { staticClass: "fas fa-heart text-dark" }),
-                            _vm._v(" "),
-                            post.user_id === _vm.user.id
-                              ? _c(
-                                  "span",
-                                  [
-                                    _vm._v(
-                                      "\n                                    —\n                                    "
-                                    ),
-                                    _c(
-                                      "router-link",
-                                      {
-                                        staticClass: "text-dark",
-                                        attrs: {
-                                          to: {
-                                            name: "editpost",
-                                            params: {
-                                              postSlug: post.slug
-                                            }
-                                          }
-                                        }
-                                      },
-                                      [_vm._v("Edit")]
-                                    )
-                                  ],
-                                  1
-                                )
-                              : _vm._e()
-                          ],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "h2",
-                          { staticClass: "heading mb-3" },
+                          { staticClass: "thumbnail" },
                           [
                             _c(
                               "router-link",
@@ -84698,80 +84649,206 @@ var render = function() {
                                   }
                                 }
                               },
-                              [_vm._v(_vm._s(post.title.slice(0, 68)) + "..")]
+                              [
+                                _c("img", {
+                                  staticClass: "img-fluid",
+                                  attrs: { src: post.photo, alt: "Image" }
+                                })
+                              ]
                             )
                           ],
                           1
                         ),
                         _vm._v(" "),
-                        _c("p", { staticStyle: { "text-align": "justify" } }, [
-                          _vm._v(
-                            "\n                                " +
-                              _vm._s(post.desc.slice(0, 100)) +
-                              "..\n                            "
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "a",
-                          {
-                            staticClass:
-                              "post-author d-flex align-items-center",
-                            attrs: { href: "#" }
-                          },
-                          [
-                            _c(
-                              "div",
-                              { staticClass: "author-pic" },
-                              [
-                                _c(
-                                  "router-link",
-                                  {
-                                    staticStyle: { padding: "0" },
-                                    attrs: {
-                                      to: {
-                                        name: "profile",
-                                        params: {
-                                          username: post.user.name
-                                        }
+                        _c("div", { staticClass: "content" }, [
+                          _c(
+                            "div",
+                            { staticClass: "post-meta mb-1" },
+                            [
+                              _c(
+                                "router-link",
+                                {
+                                  staticClass: "category text-dark",
+                                  staticStyle: { color: "whitesmoke" },
+                                  attrs: {
+                                    to: {
+                                      name: "catposts",
+                                      params: {
+                                        catName: post.category.name
                                       }
                                     }
-                                  },
-                                  [
-                                    _c("img", {
-                                      attrs: {
-                                        src: post.user.profilePic,
-                                        alt: "Image"
-                                      }
-                                    })
-                                  ]
-                                )
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "text" }, [
-                              _c("strong", [_vm._v(_vm._s(post.user.name))]),
-                              _vm._v(" "),
-                              _c("span", [
+                                  }
+                                },
+                                [_vm._v(_vm._s(post.category.name))]
+                              ),
+                              _vm._v(
+                                "\n                                        —\n                                        "
+                              ),
+                              _c("span", { staticClass: "date" }, [
                                 _vm._v(
-                                  "Author,\n                                        " +
-                                    _vm._s(post.user.posts.length) +
-                                    "\n                                        published post"
+                                  _vm._s(
+                                    _vm
+                                      .moment(post.created_at)
+                                      .format("MMM DD,YYYY")
+                                  )
                                 )
+                              ]),
+                              _vm._v(
+                                "\n                                        —\n                                        "
+                              ),
+                              _c("span", { staticClass: "text-dark" }, [
+                                _vm._v(
+                                  "\n                                            " +
+                                    _vm._s(post.likes.length) +
+                                    "\n                                        "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("i", {
+                                staticClass: "fas fa-heart text-dark"
+                              }),
+                              _vm._v(" "),
+                              post.user_id === _vm.user.id
+                                ? _c(
+                                    "span",
+                                    [
+                                      _vm._v(
+                                        "\n                                            —\n                                            "
+                                      ),
+                                      _c(
+                                        "router-link",
+                                        {
+                                          staticClass: "text-dark",
+                                          attrs: {
+                                            to: {
+                                              name: "editpost",
+                                              params: {
+                                                postSlug: post.slug
+                                              }
+                                            }
+                                          }
+                                        },
+                                        [_vm._v("Edit")]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                : _vm._e()
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "h2",
+                            { staticClass: "heading mb-3" },
+                            [
+                              _c(
+                                "router-link",
+                                {
+                                  attrs: {
+                                    to: {
+                                      name: "post",
+                                      params: {
+                                        slug: post.slug
+                                      }
+                                    }
+                                  }
+                                },
+                                [_vm._v(_vm._s(post.title.slice(0, 68)) + "..")]
+                              )
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "p",
+                            { staticStyle: { "text-align": "justify" } },
+                            [
+                              _vm._v(
+                                "\n                                        " +
+                                  _vm._s(post.desc.slice(0, 100)) +
+                                  "..\n                                    "
+                              )
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass:
+                                "post-author d-flex align-items-center",
+                              attrs: { href: "#" }
+                            },
+                            [
+                              _c(
+                                "div",
+                                { staticClass: "author-pic" },
+                                [
+                                  _c(
+                                    "router-link",
+                                    {
+                                      staticStyle: { padding: "0" },
+                                      attrs: {
+                                        to: {
+                                          name: "profile",
+                                          params: {
+                                            username: post.user.name
+                                          }
+                                        }
+                                      }
+                                    },
+                                    [
+                                      _c("img", {
+                                        attrs: {
+                                          src: post.user.profilePic,
+                                          alt: "Image"
+                                        }
+                                      })
+                                    ]
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _c("div", { staticClass: "text" }, [
+                                _c("strong", [_vm._v(_vm._s(post.user.name))]),
+                                _vm._v(" "),
+                                _c("span", [
+                                  _vm._v(
+                                    "Author,\n                                                " +
+                                      _vm._s(post.user.posts.length) +
+                                      "\n                                                published post"
+                                  )
+                                ])
                               ])
-                            ])
-                          ]
-                        )
-                      ])
-                    ]
-                  )
-                ]
-              )
+                            ]
+                          )
+                        ])
+                      ]
+                    )
+                  ]
+                )
+              }),
+              0
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-lg-4" }, [
+            _vm._m(2),
+            _vm._v(" "),
+            _c("div", {
+              staticClass: "api_football_loader shadow-sm",
+              attrs: {
+                id: "wg-api-football-livescore",
+                "data-host": "v3.football.api-sports.io",
+                "data-refresh": "60",
+                "data-key": _vm.process.env.MIX_FOOT_API_TOKEN,
+                "data-theme": "gray",
+                "data-show-errors": "false"
+              }
             })
-          ],
-          2
-        )
+          ])
+        ])
       ])
     ]),
     _vm._v(" "),
@@ -85074,7 +85151,7 @@ var render = function() {
               0
             ),
             _vm._v(" "),
-            _vm._m(2)
+            _vm._m(3)
           ]
         )
       ])
@@ -85238,7 +85315,7 @@ var render = function() {
     Object.keys(_vm.user).length > 0
       ? _c("div", { staticClass: "section" }, [
           _c("div", { staticClass: "container" }, [
-            _vm._m(3),
+            _vm._m(4),
             _vm._v(" "),
             _c(
               "div",
@@ -85408,9 +85485,9 @@ var render = function() {
         ])
       : _vm._e(),
     _vm._v(" "),
-    _vm._m(4),
+    _vm._m(5),
     _vm._v(" "),
-    _vm._m(5)
+    _vm._m(6)
   ])
 }
 var staticRenderFns = [
@@ -85469,8 +85546,18 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "row justify-content-center mt-4" }, [
-      _c("div", { staticClass: "col-lg-7 text-center" }, [
-        _c("h2", { staticClass: "heading" }, [_vm._v("Most Liked Posts")])
+      _c("div", { staticClass: "col-lg-7 text-center fw-bold" }, [
+        _c("h3", { staticClass: "fw-bold" }, [_vm._v("Most Liked Posts")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row justify-content-center mt-4" }, [
+      _c("div", { staticClass: "col-lg-12 text-center " }, [
+        _c("h3", { staticClass: "fw-bold" }, [_vm._v("Football live score")])
       ])
     ])
   },

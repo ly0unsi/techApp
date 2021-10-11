@@ -181,121 +181,155 @@
         <div class="section">
             <div class="container">
                 <div class="row g-5">
-                    <div class="row justify-content-center mt-4">
-                        <div class="col-lg-7 text-center">
-                            <h2 class="heading">Most Liked Posts</h2>
-                        </div>
-                    </div>
-                    <div
-                        class="col-lg-4"
-                        v-for="post in mostLiked.slice(0, 6)"
-                        :key="post.key"
-                        data-aos="zoom-in-down"
-                        data-aos-duration="600"
-                    >
-                        <div class="post-entry d-block small-post-entry-v">
-                            <div class="thumbnail">
-                                <router-link
-                                    :to="{
-                                        name: 'post',
-                                        params: {
-                                            slug: post.slug
-                                        }
-                                    }"
-                                >
-                                    <img
-                                        :src="post.photo"
-                                        alt="Image"
-                                        class="img-fluid"
-                                    />
-                                </router-link>
+                    <div class="col-lg-8">
+                        <div class="row justify-content-center mt-4">
+                            <div class="col-lg-7 text-center fw-bold">
+                                <h3 class="fw-bold">Most Liked Posts</h3>
                             </div>
-                            <div class="content">
-                                <div class="post-meta mb-1">
-                                    <router-link
-                                        class="category text-dark"
-                                        style="color:whitesmoke"
-                                        :to="{
-                                            name: 'catposts',
-                                            params: {
-                                                catName: post.category.name
-                                            }
-                                        }"
-                                        >{{ post.category.name }}</router-link
-                                    >
-                                    &mdash;
-                                    <span class="date">{{
-                                        moment(post.created_at).format(
-                                            "MMM DD,YYYY"
-                                        )
-                                    }}</span>
-                                    &mdash;
-                                    <span class="text-dark">
-                                        {{ post.likes.length }}
-                                    </span>
-
-                                    <i class="fas fa-heart text-dark"></i>
-                                    <span v-if="post.user_id === user.id">
-                                        &mdash;
-                                        <router-link
-                                            class="text-dark"
-                                            :to="{
-                                                name: 'editpost',
-                                                params: {
-                                                    postSlug: post.slug
-                                                }
-                                            }"
-                                            >Edit</router-link
-                                        >
-                                    </span>
-                                </div>
-                                <h2 class="heading mb-3">
-                                    <router-link
-                                        :to="{
-                                            name: 'post',
-                                            params: {
-                                                slug: post.slug
-                                            }
-                                        }"
-                                        >{{
-                                            post.title.slice(0, 68)
-                                        }}..</router-link
-                                    >
-                                </h2>
-                                <p style="text-align:justify">
-                                    {{ post.desc.slice(0, 100) }}..
-                                </p>
-                                <a
-                                    href="#"
-                                    class="post-author d-flex align-items-center"
+                        </div>
+                        <div class="row">
+                            <div
+                                class="col-lg-6 mt-lg-2"
+                                v-for="post in mostLiked.slice(0, 4)"
+                                :key="post.key"
+                                data-aos="zoom-in-down"
+                                data-aos-duration="600"
+                            >
+                                <div
+                                    class="post-entry d-block small-post-entry-v"
                                 >
-                                    <div class="author-pic">
+                                    <div class="thumbnail">
                                         <router-link
-                                            style="padding:0"
                                             :to="{
-                                                name: 'profile',
+                                                name: 'post',
                                                 params: {
-                                                    username: post.user.name
+                                                    slug: post.slug
                                                 }
                                             }"
                                         >
                                             <img
-                                                :src="post.user.profilePic"
+                                                :src="post.photo"
                                                 alt="Image"
+                                                class="img-fluid"
                                             />
                                         </router-link>
                                     </div>
-                                    <div class="text">
-                                        <strong>{{ post.user.name }}</strong>
-                                        <span
-                                            >Author,
-                                            {{ post.user.posts.length }}
-                                            published post</span
+                                    <div class="content">
+                                        <div class="post-meta mb-1">
+                                            <router-link
+                                                class="category text-dark"
+                                                style="color:whitesmoke"
+                                                :to="{
+                                                    name: 'catposts',
+                                                    params: {
+                                                        catName:
+                                                            post.category.name
+                                                    }
+                                                }"
+                                                >{{
+                                                    post.category.name
+                                                }}</router-link
+                                            >
+                                            &mdash;
+                                            <span class="date">{{
+                                                moment(post.created_at).format(
+                                                    "MMM DD,YYYY"
+                                                )
+                                            }}</span>
+                                            &mdash;
+                                            <span class="text-dark">
+                                                {{ post.likes.length }}
+                                            </span>
+
+                                            <i
+                                                class="fas fa-heart text-dark"
+                                            ></i>
+                                            <span
+                                                v-if="post.user_id === user.id"
+                                            >
+                                                &mdash;
+                                                <router-link
+                                                    class="text-dark"
+                                                    :to="{
+                                                        name: 'editpost',
+                                                        params: {
+                                                            postSlug: post.slug
+                                                        }
+                                                    }"
+                                                    >Edit</router-link
+                                                >
+                                            </span>
+                                        </div>
+                                        <h2 class="heading mb-3">
+                                            <router-link
+                                                :to="{
+                                                    name: 'post',
+                                                    params: {
+                                                        slug: post.slug
+                                                    }
+                                                }"
+                                                >{{
+                                                    post.title.slice(0, 68)
+                                                }}..</router-link
+                                            >
+                                        </h2>
+                                        <p style="text-align:justify">
+                                            {{ post.desc.slice(0, 100) }}..
+                                        </p>
+                                        <a
+                                            href="#"
+                                            class="post-author d-flex align-items-center"
                                         >
+                                            <div class="author-pic">
+                                                <router-link
+                                                    style="padding:0"
+                                                    :to="{
+                                                        name: 'profile',
+                                                        params: {
+                                                            username:
+                                                                post.user.name
+                                                        }
+                                                    }"
+                                                >
+                                                    <img
+                                                        :src="
+                                                            post.user.profilePic
+                                                        "
+                                                        alt="Image"
+                                                    />
+                                                </router-link>
+                                            </div>
+                                            <div class="text">
+                                                <strong>{{
+                                                    post.user.name
+                                                }}</strong>
+                                                <span
+                                                    >Author,
+                                                    {{ post.user.posts.length }}
+                                                    published post</span
+                                                >
+                                            </div>
+                                        </a>
                                     </div>
-                                </a>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="row justify-content-center mt-4">
+                            <div class="col-lg-12 text-center ">
+                                <h3 class="fw-bold">Football live score</h3>
+                            </div>
+                        </div>
+                        <div
+                            id="wg-api-football-livescore"
+                            data-host="v3.football.api-sports.io"
+                            data-refresh="60"
+                            :data-key="process.env.MIX_FOOT_API_TOKEN"
+                            data-theme="gray"
+                            data-show-errors="false"
+                            class="api_football_loader shadow-sm"
+                        ></div>
                     </div>
                 </div>
             </div>
@@ -761,6 +795,7 @@
         </div>
     </div>
 </template>
+
 <script>
 import AOS from "aos";
 import "aos/dist/aos.css";

@@ -50,6 +50,17 @@
 .icon-search2:before {
     content: "\e8b6";
 }
+#wg-api-football-livescore {
+    padding: 13px;
+    border-radius: 15px;
+}
+.api_football_liveTime {
+    color: var(--bs-dark) !important;
+}
+
+.api_football_modal_content {
+    border-radius: 24px;
+}
 .icon-edit:before {
     content: "\f044";
 }

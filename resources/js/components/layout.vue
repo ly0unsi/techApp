@@ -395,6 +395,18 @@
 import create from "./post/create.vue";
 const API = "http://api.openweathermap.org/data/2.5/weather?units=metric";
 const KEY = "&appid=" + process.env.MIX_OPEN_WEATHER_TOKEN;
+// var config = {
+//     method: "get",
+//     url: "https://v3.football.api-sports.io/leagues",
+//     params: {
+//         name: "Botola Pro",
+//         season: "2021"
+//     },
+//     headers: {
+//         "x-rapidapi-key": "9f06cf75f48f32d5c71dfabf598f59b6",
+//         "x-rapidapi-host": "v3.football.api-sports.io"
+//     }
+// };
 export default {
     components: { create },
     mounted() {
@@ -560,6 +572,13 @@ export default {
         });
         this.getNots();
         this.geolocation();
+        // axios(config)
+        //     .then(function(response) {
+        //         console.log(JSON.stringify(response.data));
+        //     })
+        //     .catch(function(error) {
+        //         console.log(error);
+        //     });
     }
 };
 </script>
