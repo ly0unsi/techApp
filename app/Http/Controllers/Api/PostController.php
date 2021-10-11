@@ -147,7 +147,8 @@ class PostController extends Controller
         }
         $nextPost =  Post::where('id', '>', $post->id)->orderBy('id', 'asc')->first();
         $prevPost =  Post::where('id', '<', $post->id)->orderBy('id', 'desc')->first();
-
+        $post->views += 1;
+        $post->update();
         return response()->json(
             [
                 'post' => $post,

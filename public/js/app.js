@@ -3767,6 +3767,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -4317,7 +4320,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 
 var API = "http://api.openweathermap.org/data/2.5/weather?units=metric";
-var KEY = "&appid=758914209cbe91dd9b71d02c93cc4f54";
+var KEY = "&appid=" + "758914209cbe91dd9b71d02c93cc4f54";
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_components$mounted$d = {
   components: {
     create: _post_create_vue__WEBPACK_IMPORTED_MODULE_1__.default
@@ -84398,6 +84401,12 @@ var render = function() {
                                 _c("i", {
                                   staticClass: "fas fa-heart text-light"
                                 }),
+                                _vm._v(
+                                  "\n                                    —\n                                    " +
+                                    _vm._s(post.views) +
+                                    "\n                                    "
+                                ),
+                                _c("i", { staticClass: "fas fa-eye" }),
                                 _vm._v(" "),
                                 post.user_id === _vm.user.id
                                   ? _c(

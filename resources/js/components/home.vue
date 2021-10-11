@@ -79,6 +79,9 @@
                                         &mdash;
                                         {{ post.likes.length }}
                                         <i class="fas fa-heart text-light"></i>
+                                        &mdash;
+                                        {{ post.views }}
+                                        <i class="fas fa-eye"></i>
 
                                         <span v-if="post.user_id === user.id">
                                             &mdash;

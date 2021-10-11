@@ -394,7 +394,7 @@
 <script>
 import create from "./post/create.vue";
 const API = "http://api.openweathermap.org/data/2.5/weather?units=metric";
-const KEY = "&appid=758914209cbe91dd9b71d02c93cc4f54";
+const KEY = "&appid=" + process.env.MIX_OPEN_WEATHER_TOKEN;
 export default {
     components: { create },
     mounted() {
