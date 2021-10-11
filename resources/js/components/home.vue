@@ -584,14 +584,14 @@
                 </div>
                 <div class="row g-5">
                     <div
-                        class="col-lg-12"
+                        class="col-lg-6"
                         v-for="post in pageOfPosts"
                         data-aos="zoom-in-down"
                         data-aos-duration="600"
                         :key="post.id"
                     >
-                        <div class="post-entry d-md-flex small-horizontal mb-5">
-                            <div class="me-md-4 thumbnail mb-3 mb-md-0">
+                        <div class="post-entry small-horizontal mb-5">
+                            <div class="me-md-4 thumbnail mb-3">
                                 <img
                                     :src="post.photo"
                                     alt="Image"
@@ -626,11 +626,11 @@
                                     </span>
                                 </div>
                                 <h2 class="heading">
-                                    <a href="single.html">{{ post.title }}</a>
+                                    <a href="single.html"
+                                        >{{ post.title.slice(0, 110) }}..</a
+                                    >
                                 </h2>
-                                <p>
-                                    {{ post.desc }}
-                                </p>
+                                <p>{{ post.desc.slice(0, 160) }}..</p>
                                 <a
                                     href="#"
                                     class="post-author d-flex align-items-center"

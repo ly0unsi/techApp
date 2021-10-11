@@ -1299,8 +1299,8 @@ body {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 .site-nav {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 14px;
+    padding-bottom: 10px;
 }
 .site-nav h1,
 .site-nav .h1 {

@@ -28,6 +28,7 @@
         "aos": "^2.3.4",
         "jw-vue-pagination": "^1.0.3",
         "noty": "^3.2.0-beta",
+        "open-weather-icons": "0.0.8",
         "slugify": "^1.6.0",
         "sweet-alert": "^2.0.5",
         "sweetalert2": "^9.10.12",

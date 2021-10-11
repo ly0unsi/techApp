@@ -21,6 +21,7 @@ class CreatePostsTable extends Migration
             $table->string('photo');
             $table->text('desc');
             $table->text('content');
+
             $table->foreignId('user_id');
             $table->foreignId('category_id');
 

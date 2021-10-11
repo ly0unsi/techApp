@@ -4,9 +4,7 @@
             <div class="container">
                 <div class="site-navigation">
                     <div class="row">
-                        <div
-                            class="col-md-4 text-center order-1 order-md-2 mb-3 mb-md-0"
-                        >
+                        <div class="col-md-2 text-center order-1 mb-3 mb-md-0">
                             <router-link to="/" class="logo m-0 text-uppercase">
                                 Readose.com
                             </router-link>
@@ -72,7 +70,40 @@
                             </transition>
                         </div>
                         <div
-                            class="col-md-4 col-sm-12 text-end order-2 order-md-3 mb-3 mb-md-0"
+                            class="col-md-3 order-3 col-sm-12 shadow-sm"
+                            style="border-radius:35px"
+                            v-if="Object.keys(weather).length !== 0"
+                        >
+                            <img
+                                :src="
+                                    ' http://openweathermap.org/img/wn/' +
+                                        weather.icon +
+                                        '.png'
+                                "
+                                alt=""
+                                width="38"
+                                style="border-radius:50%"
+                            />
+
+                            <b class="text-dark">{{ weather.location }}</b>
+                            <i class="fas fa-thermometer-half text-dark"></i>
+                            <span class="text-dark"
+                                >{{ weather.currentTemp }}°</span
+                            >
+                            -
+                            <i class="fas fa-sun text-dark"></i>
+                            <span class="text-dark">{{ weather.sunrise }}</span>
+                        </div>
+                        <div class="col-md-3 order-3" v-else>
+                            <div
+                                class="spinner-border spinner_add_post"
+                                role="status"
+                            >
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                        <div
+                            class="col-md-3 col-sm-12 text-end order-2 order-md-3 mb-3 mb-md-0"
                         >
                             <div class="d-flex">
                                 <ul class="list-unstyled social me-auto col-10">
@@ -99,6 +130,7 @@
                                             ></a>
                                         </li>
                                     </div>
+
                                     <div
                                         style="float:right align-items: center;display: inline-flex;"
                                     >
@@ -361,6 +393,8 @@
 </template>
 <script>
 import create from "./post/create.vue";
+const API = "http://api.openweathermap.org/data/2.5/weather?units=metric";
+const KEY = "&appid=758914209cbe91dd9b71d02c93cc4f54";
 export default {
     components: { create },
     mounted() {
@@ -369,6 +403,19 @@ export default {
     },
     data() {
         return {
+            weather: {
+                currentTemp: "",
+                windSpeed: "",
+                maxTemp: "",
+                sunrise: "",
+                sunset: "",
+                pressure: "",
+                humidity: "",
+                wind: "",
+                overcast: "",
+                icon: "",
+                location: ""
+            },
             user: {},
             categories: {},
             show: false,
@@ -383,6 +430,40 @@ export default {
         };
     },
     methods: {
+        async getWeather(url) {
+            const response = await axios.get(url);
+            this.weather.currentTemp = response.data.main.temp;
+            this.weather.windSpeed = response.data.wind.speed;
+            this.weather.maxTemp = response.data.main.temp_max;
+            this.weather.pressure = response.data.main.pressure;
+            this.weather.humidity = response.data.main.humidity + "%";
+            this.weather.wind = response.data.wind.speed + "m/s";
+            this.weather.overcast = response.data.weather[0].description;
+            this.weather.icon = response.data.weather[0].icon;
+            this.weather.sunrise = new Date(response.data.sys.sunrise * 1000)
+                .toLocaleTimeString("en-GB")
+                .slice(0, 5);
+            this.weather.sunset = new Date(response.data.sys.sunset * 1000)
+                .toLocaleTimeString("en-GB")
+                .slice(0, 5);
+            this.weather.location =
+                response.data.sys.country + "," + response.data.name;
+        },
+        geolocation() {
+            navigator.geolocation.getCurrentPosition(
+                this.buildUrl,
+                this.geoError
+            );
+        },
+        buildUrl(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            this.getWeather(API + "&lat=" + lat + "&lon=" + lon + KEY);
+        },
+        geoError(error) {
+            this.getWeather(API + "&lat=0&lon=0" + KEY);
+        },
         async markAsRead(id) {
             await axios.post("/api/markasread/" + id);
             Reload.$emit("profileChanged");
@@ -446,6 +527,7 @@ export default {
             });
         }
     },
+
     mounted() {
         this.getNots();
         setInterval(() => {
@@ -477,6 +559,7 @@ export default {
             this.getNots();
         });
         this.getNots();
+        this.geolocation();
     }
 };
 </script>

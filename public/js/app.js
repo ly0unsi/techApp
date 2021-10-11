@@ -4283,7 +4283,41 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
+var API = "http://api.openweathermap.org/data/2.5/weather?units=metric";
+var KEY = "&appid=758914209cbe91dd9b71d02c93cc4f54";
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_components$mounted$d = {
   components: {
     create: _post_create_vue__WEBPACK_IMPORTED_MODULE_1__.default
@@ -4294,6 +4328,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   data: function data() {
     return {
+      weather: {
+        currentTemp: "",
+        windSpeed: "",
+        maxTemp: "",
+        sunrise: "",
+        sunset: "",
+        pressure: "",
+        humidity: "",
+        wind: "",
+        overcast: "",
+        icon: "",
+        location: ""
+      },
       user: {},
       categories: {},
       show: false,
@@ -4306,13 +4353,58 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   methods: {
-    markAsRead: function markAsRead(id) {
+    getWeather: function getWeather(url) {
+      var _this = this;
+
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
+                return axios.get(url);
+
+              case 2:
+                response = _context.sent;
+                _this.weather.currentTemp = response.data.main.temp;
+                _this.weather.windSpeed = response.data.wind.speed;
+                _this.weather.maxTemp = response.data.main.temp_max;
+                _this.weather.pressure = response.data.main.pressure;
+                _this.weather.humidity = response.data.main.humidity + "%";
+                _this.weather.wind = response.data.wind.speed + "m/s";
+                _this.weather.overcast = response.data.weather[0].description;
+                _this.weather.icon = response.data.weather[0].icon;
+                _this.weather.sunrise = new Date(response.data.sys.sunrise * 1000).toLocaleTimeString("en-GB").slice(0, 5);
+                _this.weather.sunset = new Date(response.data.sys.sunset * 1000).toLocaleTimeString("en-GB").slice(0, 5);
+                _this.weather.location = response.data.sys.country + "," + response.data.name;
+
+              case 14:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
+    geolocation: function geolocation() {
+      navigator.geolocation.getCurrentPosition(this.buildUrl, this.geoError);
+    },
+    buildUrl: function buildUrl(position) {
+      var lat = position.coords.latitude;
+      var lon = position.coords.longitude;
+      this.getWeather(API + "&lat=" + lat + "&lon=" + lon + KEY);
+    },
+    geoError: function geoError(error) {
+      this.getWeather(API + "&lat=0&lon=0" + KEY);
+    },
+    markAsRead: function markAsRead(id) {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
                 return axios.post("/api/markasread/" + id);
 
               case 2:
@@ -4320,10 +4412,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 3:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee);
+        }, _callee2);
       }))();
     },
     onShowModal: function onShowModal() {
@@ -4336,38 +4428,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.show = !this.show;
     },
     getUser: function getUser() {
-      var _this = this;
-
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
-        var res;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.prev = 0;
-                _context2.next = 3;
-                return axios.get("/api/user");
-
-              case 3:
-                res = _context2.sent;
-                _this.user = res.data;
-                _context2.next = 10;
-                break;
-
-              case 7:
-                _context2.prev = 7;
-                _context2.t0 = _context2["catch"](0);
-                console.log(_context2.t0);
-
-              case 10:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, null, [[0, 7]]);
-      }))();
-    },
-    getNots: function getNots() {
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
@@ -4376,28 +4436,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                if (!(Object.keys(_this2.user).length > 0)) {
-                  _context3.next = 6;
-                  break;
-                }
-
+                _context3.prev = 0;
                 _context3.next = 3;
-                return axios.get("/api/getnots/");
+                return axios.get("/api/user");
 
               case 3:
                 res = _context3.sent;
-                _this2.nots = res.data.nots;
-                _this2.unreadNots = res.data.unreadNots;
+                _this2.user = res.data;
+                _context3.next = 10;
+                break;
 
-              case 6:
+              case 7:
+                _context3.prev = 7;
+                _context3.t0 = _context3["catch"](0);
+                console.log(_context3.t0);
+
+              case 10:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3);
+        }, _callee3, null, [[0, 7]]);
       }))();
     },
-    getCategories: function getCategories() {
+    getNots: function getNots() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
@@ -4406,14 +4468,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                _context4.next = 2;
-                return axios.get("/api/categories/");
+                if (!(Object.keys(_this3.user).length > 0)) {
+                  _context4.next = 6;
+                  break;
+                }
 
-              case 2:
+                _context4.next = 3;
+                return axios.get("/api/getnots/");
+
+              case 3:
                 res = _context4.sent;
-                _this3.categories = res.data;
+                _this3.nots = res.data.nots;
+                _this3.unreadNots = res.data.unreadNots;
 
-              case 4:
+              case 6:
               case "end":
                 return _context4.stop();
             }
@@ -4421,7 +4489,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee4);
       }))();
     },
-    getPosts: function getPosts() {
+    getCategories: function getCategories() {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee5() {
@@ -4431,11 +4499,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context5.prev = _context5.next) {
               case 0:
                 _context5.next = 2;
-                return axios.get("/api/posts/");
+                return axios.get("/api/categories/");
 
               case 2:
                 res = _context5.sent;
-                _this4.posts = res.data.trend;
+                _this4.categories = res.data;
 
               case 4:
               case "end":
@@ -4445,11 +4513,35 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee5);
       }))();
     },
+    getPosts: function getPosts() {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee6() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _context6.next = 2;
+                return axios.get("/api/posts/");
+
+              case 2:
+                res = _context6.sent;
+                _this5.posts = res.data.trend;
+
+              case 4:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
+      }))();
+    },
     closeModal: function closeModal() {
       this.showModal = false;
     },
     handleProgressBar: function handleProgressBar() {
-      var _this5 = this;
+      var _this6 = this;
 
       //  [App.vue specific] When App.vue is first loaded start the progress bar
       this.$Progress.start(); //  hook the progress bar to start before we move router-view
@@ -4459,11 +4551,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         if (to.meta.progress !== undefined) {
           var meta = to.meta.progress; // parse meta tags
 
-          _this5.$Progress.parseMeta(meta);
+          _this6.$Progress.parseMeta(meta);
         } //  start the progress bar
 
 
-        _this5.$Progress.start(); //  continue to next page
+        _this6.$Progress.start(); //  continue to next page
 
 
         next();
@@ -4471,48 +4563,49 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       this.$router.afterEach(function (to, from) {
         //  finish the progress bar
-        _this5.$Progress.finish();
+        _this6.$Progress.finish();
       });
     }
   }
 }, _defineProperty(_components$mounted$d, "mounted", function mounted() {
-  var _this6 = this;
+  var _this7 = this;
 
   this.getNots();
   setInterval(function () {
-    _this6.getNots();
+    _this7.getNots();
   }, 3000);
 }), _defineProperty(_components$mounted$d, "computed", {
   searchedPosts: function searchedPosts() {
-    var _this7 = this;
+    var _this8 = this;
 
     return this.posts.filter(function (post) {
-      return post.title.match(_this7.searchTerm.toUpperCase());
+      return post.title.match(_this8.searchTerm.toUpperCase());
     });
   }
 }), _defineProperty(_components$mounted$d, "created", function created() {
-  var _this8 = this;
+  var _this9 = this;
 
   this.getUser();
   Reload.$on("logout", function () {
-    _this8.getUser();
+    _this9.getUser();
 
-    _this8.getNots();
+    _this9.getNots();
   });
   Reload.$on("login", function () {
-    _this8.getUser();
+    _this9.getUser();
 
-    _this8.getNots();
+    _this9.getNots();
   });
   this.getCategories();
   this.getPosts();
   this.handleProgressBar();
   Reload.$on("profileChanged", function () {
-    _this8.getUser();
+    _this9.getUser();
 
-    _this8.getNots();
+    _this9.getNots();
   });
   this.getNots();
+  this.geolocation();
 }), _components$mounted$d);
 
 /***/ }),
@@ -7163,7 +7256,6 @@ try {
 
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
@@ -85147,7 +85239,7 @@ var render = function() {
                   "div",
                   {
                     key: post.id,
-                    staticClass: "col-lg-12",
+                    staticClass: "col-lg-6",
                     attrs: {
                       "data-aos": "zoom-in-down",
                       "data-aos-duration": "600"
@@ -85156,21 +85248,14 @@ var render = function() {
                   [
                     _c(
                       "div",
-                      {
-                        staticClass:
-                          "post-entry d-md-flex small-horizontal mb-5"
-                      },
+                      { staticClass: "post-entry small-horizontal mb-5" },
                       [
-                        _c(
-                          "div",
-                          { staticClass: "me-md-4 thumbnail mb-3 mb-md-0" },
-                          [
-                            _c("img", {
-                              staticClass: "img-fluid",
-                              attrs: { src: post.photo, alt: "Image" }
-                            })
-                          ]
-                        ),
+                        _c("div", { staticClass: "me-md-4 thumbnail mb-3" }, [
+                          _c("img", {
+                            staticClass: "img-fluid",
+                            attrs: { src: post.photo, alt: "Image" }
+                          })
+                        ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "content" }, [
                           _c("div", { staticClass: "post-meta mb-1" }, [
@@ -85226,16 +85311,12 @@ var render = function() {
                           _vm._v(" "),
                           _c("h2", { staticClass: "heading" }, [
                             _c("a", { attrs: { href: "single.html" } }, [
-                              _vm._v(_vm._s(post.title))
+                              _vm._v(_vm._s(post.title.slice(0, 110)) + "..")
                             ])
                           ]),
                           _vm._v(" "),
                           _c("p", [
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(post.desc) +
-                                "\n                            "
-                            )
+                            _vm._v(_vm._s(post.desc.slice(0, 160)) + "..")
                           ]),
                           _vm._v(" "),
                           _c(
@@ -85589,10 +85670,7 @@ var render = function() {
               _c("div", { staticClass: "row" }, [
                 _c(
                   "div",
-                  {
-                    staticClass:
-                      "col-md-4 text-center order-1 order-md-2 mb-3 mb-md-0"
-                  },
+                  { staticClass: "col-md-2 text-center order-1 mb-3 mb-md-0" },
                   [
                     _c(
                       "router-link",
@@ -85752,11 +85830,54 @@ var render = function() {
                   1
                 ),
                 _vm._v(" "),
+                Object.keys(_vm.weather).length !== 0
+                  ? _c(
+                      "div",
+                      {
+                        staticClass: "col-md-3 order-3 col-sm-12 shadow-sm",
+                        staticStyle: { "border-radius": "35px" }
+                      },
+                      [
+                        _c("img", {
+                          staticStyle: { "border-radius": "50%" },
+                          attrs: {
+                            src:
+                              " http://openweathermap.org/img/wn/" +
+                              _vm.weather.icon +
+                              ".png",
+                            alt: "",
+                            width: "38"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("b", { staticClass: "text-dark" }, [
+                          _vm._v(_vm._s(_vm.weather.location))
+                        ]),
+                        _vm._v(" "),
+                        _c("i", {
+                          staticClass: "fas fa-thermometer-half text-dark"
+                        }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "text-dark" }, [
+                          _vm._v(_vm._s(_vm.weather.currentTemp) + "°")
+                        ]),
+                        _vm._v(
+                          "\n                        -\n                        "
+                        ),
+                        _c("i", { staticClass: "fas fa-sun text-dark" }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "text-dark" }, [
+                          _vm._v(_vm._s(_vm.weather.sunrise))
+                        ])
+                      ]
+                    )
+                  : _c("div", { staticClass: "col-md-3 order-3" }, [_vm._m(0)]),
+                _vm._v(" "),
                 _c(
                   "div",
                   {
                     staticClass:
-                      "col-md-4 col-sm-12 text-end order-2 order-md-3 mb-3 mb-md-0"
+                      "col-md-3 col-sm-12 text-end order-2 order-md-3 mb-3 mb-md-0"
                   },
                   [
                     _c("div", { staticClass: "d-flex" }, [
@@ -85764,7 +85885,7 @@ var render = function() {
                         "ul",
                         { staticClass: "list-unstyled social me-auto col-10" },
                         [
-                          _vm._m(0),
+                          _vm._m(1),
                           _vm._v(" "),
                           _c(
                             "div",
@@ -86281,6 +86402,19 @@ var render = function() {
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "spinner-border spinner_add_post",
+        attrs: { role: "status" }
+      },
+      [_c("span", { staticClass: "sr-only" }, [_vm._v("Loading...")])]
+    )
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
