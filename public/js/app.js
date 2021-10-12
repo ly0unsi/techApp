@@ -3805,6 +3805,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -3818,7 +3820,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       mostLiked: [],
       pageOfPosts: [],
       followingsPosts: [],
-      categories: []
+      categories: [],
+      MIX_FOOT_API_TOKEN: "9f06cf75f48f32d5c71dfabf598f59b6",
+      mostViews: []
     };
   },
   methods: {
@@ -3900,8 +3904,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this3.mostLiked = res.data.mostLiked;
                 _this3.followingsPosts = res.data.followingsPosts;
                 _this3.categories = res.data.catPosts;
+                _this3.mostViews = res.data.mostViews;
 
-              case 7:
+              case 8:
               case "end":
                 return _context3.stop();
             }
@@ -84833,21 +84838,7 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "col-lg-4" }, [
-            _vm._m(2),
-            _vm._v(" "),
-            _c("div", {
-              staticClass: "api_football_loader shadow-sm",
-              attrs: {
-                id: "wg-api-football-livescore",
-                "data-host": "v3.football.api-sports.io",
-                "data-refresh": "60",
-                "data-key": _vm.process.env.MIX_FOOT_API_TOKEN,
-                "data-theme": "gray",
-                "data-show-errors": "false"
-              }
-            })
-          ])
+          _vm._m(2)
         ])
       ])
     ]),
@@ -84864,7 +84855,7 @@ var render = function() {
             _c(
               "ol",
               { staticClass: "carousel-indicators" },
-              _vm._l(_vm.trend.slice(0, 4), function(post, index) {
+              _vm._l(_vm.mostViews.slice(0, 4), function(post, index) {
                 return _c("li", {
                   key: post.id,
                   class: { active: index === 0 },
@@ -84883,7 +84874,7 @@ var render = function() {
                 staticClass: "carousel-inner py-5",
                 staticStyle: { background: "white", color: "black!important" }
               },
-              _vm._l(_vm.trend.slice(0, 4), function(post, index) {
+              _vm._l(_vm.mostViews.slice(0, 4), function(post, index) {
                 return _c(
                   "div",
                   {
@@ -85000,6 +84991,12 @@ var render = function() {
                                 _c("i", {
                                   staticClass: "fas fa-heart text-secondary"
                                 }),
+                                _vm._v(
+                                  "\n                                    —\n                                    " +
+                                    _vm._s(post.views) +
+                                    "\n                                    "
+                                ),
+                                _c("i", { staticClass: "fas fa-eye" }),
                                 _vm._v(" "),
                                 post.user_id === _vm.user.id
                                   ? _c(
@@ -85555,10 +85552,24 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row justify-content-center mt-4" }, [
-      _c("div", { staticClass: "col-lg-12 text-center " }, [
-        _c("h3", { staticClass: "fw-bold" }, [_vm._v("Football live score")])
-      ])
+    return _c("div", { staticClass: "col-lg-4" }, [
+      _c("div", { staticClass: "row justify-content-center mt-4" }, [
+        _c("div", { staticClass: "col-lg-12 text-center " }, [
+          _c("h3", { staticClass: "fw-bold" }, [_vm._v("Football live score")])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", {
+        staticClass: "api_football_loader shadow-sm",
+        attrs: {
+          id: "wg-api-football-livescore",
+          "data-host": "v3.football.api-sports.io",
+          "data-refresh": "60",
+          "data-key": "9f06cf75f48f32d5c71dfabf598f59b6",
+          "data-theme": "gray",
+          "data-show-errors": "false"
+        }
+      })
     ])
   },
   function() {

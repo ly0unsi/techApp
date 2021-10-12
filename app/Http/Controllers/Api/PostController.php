@@ -76,25 +76,28 @@ class PostController extends Controller
     public function index(Request $request)
     {
         $mostLiked = Post::with('user', 'category', 'likes', 'user.followers', 'user.posts')->withCount('likes')->orderBy('likes_count', 'DESC')->get();
-        $trend = Post::with('user', 'category', 'likes', 'user.posts')->latest()->get();
+        $trend = Post::with('user', 'category', 'likes', 'user.posts')->orderBy('views', 'DESC')->orderBy('id', 'DESC')->get();
         if (auth()->user()) {
             $userIds = auth()->user()->getUserIds();
             $followingsPosts = Post::whereIn('user_id', $userIds)->with('user', 'category', 'likes', 'user.posts')->latest()->get();
         }
 
         $catPosts = Category::with('posts', 'posts.user', 'posts.likes', 'posts.user.posts')->get();
+        $mostViews = Post::with('user', 'category', 'likes', 'user.posts')->orderBy('views', 'DESC')->get();
         if (auth()->user()) {
             return response()->json([
                 'trend' => $trend,
                 'mostLiked' => $mostLiked,
                 'followingsPosts' => $followingsPosts,
-                'catPosts' => $catPosts
+                'catPosts' => $catPosts,
+                'mostViews' => $mostViews
             ]);
         } else {
             return response()->json([
                 'trend' => $trend,
                 'mostLiked' => $mostLiked,
-                'catPosts' => $catPosts
+                'catPosts' => $catPosts,
+                'mostViews' => $mostViews
             ]);
         }
     }

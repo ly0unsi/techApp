@@ -325,7 +325,7 @@
                             id="wg-api-football-livescore"
                             data-host="v3.football.api-sports.io"
                             data-refresh="60"
-                            :data-key="process.env.MIX_FOOT_API_TOKEN"
+                            data-key="9f06cf75f48f32d5c71dfabf598f59b6"
                             data-theme="gray"
                             data-show-errors="false"
                             class="api_football_loader shadow-sm"
@@ -345,7 +345,7 @@
                         <li
                             v-bind:class="{ active: index === 0 }"
                             :key="post.id"
-                            v-for="(post, index) in trend.slice(0, 4)"
+                            v-for="(post, index) in mostViews.slice(0, 4)"
                             data-target="#carouselExampleIndicators2"
                             :data-slide-to="index"
                         ></li>
@@ -358,7 +358,7 @@
                             v-bind:class="{ active: index === 0 }"
                             class="carousel-item position-relative"
                             :key="post.id"
-                            v-for="(post, index) in trend.slice(0, 4)"
+                            v-for="(post, index) in mostViews.slice(0, 4)"
                         >
                             <div
                                 class="post-entry d-lg-flex container text-secondary"
@@ -419,7 +419,9 @@
                                         <i
                                             class="fas fa-heart text-secondary"
                                         ></i>
-
+                                        &mdash;
+                                        {{ post.views }}
+                                        <i class="fas fa-eye"></i>
                                         <span v-if="post.user_id === user.id">
                                             &mdash;
                                             <router-link
@@ -799,6 +801,7 @@
 <script>
 import AOS from "aos";
 import "aos/dist/aos.css";
+
 export default {
     mounted() {
         AOS.init();
@@ -810,9 +813,12 @@ export default {
             mostLiked: [],
             pageOfPosts: [],
             followingsPosts: [],
-            categories: []
+            categories: [],
+            MIX_FOOT_API_TOKEN: process.env.MIX_FOOT_API_TOKEN,
+            mostViews: []
         };
     },
+
     methods: {
         async getNots() {
             const res = await axios.get("/api/getnots/");
@@ -836,6 +842,7 @@ export default {
             this.mostLiked = res.data.mostLiked;
             this.followingsPosts = res.data.followingsPosts;
             this.categories = res.data.catPosts;
+            this.mostViews = res.data.mostViews;
         },
         moment() {
             return moment();
