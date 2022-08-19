@@ -572,6 +572,7 @@ export default {
         });
         this.getNots();
         this.geolocation();
+        console.log(KEY);
         // axios(config)
         //     .then(function(response) {
         //         console.log(JSON.stringify(response.data));
